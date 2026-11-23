@@ -108,14 +108,18 @@ const money = (value) => (value == null ? '' : `; ≈ R$ ${new Intl.NumberFormat
 
 // ------------------------------------------------------------ classificação
 // Regexes da matriz de custo pré-compiladas UMA vez (perf: antes eram `new RegExp` por linha × regra).
-const REGRAS_COST = MATRIX.cost.map((r) => (r.added ? { ...r, regexes: r.added.map((re) => new RegExp(re)) } : r));
+const REGRAS_COST = MATRIX.cost.map((r) => ({
+  ...r,
+  regexes: r.added ? r.added.map((re) => new RegExp(re)) : undefined,
+  netRegexes: r.netIncrease ? Object.entries(r.netIncrease).map(([api, re]) => [api, new RegExp(re)]) : undefined,
+}));
 
 function costRuleSignals(e, addedText, cost) {
   for (const r of REGRAS_COST) {
     if (r.globs && !matchAny(e.path, r.globs)) continue;
     if (r.regexes && addedText.some((line) => r.regexes.some((re) => re.test(line)))) cost.raise(r.level, r.reason, e.path);
-    for (const [api, re] of Object.entries(r.netIncrease ?? {})) {
-      const delta = countMatches(e.newText, new RegExp(re)) - countMatches(e.oldText, new RegExp(re));
+    for (const [api, re] of r.netRegexes ?? []) {
+      const delta = countMatches(e.newText, re) - countMatches(e.oldText, re);
       if (delta > 0) cost.raise(r.level, `${r.reason} — ${t('cost.paidApi', { api, delta, file: e.path })}`);
     }
   }

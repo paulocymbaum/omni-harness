@@ -1278,6 +1278,7 @@ quality/test/delivery/validate.test.mjs
 quality/test/gates-batch.test.mjs
 quality/test/gates.test.mjs
 quality/test/gates-novos.test.mjs
+quality/test/git-diff.test.mjs
 quality/test/gitflow-hooks.test.mjs
 quality/test/gitflow.test.mjs
 quality/test/graph-freshness.test.mjs

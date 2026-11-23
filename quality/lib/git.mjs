@@ -129,6 +129,41 @@ export function diffTexts(oldText, newText) {
 }
 
 /**
+ * added/removed de TODO o diff em UM spawn (`git diff -U0` global) — substitui o
+ * `diffTexts` por arquivo (mkdtemp + 2 writes + spawn + rm cada) na montagem das entries.
+ * Caminho novo (b/) é a chave; seção sem hunks (rename puro) não entra no Map.
+ */
+export function diffGlobal(root, baseSha) {
+  const r = git(['diff', '-U0', '--no-color', '--no-ext-diff', baseSha], root);
+  const mapa = new Map();
+  let alvoAdded = null;
+  let alvoRemoved = null;
+  let novaLinha = 0;
+  const registrar = (p) => {
+    if (!mapa.has(p)) mapa.set(p, { added: [], removed: [] });
+    return mapa.get(p);
+  };
+  for (const line of r.stdout.split('\n')) {
+    if (line.startsWith('--- a/')) { alvoRemoved = registrar(line.slice(6)); continue; }
+    if (line.startsWith('+++ b/')) { alvoAdded = registrar(line.slice(6)); novaLinha = 0; continue; }
+    novaLinha = linhaHunk(alvoAdded, alvoRemoved, line, novaLinha);
+  }
+  return mapa;
+}
+
+/** Uma linha do hunk: @@ reposiciona; +/- alimenta added/removed do alvo corrente. */
+function linhaHunk(alvoAdded, alvoRemoved, line, novaLinha) {
+  if (line.startsWith('---') || line.startsWith('+++')) return novaLinha; // /dev/null (criação/deleção)
+  if (line.startsWith('@@')) {
+    const h = /^@@ -\d+(?:,\d+)? \+(\d+)(?:,\d+)? @@/.exec(line);
+    return h ? Number(h[1]) : novaLinha;
+  }
+  if (line.startsWith('+') && alvoAdded != null) alvoAdded.added.push({ line: novaLinha++, text: line.slice(1) });
+  else if (line.startsWith('-') && alvoRemoved != null) alvoRemoved.removed.push(line.slice(1));
+  return novaLinha;
+}
+
+/**
  * Monta as entradas avaliadas: texto antigo (na base), texto novo (disco) e linhas do diff.
  * `only` restringe a um conjunto de caminhos (ex.: arquivos tocados na sessão).
  */
@@ -139,10 +174,12 @@ export function collectEntries({ root = repoRoot(), base = 'HEAD', only } = {}) 
     const set = new Set(only);
     files = files.filter((f) => set.has(f.path));
   }
+  // 1 diff global (EG1) em vez de um `git diff --no-index` + tmpdir por arquivo.
+  const mapaDiff = diffGlobal(root, baseSha ?? 'HEAD');
   return files.map((f) => {
     const oldText = f.status === 'A' ? null : fileAtRev(baseSha, f.oldPath ?? f.path, root);
     const newText = f.status === 'D' ? null : readWorking(f.path, root);
-    const { added, removed } = diffTexts(oldText, newText);
+    const { added, removed } = mapaDiff.get(f.path) ?? diffTexts(oldText, newText);
     return { ...f, oldText, newText, added, removed };
   });
 }
