@@ -1,7 +1,5 @@
 # Omni Harness — núcleo agnóstico de agentes de código
 
-![quality](https://github.com/paulocymbaum/omni-harness/actions/workflows/quality.yml/badge.svg)
-
 > Núcleo agnóstico de stack/arquitetura para agentes de código (Claude Code, Cline, Codex, VS Code/Copilot, Antigravity, Kiro): hooks, gates determinísticos, ciclo de entrega em backlog, perfis por projeto. **Node 22, zero dependências.** Foi apartado do monorepo Fluxo (2026-11-22) — o Fluxo hoje é apenas o exemplo de hospedeiro em [`quality/examples/fluxo/`](quality/examples/fluxo/README.md).
 
 ## O que há aqui

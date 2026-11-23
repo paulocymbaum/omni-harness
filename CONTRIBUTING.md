@@ -20,9 +20,7 @@ HARNESS_PROFILE_DIR="$PWD/quality/examples/fluxo/profile" node --test quality/te
 node quality/agents/sync-clinerules.mjs --check
 ```
 
-4. Abra o PR para `main`. O CI (`quality`) é obrigatório e a `main` é protegida (sem push direto, sem force-push, sem delete).
-
-> O CI publica o check **`quality`** — é o contexto exigido pela proteção de `main`.
+4. **Projeto local — sem CI/Actions.** A validação é a bateria local acima; rode-a antes de commitar. Mantenedor: commit direto em `main` após a bateria verde. Contribuição externa (fork): abra o PR — será revisada e mergeada manualmente após rodar a mesma bateria; não há checks automáticos.
 
 ## Regras do núcleo
 

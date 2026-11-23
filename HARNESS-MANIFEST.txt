@@ -1,8 +1,8 @@
 Omni Harness — núcleo agnóstico de agentes de código multi-host (Claude Code, Cline, Codex, VS Code/Copilot, Antigravity, Kiro)
-Base: bundle de fluxo@9b89bc9df04c7883b0197bbe85c34d67c66ab175 + R0..R5 agnóstico completo + apartamento do Fluxo (exemplo em quality/examples/fluxo) + distribuição (package.json, bin CLI, install.sh, Formula brew, hosts múltiplos com overrides do hospedeiro) + open-source (MIT, CI, governança)
+Base: bundle de fluxo@9b89bc9df04c7883b0197bbe85c34d67c66ab175 + R0..R5 agnóstico completo + apartamento do Fluxo (exemplo em quality/examples/fluxo) + distribuição (package.json, bin CLI, install.sh, Formula brew, hosts múltiplos com overrides do hospedeiro) + open-source (MIT, governança) + projeto local (sem CI/Actions; validação pela bateria de testes local)
 Data: 2026-11-23T01:29Z
 
-Conteudo: prompts núcleo (AGENTS.md, CLAUDE.md, README.md), package.json + bin/ + install.sh + Formula/ (distribuição npm/pnpx, brew, curl), LICENSE + CONTRIBUTING + CODE_OF_CONDUCT + SECURITY, .github/workflows/quality.yml (CI), .claude/ (settings, agents, hooks, rules, skills de processo), .clinerules/ (rules, hooks + package CJS), quality/ (motor: hooks, lib/hosts, profile, gates, delivery, packs, tools, test; bootstrap-example-profile; examples/fluxo como exemplo de hospedeiro), docs/harness/, docs/parking-lot/, docs/entregas/2026-10-01-harness-entrega-em-ciclo/, scripts/ (harness-init, tracker, dev), .gitignore.
+Conteudo: prompts núcleo (AGENTS.md, CLAUDE.md, README.md), package.json + bin/ + install.sh + Formula/ (distribuição npm/pnpx, brew, curl), LICENSE + CONTRIBUTING + CODE_OF_CONDUCT + SECURITY, .claude/ (settings, agents, hooks, rules, skills de processo), .clinerules/ (rules, hooks + package CJS), quality/ (motor: hooks, lib/hosts, profile, gates, delivery, packs, tools, test; bootstrap-example-profile; examples/fluxo como exemplo de hospedeiro), docs/harness/, docs/parking-lot/, docs/entregas/2026-10-01-harness-entrega-em-ciclo/, scripts/ (harness-init, tracker, dev), .gitignore.
 Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do host Fluxo que não seja exemplo (perfil ativo, overlay, skills de domínio, gates de produto fora de examples, configs legadas, baseline, docs de produto).
 .claude/agents/avaliador-de-entrega.md
 .claude/agents/documentador.md
@@ -774,7 +774,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/refs/remotes/origin/docs/ci-check-note
 .git/refs/remotes/origin/fix/testes-datados
 .git/refs/remotes/origin/main
-.github/workflows/quality.yml
+
 .gitignore
 AGENTS.md
 CLAUDE.md
