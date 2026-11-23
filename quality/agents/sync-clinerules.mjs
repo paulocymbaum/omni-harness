@@ -91,12 +91,18 @@ export function sync(root, { check = false } = {}) {
       fs.writeFileSync(target, want);
     }
   }
-  const indexTarget = path.join(root, '.clinerules', INDEX_TARGET);
-  const index = generateIndex(root);
-  const indexHave = fs.existsSync(indexTarget) ? fs.readFileSync(indexTarget, 'utf8') : null;
-  if (indexHave !== index) {
-    drift.push(INDEX_TARGET);
-    if (!check) fs.writeFileSync(indexTarget, index);
+  // Índice (80) só quando o root tem skills/agents: em raiz sem fontes, gerar/countar índice
+  // criava drift falso (bug herdado do monorepo — corrigido na apartação do Omni Harness).
+  const temFonteDeIndex = fs.existsSync(path.join(root, '.claude', 'skills'))
+    || fs.existsSync(path.join(root, '.claude', 'agents'));
+  if (temFonteDeIndex) {
+    const indexTarget = path.join(root, '.clinerules', INDEX_TARGET);
+    const index = generateIndex(root);
+    const indexHave = fs.existsSync(indexTarget) ? fs.readFileSync(indexTarget, 'utf8') : null;
+    if (indexHave !== index) {
+      drift.push(INDEX_TARGET);
+      if (!check) fs.writeFileSync(indexTarget, index);
+    }
   }
   // R2 — espelho do overlay de projeto quando o perfil o define (.clinerules/85-projeto.md).
   // O arquivo-fonte deve existir NO root informado (em repo de teste sem overlay, nada a fazer).
