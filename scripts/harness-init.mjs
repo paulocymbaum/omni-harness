@@ -98,7 +98,7 @@ const perfil = {
   schemaVersion: 1,
   name: nome,
   locale: 'pt-BR',
-  packs: [],
+  packs: ['pii-br'],
   prompt: { overlay: '.claude/PROJETO.md', domainSkills: [], domainRules: [] },
   tracker: { provider: 'none' },
 };
