@@ -78,6 +78,7 @@ node --test quality/test/anti-loop.test.mjs
 node --test quality/test/autofix.test.mjs
 omni-harness hosts [destino] [--json]              # hosts suportados e paths resolvidos (com overrides do hospedeiro)
 node --test quality/test/hosts.test.mjs              # integração por host (claude-code, cline, codex, vscode, antigravity, kiro)
+node --test quality/test/ide-providers.test.mjs      # matriz funcional dos provedores: init + hook/carrier respondendo + doctor, provedor a provedor
 node --test quality/test/package.test.mjs              # pacote npm: bin, files e fluxo dlx de ponta a ponta
 # Testes de motor com fixtures do exemplo: bootstrap-example-profile ativa o perfil automaticamente (sem env):
 HARNESS_PROFILE_DIR="$PWD/quality/examples/fluxo/profile" node --test quality/examples/fluxo/gates/version.test.mjs quality/examples/fluxo/gates/version-flow.test.mjs

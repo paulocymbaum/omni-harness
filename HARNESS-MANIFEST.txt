@@ -1275,6 +1275,7 @@ quality/test/graph-freshness.test.mjs
 quality/test/helpers.mjs
 quality/test/hooks.test.mjs
 quality/test/hosts.test.mjs
+quality/test/ide-providers.test.mjs
 quality/test/is-main.test.mjs
 quality/test/jira-epic.test.mjs
 quality/test/jira-fake.mjs
