@@ -71,7 +71,11 @@ function resolverSessao({ input, root, session, entries, lembretes }) {
 function main() {
   const input = readStdinJson();
   const root = repoRoot();
-  if (!isGitRepo(root)) return null;
+  if (!isGitRepo(root)) {
+    // Sem git NÃO silencia: informa o que fica indisponível e o caminho via CLI (R-hosts).
+    const aviso = 'Repositório sem git: evidência por hash e gates de sessão do Stop ficam indisponíveis — rode os gates via CLI (node quality/run.mjs --tier rapido) e considere git init.';
+    return { systemMessage: aviso, hookSpecificOutput: { hookEventName: 'Stop', additionalContext: aviso } };
+  }
   // QG-027: deploy esquecido — homologação aprovada sem registro de deploy depois dela (aviso, não bloqueia).
   const lembretes = lembretesDeDeploy(root);
   const session = loadSession(input.session_id);

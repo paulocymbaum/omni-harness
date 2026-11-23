@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 // SessionStart: prepara ferramentas, limpa estado antigo e informa o Claude (pt-BR) sobre os gates ativos.
 import { readStdinJson } from '../lib/util.mjs';
-import { isGitRepo } from '../lib/git.mjs';
 import { lizardCommand, warmLizard, toolInventory } from '../lib/tools.mjs';
 import { pruneState } from '../lib/state.mjs';
 import { t } from '../lib/messages.mjs';
@@ -12,7 +11,8 @@ import { graphHint } from '../lib/search-message.mjs';
 
 try {
   readStdinJson();
-  if (!isGitRepo()) process.exit(0);
+  // Sem git NÃO silencia: o contexto de gates/ferramentas continua válido em hospedeiro novo
+  // (a evidência por hash é que requer git — documentado em docs/harness/02-ciclo-de-sessao.md).
   pruneState();
   if (!lizardCommand()) warmLizard();
   const inv = toolInventory();

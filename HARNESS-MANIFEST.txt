@@ -1,6 +1,6 @@
 Omni Harness — núcleo agnóstico de agentes de código multi-host (Claude Code, Cline, Codex, VS Code/Copilot, Antigravity, Kiro)
 Base: bundle de fluxo@9b89bc9df04c7883b0197bbe85c34d67c66ab175 + R0..R5 agnóstico completo + apartamento do Fluxo (exemplo em quality/examples/fluxo) + distribuição (package.json, bin CLI, install.sh, Formula brew, hosts múltiplos com overrides do hospedeiro) + open-source (MIT, CI, governança)
-Data: 2026-11-23T01:10Z
+Data: 2026-11-23T01:29Z
 
 Conteudo: prompts núcleo (AGENTS.md, CLAUDE.md, README.md), package.json + bin/ + install.sh + Formula/ (distribuição npm/pnpx, brew, curl), LICENSE + CONTRIBUTING + CODE_OF_CONDUCT + SECURITY, .github/workflows/quality.yml (CI), .claude/ (settings, agents, hooks, rules, skills de processo), .clinerules/ (rules, hooks + package CJS), quality/ (motor: hooks, lib/hosts, profile, gates, delivery, packs, tools, test; bootstrap-example-profile; examples/fluxo como exemplo de hospedeiro), docs/harness/, docs/parking-lot/, docs/entregas/2026-10-01-harness-entrega-em-ciclo/, scripts/ (harness-init, tracker, dev), .gitignore.
 Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do host Fluxo que não seja exemplo (perfil ativo, overlay, skills de domínio, gates de produto fora de examples, configs legadas, baseline, docs de produto).
@@ -76,8 +76,10 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/info/exclude
 .git/logs/HEAD
 .git/logs/refs/heads/docs/ci-check-note
+.git/logs/refs/heads/fix/testes-datados
 .git/logs/refs/heads/main
 .git/logs/refs/remotes/origin/docs/ci-check-note
+.git/logs/refs/remotes/origin/fix/testes-datados
 .git/logs/refs/remotes/origin/main
 .git/objects/00/cc8184c7efb3c2d3b47ed4f53ab12064c4240b
 .git/objects/01/11860345fbdc0f20a12c1c6083c477b93c1079
@@ -113,6 +115,8 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/0c/bcdd7cf87e81da7867f25af70d388916773f20
 .git/objects/0d/633e55297ffd673716c543ef3cc4a0ae158c05
 .git/objects/0d/af154bb23e711ca3d9ef7bde28dd9c7f451744
+.git/objects/0e/9fe5445a69c66a4edcdc27ae447f1ca0ffd4ea
+.git/objects/0e/a3d8ae06d473b2bb97f37a0fad83090b0aa993
 .git/objects/0e/fe3e42805b30995cdee72630031257aae231a7
 .git/objects/0f/37537084b86275d1eb93dbd0c8646c63ed3726
 .git/objects/10/1a1b72f891ac984dc5e02b72a57e254ad1e761
@@ -163,6 +167,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/23/c949f3fda2701eceb7b4e2547d9d100f9d86ef
 .git/objects/23/d4950dfe951708390478e944a9a376134377a8
 .git/objects/23/e63883e7146edb78785cd2593288cfe4d90153
+.git/objects/24/69eae6a6be55b9cd5f074dbbd7a7fcaab81411
 .git/objects/25/24c9836e7e60018ab921883244771f2f4bbb90
 .git/objects/26/e198e2222693f15486d4cde8cb19e66ad2e230
 .git/objects/27/af3c005085572fab802bdb13078870e7044609
@@ -183,6 +188,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/2c/368a96d906a2ca1a94e8d609e4aea29f687066
 .git/objects/2c/a95a25986dc6f0ef18ade83b7461570e32f909
 .git/objects/2c/e2af302b2695dd509c4ea789f97b3908374525
+.git/objects/2d/9e4f5547e55cc3528d45c091ef1712c77df603
 .git/objects/2d/f2e43134082628754624c0806269a24967f2e0
 .git/objects/2e/01a8e0af950b939be28b911d6bee3ecc304b6a
 .git/objects/2e/1c1cdee5d6ea206b312f12281475c84254c7d7
@@ -192,6 +198,8 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/2f/c4dcd44c01586156592eb1b0a2ea6eac3cfb68
 .git/objects/30/057ca044c0cdcdf37f463409731421b9af0d10
 .git/objects/30/0fbe647935d800ec0ad89c46e05d99ab19d2dd
+.git/objects/30/25cfd2bda3bc3a431278c241ae5ec6c73a7e04
+.git/objects/30/3cfea9c0e9e0fa417763fafd4333fd73d41ba6
 .git/objects/30/5f74ff76fa0286893523c4f21826cf2bfec153
 .git/objects/30/de73b6922bf6d4f6658a3265d54f0f969e808b
 .git/objects/31/59d4721a88f0d6be0290dc3af795f4083ef078
@@ -209,6 +217,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/33/9fb75c2a5ebb3d6d1e7e686f720b2cf2d5fbe4
 .git/objects/33/ebec486f6e9c6941b31859e5f0c17ff8dc6adb
 .git/objects/34/04a655eb85f3840a95871de99fe0debf17414f
+.git/objects/35/14571266811d4bc4e1d8cd64c300287b9f67db
 .git/objects/35/7cd13b9030a5c944b2fdd5a063bb50ab3fba58
 .git/objects/35/8eacb89282feab15e142c5374590ec27c9aeac
 .git/objects/36/04b722eab530e7f827af677a9f1a8761f7d1f4
@@ -245,6 +254,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/42/a574b3a486f84bb3bb9750a9e89411f7c22ef8
 .git/objects/43/4103ef24689a7518a9690e953208b615837f62
 .git/objects/43/880f6fad4585d77ad85c1dc65ede5583e5d7eb
+.git/objects/43/cf9fca6fe0d6a373989d91f633c2b5340694f6
 .git/objects/43/ec6912df8e23ee59f8a87ba334f71c2650bef6
 .git/objects/43/ee41349255ceedc2ce3efe4e53e71c4fd3449c
 .git/objects/44/6e98e117df1b7ceaf1a0627521615acf5e203c
@@ -258,6 +268,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/47/ee7e4700546bddd71d9aa54cb867864e2aea02
 .git/objects/48/3bbd5353ba540ca861e5cb1959bb31200c3212
 .git/objects/48/cc445a3815816ef3f566ba19f7e61f6aa15766
+.git/objects/48/db21dd039d4f8c485bfa7f46878f37ff2253dd
 .git/objects/48/e162370edc1c7487f961c6bfc4298d78522bc8
 .git/objects/49/7b578dd4af7fde1a05172381df5738b368be45
 .git/objects/49/85f500b26a5efefdae03b478eada9b51049f6e
@@ -268,6 +279,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/4c/498d045dbbd60d567e73e404384954ce5a13f9
 .git/objects/4c/52009c5dac9bb409ebc5dbebebd958391f3d70
 .git/objects/4c/98e64acfd581b8addee02b70a027845d55ae0e
+.git/objects/4d/3406140687779164e692f2e43175fe485f7963
 .git/objects/4d/6c9e9c68d5b9e4ce923a260e2241395ba597ed
 .git/objects/4d/ca569d3fbb8529fc8000129e60b65246aa1783
 .git/objects/4d/d054918effe64d30a67da69f535041d53491a0
@@ -285,6 +297,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/56/8c855b1e396025e93f19492501dc151e10cc5a
 .git/objects/57/2ffa96f07f7134a578d286dee8b9d7f7288f04
 .git/objects/57/48fab144fab4c71f72a925c5d21b6a977ff64f
+.git/objects/57/ce6633491eb9021204bd3f42a69d6a164140fe
 .git/objects/58/82a11b6413b266c1d0ba848d2b3a202e17f96a
 .git/objects/58/9c70820736e983f85b0132588710875279b41d
 .git/objects/58/c4540d6f5a5bfdc44f51766ebbdae6d0aa912b
@@ -301,6 +314,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/5c/5d0d0971602bd5c6ac05b64564e6cf907266b2
 .git/objects/5d/04c52908c59a8c50a6bd58ad884107acb9a420
 .git/objects/5d/17b0f51bbab658160de78912037ed3fdbe754f
+.git/objects/5e/6e380941a5bc2732f2a10a959a6a6ca7ebdc86
 .git/objects/5e/76020060a3cbff6c5fd4258b18fe9b73ae95f9
 .git/objects/5e/831346232ca678124a6f77edfc714dd7c33690
 .git/objects/5e/ce5aa971cf42f0e35a2cc60fbc313a01abdd51
@@ -327,6 +341,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/65/88a8a762cd637686bdf2e0bbd6a8fa07d8c255
 .git/objects/65/b5e6bf60eb1e689a85bbf856e7145a8aa03c04
 .git/objects/67/cc95e230097512ed76e4cef6454c0ef388e8ab
+.git/objects/67/dd2319f5f5281e07dab88603b175d1b862f6ed
 .git/objects/68/aaa3b8b15bb97075a863586dab553c1c42354f
 .git/objects/68/ebb20d551fb84615c8da96f577164aa4bcca43
 .git/objects/69/4ca69e0e3e7c26607a6732aa6b53495be3eddd
@@ -339,10 +354,12 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/6b/dcd03422a022a9d9dce926e896d6f701c08e74
 .git/objects/6c/1e732a8123cbb028fc942eef04394968390080
 .git/objects/6c/42119f39e56ad0edc56002e161581b9bd75d9c
+.git/objects/6c/97a3bf62457e742a3cc46b2db6f16f83dc589b
 .git/objects/6c/ba88d592f897fbbdb6c8b3de385e4d4e1eb4f3
 .git/objects/6d/5e58539ceff94f6bd26b096223e4ce25913cdf
 .git/objects/6d/6bf6521b7b81295234237f1d33017d3550cb19
 .git/objects/6d/c59cd5c653d6059c17126379fab00fdce910a8
+.git/objects/6e/1cd24cd89de788594b51407547411b06f48752
 .git/objects/6e/26c61cab386fc7366b2ba17ce3a10b38a2030b
 .git/objects/6e/5c32e51cd90eca2b644c512cc13b7af789a222
 .git/objects/6e/e6949849dfaa7656fac5e86532330e5681c882
@@ -403,6 +420,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/7f/83c4470b1afeb59217024e3483ed795fc16a38
 .git/objects/7f/c3d3db1f209c314d0d65e01b4d3c5d0f533855
 .git/objects/80/30bdde4841bd80d062a8c6e843d9473f72a88c
+.git/objects/80/4da482a69f971810a28da6c209c6f927f4e31d
 .git/objects/80/a3abdca4a43c4586d20fad80a07e2a194385b4
 .git/objects/80/d5110bb9f519cee2d4d8894d80420ddc3ea382
 .git/objects/81/01be8db8d3793969f21309c8fbf8d41e6d8b5b
@@ -474,6 +492,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/9a/2c733f06821206a7871d76ad14f2e825bcb2d1
 .git/objects/9a/d69cf491fa94f11e07da0220356a5e73a3afb9
 .git/objects/9a/d813f7516153455e9135fa1dac96b956cef681
+.git/objects/9b/362aee3944f9dd30e75658886402bb2db89488
 .git/objects/9b/a74a7468f9ed9cf568d3bf957702817d29cd12
 .git/objects/9b/c9bb3eb2d9be6de12725ed6330d4c4b0e8a4fb
 .git/objects/9b/fd8dfc52ab2c8c098d156299023c911cb94ba3
@@ -518,6 +537,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/ac/99b6443a8ada8b0e2bf8ac10b207d4d7b91030
 .git/objects/ad/0aa7fc9a63c3ad5b116664dd5769f10439e525
 .git/objects/ad/27a60a6bd301e8e106b309f0977e4ae984e1f7
+.git/objects/ad/3d523330e7005fb187156d21772222a8a6b7bc
 .git/objects/ad/9ae3d576ccc713e0c2ec48f32c4562a0014af9
 .git/objects/ad/f0734ba956e7c8443b84ee13e23972130a64e3
 .git/objects/ae/fde4afc67fbe7bc02bba1b6bc1c2955515492f
@@ -577,6 +597,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/c4/1e803747233fd79f50deff4a535f15bf472fea
 .git/objects/c4/4e06da6309203800419359486272563410f048
 .git/objects/c4/7f10a450212b80bc60bdf904125a7806ca6d88
+.git/objects/c4/86ffd6fe644ae5f7f178eeeebd4df6c58ed176
 .git/objects/c5/037d7959b44fa6f468d109eebdd120ab179af8
 .git/objects/c5/0e479111eb35d09beab613a63d2b9d60459dbb
 .git/objects/c5/5cca62e59e055f6a422b67c0c36c6067cfc636
@@ -614,6 +635,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/cf/64d9f558e189bda590ce0f108128b250aa64ee
 .git/objects/cf/8e96a0347e022cf05c7b81548ef46b2edfa87d
 .git/objects/cf/9de916da098c2329d7f71ceac456184088b94b
+.git/objects/cf/cbb59c2602a08c34a52a54181f60ffc10ea649
 .git/objects/d0/28c7deb1d29cb949c6b14abf0cfafc7e2e6c39
 .git/objects/d0/dc39f7993873c5c70550cffb391484c7256add
 .git/objects/d1/63a97a34076fac7dfd47c93255c97df377b580
@@ -650,6 +672,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/db/81d695c19ece9a0cfcfd677f13ab64363757c4
 .git/objects/db/e577dbae7581af8aab45cf8333409d29a0a54a
 .git/objects/dc/774b4163d3df62569267f0e60d5f206af9f29c
+.git/objects/dd/32084a558ed494565f43fc1c15b9a3c174a9bf
 .git/objects/de/4b5045e0c8df2378fe2bc555b8a5926a6e8933
 .git/objects/de/935d9cadac792892fd68d59d1f7e2c6f5bc51c
 .git/objects/de/b7e07b5a9c21b57a709103f1a22ebe8fedca61
@@ -665,6 +688,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/e4/0cb87bf5b4c4232b346155e0cdd95c31420a99
 .git/objects/e4/2f8b2d72775e5cca97564416c3a46e873a89fa
 .git/objects/e4/5c92f227ab72db8e465d4aee122eabfee6305a
+.git/objects/e4/be0cb302b50a9fba2f0e6303bd23c62842fc11
 .git/objects/e5/55bac9fcb26ae3eca8c6c1c098aaf3e2f8dbcb
 .git/objects/e5/8c7047259e8675cbdead38fc485b3da74d5770
 .git/objects/e5/c46db56daebd7afb5a1f8e838b94324c7cc2f9
@@ -676,6 +700,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/e6/e89f375d305a3895b33f3ce718d9462ff7814b
 .git/objects/e6/ee057f2e7272151dd94b9c4032df1df137de19
 .git/objects/e7/0a137290bc4d575860d1229dcb7be1b559eb71
+.git/objects/e7/68e0461ed8e9bba8eb96f1da92c6b0993628f5
 .git/objects/e8/334625154bcf4e8deff148afac0c741b08eb17
 .git/objects/e8/753c0963aea1b42d79338f752370ed46ca3e25
 .git/objects/e8/c1ec849254b997b1eec9f73414ac983a2a52ce
@@ -722,6 +747,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/f8/f2ea4cb7263140fe622c364fb633f35b3e3121
 .git/objects/f9/13cf3d61bdd3d853322faae656b0a425fb3504
 .git/objects/f9/22d368bc9c5f5bea077ba52c205fc76dc0ff40
+.git/objects/f9/3dc14c7f246e9ac407408deb3a4932f345614d
 .git/objects/f9/5f5ae589df332cb2b287f17c218fb319475f41
 .git/objects/f9/ccf7b36da8c27ad78303cf602e5fa58a803607
 .git/objects/fa/3765cdcfb871bafcff04b90d247c8d0f171969
@@ -743,8 +769,10 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/objects/ff/dd506568c217b0e17f73b426af8dc08d61ebd3
 .git/objects/ff/e99b64172698136fd5aa404ddd741f88d533a8
 .git/refs/heads/docs/ci-check-note
+.git/refs/heads/fix/testes-datados
 .git/refs/heads/main
 .git/refs/remotes/origin/docs/ci-check-note
+.git/refs/remotes/origin/fix/testes-datados
 .git/refs/remotes/origin/main
 .github/workflows/quality.yml
 .gitignore

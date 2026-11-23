@@ -1,9 +1,11 @@
-// Dados pessoais e segredos em texto que vai para fora do repositório (cards do Jira). Regra do
-// repo: nunca uid, e-mail, businessId, CPF/CNPJ ou token em card (AGENTS.md §2.8 e
-// .claude/rules/backlog-e-gates.md). O hook de domínio (.claude/hooks/lib/regras.mjs) só AVISA em
-// `.md` e não olha e-mail, uid nem token, e agentes que não passam por ele (Cline) não têm
-// nenhum filtro. Função pura: devolve achados com o valor MASCARADO, nunca o valor bruto.
-import { CPF, CNPJ, isPlaceholder } from '../../.claude/hooks/lib/regras.mjs';
+// Dados pessoais e segredos em texto que vai para fora do repositório (cards do tracker). Regra do
+// núcleo: nunca uid, e-mail, businessId, documento legal ou token em card. Função pura: devolve
+// achados com o valor MASCARADO, nunca o valor bruto.
+// Padrões de documento são o MECANISMO base deste módulo (sem acoplar a hooks de host); o pack
+// `pii-br` do perfil define os padrões para o pipeline de regras de domínio (.claude/hooks).
+const CPF = /\b\d{3}\.\d{3}\.\d{3}-\d{2}\b/g;
+const CNPJ = /\b\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}\b/g;
+const isPlaceholder = (doc) => new Set(doc.replace(/\D/g, '')).size <= 1;
 
 // O último rótulo do domínio tem de ser alfabético: `pnpm@9.15.0` e `satori@0.63.2` são pacote@versão, não e-mail.
 const EMAIL = /\b[\w.+-]+@[\w-]+(?:\.[\w-]+)*\.[A-Za-z]{2,}\b/g;

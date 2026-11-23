@@ -152,6 +152,26 @@ test('init e2e com override do hospedeiro: kiro instala no caminho sobrescrito (
   }
 }, { timeout: 120_000 });
 
+test('host cline sem git: TaskStart/TaskComplete NÃO silenciam (contexto de gates e aviso de evidência)', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'hosts-nogit-'));
+  try {
+    init(tmp, 'cline'); // init NÃO roda git init: hospedeiro novo, sem git
+    const run = (hook) => spawnSync(process.execPath, [path.join(tmp, '.clinerules', 'hooks', hook)], {
+      input: JSON.stringify({ taskId: 't1' }), encoding: 'utf8', timeout: 60_000,
+    });
+    const start = run('TaskStart');
+    assert.equal(start.status, 0, start.stderr);
+    const startOut = JSON.parse(start.stdout);
+    assert.match(startOut.context ?? '', /Gates de qualidade/, 'abertura sem git continua com contexto');
+    const done = run('TaskComplete');
+    assert.equal(done.status, 0, done.stderr);
+    const doneOut = JSON.parse(done.stdout);
+    assert.match(doneOut.context ?? doneOut.systemMessage ?? '', /sem git/, 'aviso de evidência indisponível');
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+}, { timeout: 120_000 });
+
 test('init --hosts inválido: falha citando os ids válidos', () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'hosts-inv-'));
   try {
