@@ -837,6 +837,8 @@ docs/harness/11-agentes-e-skills.md
 docs/harness/12-referencia-rapida.md
 docs/harness/INDEX.md
 docs/parking-lot/harness-agnostico.md
+docs/parking-lot/runners-go-rust-cpp-csharp-java.md
+
 install.sh
 package.json
 quality/agents/graphify-build.mjs
