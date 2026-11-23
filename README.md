@@ -1,6 +1,29 @@
 # Omni Harness — núcleo agnóstico de agentes de código
 
-> Núcleo agnóstico de stack/arquitetura para agentes de código (Claude Code, Cline, Codex, VS Code/Copilot, Antigravity, Kiro): hooks, gates determinísticos, ciclo de entrega em backlog, perfis por projeto. **Node 22, zero dependências.** Foi apartado do monorepo Fluxo (2026-11-22) — o Fluxo hoje é apenas o exemplo de hospedeiro em [`quality/examples/fluxo/`](quality/examples/fluxo/README.md).
+> **Infraestrutura neutra de qualidade e workflow para agentes de código**: o mesmo motor de gates determinísticos, os mesmos hooks e o mesmo contexto de sessão em qualquer IDE ou CLI — e o conhecimento do projeto num **perfil** que o time edita sem tocar em código. Stack e arquitetura do hospedeiro são **dado de configuração**, não acoplamento. **Node 22, zero dependências.**
+>
+> Nasceu dentro do monorepo Fluxo e foi apartado (2026-11-22) — o Fluxo hoje é apenas o exemplo de hospedeiro em [`quality/examples/fluxo/`](quality/examples/fluxo/README.md).
+
+## Como funciona (a ideia em 4 pilares)
+
+1. **Motor determinístico** — `node quality/run.mjs` roda gates testáveis (`quality/gates/`) em três níveis: **rápido** (a cada edição), **rotina** (ao concluir) e **completo** (risco alto). Ferramenta ausente no hospedeiro = aviso aberto com impacto e ação; nunca silêncio, nunca crash.
+2. **Perfil do hospedeiro** (`quality/profile/`) — tudo que varia por projeto: camadas/stacks, fronteiras de arquitetura, runners, thresholds, tracker, gitflow, política PII (packs), locale e overlay de prompts. Schema v1 validado (`quality/lib/profile.mjs`).
+3. **Multi-host** — `harness-init` instala a integração certa para cada agente: hooks nativos (Claude Code, Cline) ou carriers de instruções (Codex, Copilot, Antigravity, Kiro). Mesma política, dois transportes.
+4. **Ciclo de entrega** — investigação → gates que provam a falha → implementação → avaliação, com backlog versionado e espelho em tracker (Jira ou `none`).
+
+## Stacks
+
+O motor é agnóstico: **runner é mecanismo no núcleo; qual stack, onde ela vive e como o projeto a invoca é dado do perfil.** Runner sem config no perfil fica inerte — repo sem a stack não paga nada.
+
+| Stack | Runner | Gates hoje |
+|---|---|---|
+| **Dart / Flutter** | `runners/flutter.mjs` | `dart analyze` arquivo a arquivo (foco em linhas adicionadas), testes relacionados por feature, suíte completa no nível completo |
+| **TypeScript / Node** | `runners/typescript.mjs` (pnpm) | lint/tsc, testes relacionados, supply chain |
+| **C# / .NET** | `runners/backend.mjs` (`runnerDotnet`) | `dotnet build -warnaserror` + `dotnet test --filter` + ambiente dedicado |
+| **Python** | via uv | toolchain detectada (`uv`), falha aberta |
+| **Go, Rust, C++, Java** | **em desenho** ([`docs/parking-lot/runners-go-rust-cpp-csharp-java.md`](docs/parking-lot/runners-go-rust-cpp-csharp-java.md)) | mesmas libs de mercado (go test/testify, cargo/clippy, GoogleTest/CTest, JUnit 5/Maven/Gradle), plano faseado F1–F6 |
+
+Hooks do RunStart listam ✔/✘ o que o hospedeiro tem (lizard, dart, flutter, dotnet, pnpm, uv, docker, firebase, osv-scanner…) — **IGNORADO não é aprovação**: o gate correspondente fica "não medido" com aviso.
 
 ## O que há aqui
 
@@ -11,7 +34,7 @@
 | `scripts/harness-init.mjs` | Instalador: semeia o núcleo num repo hospedeiro novo |
 | `quality/examples/fluxo/` | **Exemplo completo** de um host multi-stack (perfil, overlay, skills, gates) — fora da suíte e do discovery |
 | `docs/harness/` | Documentação operacional, um doc por workflow |
-| `docs/parking-lot/harness-agnostico.md` | Desenho da arquitetura agnóstica (R0–R5) e decisões |
+| `docs/parking-lot/` | Desenho da arquitetura agnóstica (R0–R5) e do suporte Go/Rust/C++/Java |
 
 ## Hosts de agente suportados
 
@@ -54,7 +77,7 @@ node quality/run.mjs --tier rapido                         # motor de qualidade
 
 ## Perfis
 
-O perfil declara **tudo que varia por projeto**: camadas/stacks, fronteiras de arquitetura, métricas do ratchet, runners (Flutter/TS/.NET/Python), tracker (`jira`/`none`), gitflow (permanentes e matriz), política PII via packs, locale e overlay de prompts. Schema v1 validado por `quality/lib/profile.mjs`; gate em `quality/test/profile.test.mjs`. Exemplo completo de um host real em `quality/examples/fluxo/`.
+O perfil declara **tudo que varia por projeto**: camadas/stacks, fronteiras de arquitetura, métricas do ratchet, runners por stack (`runnerDotnet`, `runnerTs`, Flutter/Python; `runnerGo`/`runnerRust`/`runnerCpp`/`runnerJava` no desenho F1–F6), tracker (`jira`/`none`), gitflow (permanentes e matriz), política PII via packs, locale e overlay de prompts. Schema v1 validado por `quality/lib/profile.mjs`; gate em `quality/test/profile.test.mjs`. Exemplo completo de um host real em `quality/examples/fluxo/`.
 
 Testes do motor que exercitam o exemplo (gates, risco, hooks, tracker):
 
@@ -66,11 +89,12 @@ HARNESS_PROFILE_DIR="$PWD/quality/examples/fluxo/profile" node --test quality/te
 
 - Operacional, por workflow: [`docs/harness/INDEX.md`](docs/harness/INDEX.md)
 - Arquitetura agnóstica e decisões (R0–R5): [`docs/parking-lot/harness-agnostico.md`](docs/parking-lot/harness-agnostico.md)
+- Runners por linguagem (Go, Rust, C++, C#, Java — desenho F1–F6): [`docs/parking-lot/runners-go-rust-cpp-csharp-java.md`](docs/parking-lot/runners-go-rust-cpp-csharp-java.md)
 - Inventário do bundle: [`HARNESS-MANIFEST.txt`](HARNESS-MANIFEST.txt)
 
 ## Comunidade
 
-- **Contribuir:** [CONTRIBUTING.md](CONTRIBUTING.md) — branches `feat/*`, Conventional Commits, bateria local antes do PR (CI `quality` obrigatório em `main`).
+- **Contribuir:** [CONTRIBUTING.md](CONTRIBUTING.md) — branches `feat/*`, Conventional Commits. **Projeto local, sem CI/Actions**: a bateria local é a validação; o mantenedor committa direto em `main` com ela verde. Contribuição externa entra por PR de fork, revisada e mergeada manualmente após a mesma bateria.
 - **Segurança:** [SECURITY.md](SECURITY.md) — reporte por advisory privado, nunca em issue pública.
 - **Conduta:** [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) (Contributor Covenant 2.1).
 - **Licença:** [MIT](LICENSE).
