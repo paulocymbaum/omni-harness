@@ -1,3 +1,4 @@
+import './bootstrap-example-profile.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { classifyRisk, runsPerDay } from '../lib/risk.mjs';

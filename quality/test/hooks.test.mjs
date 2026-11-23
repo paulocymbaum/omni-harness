@@ -1,4 +1,5 @@
 // Testes ponta a ponta dos hooks, cada um num repositório git temporário (QUALITY_ROOT).
+import './bootstrap-example-profile.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';

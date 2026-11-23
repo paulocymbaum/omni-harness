@@ -1,3 +1,4 @@
+import './bootstrap-example-profile.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { sizeGate, boundaryGate, suppressionGate, fallbackGate, exportsGate, complexityGate, formatGate } from '../lib/gates/fast.mjs';

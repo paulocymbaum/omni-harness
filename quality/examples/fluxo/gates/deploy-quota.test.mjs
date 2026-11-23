@@ -4,10 +4,10 @@ import { spawnSync } from 'node:child_process';
 import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { repoRoot } from '../lib/util.mjs';
+import { repoRoot } from '../../../lib/util.mjs';
 
 const root = repoRoot();
-const cli = path.join(root, 'scripts', 'deploy', 'actions-quota.mjs');
+const cli = path.join(root, 'quality', 'examples', 'fluxo', 'scripts', 'deploy', 'actions-quota.mjs');
 
 /** gh falso: responde por argumentos; FAKE_USERS/FAKE_ORGS=erro simula 403, FAKE_USED/FAKE_INCLUDED mudam o saldo. */
 const criarShim = () => {

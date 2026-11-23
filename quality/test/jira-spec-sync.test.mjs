@@ -1,6 +1,7 @@
 // Cards do Jira com a spec: card criado antes da spec recebe a label spec-pendente e a chave
 // fica gravada na tarefa; ao gravar a spec o sync acha o card pela chave, preenche a description
 // e tira a label; erro de busca nunca cria card duplicado. Jira falso em memória (sem rede).
+import './bootstrap-example-profile.mjs';
 import { test, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

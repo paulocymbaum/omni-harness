@@ -7,9 +7,11 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { QUALITY_DIR } from './helpers.mjs';
+import { QUALITY_DIR } from '../../../test/helpers.mjs';
 
 const ROOT = path.dirname(QUALITY_DIR);
+// Workflows são do hospedeiro: sem .github/workflows (núcleo puro), a bateria é pulada com motivo.
+const HAS_GHW = fs.existsSync(path.join(ROOT, ".github", "workflows"));
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), 'utf8');
 
 /** Corpo (`run: |`) do passo cujo `name:` contém o trecho dado. */
@@ -39,13 +41,13 @@ function resolveVersion(printed) {
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 }
 
-test('mobile-builds: BUILD_NAME e BUILD_NUMBER saem de X.Y.Z+B (e build 1 quando não há sufixo)', () => {
+test.skip(HAS_GHW ? false : '.github/workflows do hospedeiro ausentes', 'mobile-builds: BUILD_NAME e BUILD_NUMBER saem de X.Y.Z+B (e build 1 quando não há sufixo)', () => {
   assert.deepEqual(resolveVersion('23.47.75+81'), { BUILD_NAME: '23.47.75', BUILD_NUMBER: '81' });
   assert.deepEqual(resolveVersion('24.0.0+7'), { BUILD_NAME: '24.0.0', BUILD_NUMBER: '7' });
   assert.deepEqual(resolveVersion('1.2.3'), { BUILD_NAME: '1.2.3', BUILD_NUMBER: '1' });
 });
 
-test('mobile-builds: os dois jobs buscam histórico e tags e passam a versão ao flutter build', () => {
+test.skip(HAS_GHW ? false : '.github/workflows do hospedeiro ausentes', 'mobile-builds: os dois jobs buscam histórico e tags e passam a versão ao flutter build', () => {
   const yaml = read('.github/workflows/mobile-builds.yml');
   assert.equal((yaml.match(/fetch-depth: 0/g) ?? []).length, 2);
   assert.equal((yaml.match(/fetch-tags: true/g) ?? []).length, 2);
@@ -53,7 +55,7 @@ test('mobile-builds: os dois jobs buscam histórico e tags e passam a versão ao
   assert.match(yaml, /flutter build ios --debug --no-codesign --build-name "\$BUILD_NAME" --build-number "\$BUILD_NUMBER"/);
 });
 
-test('release-tag: push atômico, tags filtradas, Release só de produto e sem "Latest" por acaso', () => {
+test.skip(HAS_GHW ? false : '.github/workflows do hospedeiro ausentes', 'release-tag: push atômico, tags filtradas, Release só de produto e sem "Latest" por acaso', () => {
   const yaml = read('.github/workflows/release-tag.yml');
   assert.match(yaml, /git push --atomic origin HEAD:RELEASE "\$\{refs\[@\]\}"/);
   assert.doesNotMatch(yaml, /xargs -a \/tmp\/tags-new/);
@@ -64,7 +66,7 @@ test('release-tag: push atômico, tags filtradas, Release só de produto e sem "
   assert.doesNotMatch(yaml, /gh release create "\$tag" --title "\$tag" --generate-notes --verify-tag\n/); // sem a forma antiga
 });
 
-test('deploys de site e admin usam --tagged-only (sem tag, a UI não inventa v0.0.0)', () => {
+test.skip(HAS_GHW ? false : '.github/workflows do hospedeiro ausentes', 'deploys de site e admin usam --tagged-only (sem tag, a UI não inventa v0.0.0)', () => {
   assert.match(read('.github/workflows/fluxo-web-deploy.yml'), /--next site --tagged-only/);
   assert.match(read('.github/workflows/fluxo-admin-deploy.yml'), /--next admin-web --tagged-only/);
   assert.match(read('.github/workflows/backend-deploy.yml'), /--next backend\)/); // backend precisa de versão sempre
@@ -89,7 +91,7 @@ function gitRepos() {
   return { tmp, git, a, b: make('b'), origin: path.join(tmp, 'origin.git'), cleanup: () => fs.rmSync(tmp, { recursive: true, force: true }) };
 }
 
-test('git: push --atomic com origin à frente recusa TUDO (nenhuma tag chega); sem conflito, tudo chega', () => {
+test.skip(HAS_GHW ? false : '.github/workflows do hospedeiro ausentes', 'git: push --atomic com origin à frente recusa TUDO (nenhuma tag chega); sem conflito, tudo chega', () => {
   const g = gitRepos();
   try {
     const commitTag = (dir, tag) => {
