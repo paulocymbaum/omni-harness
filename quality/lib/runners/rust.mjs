@@ -4,12 +4,19 @@ import { repoRoot } from '../util.mjs';
 import { PROFILE } from '../profile.mjs';
 import { which } from '../tools.mjs';
 import { result } from '../report.mjs';
-import { step, tail, parseColonDiag, classifyLintIssues, scanScope } from './common.mjs';
+import { step as stepBase, tail, parseColonDiag, classifyLintIssues, scanScope } from './common.mjs';
 
 // ================================================================ Rust (F3 — perfil: runnerRust; camada 'rust')
 // fmt/clippy/test; cargo audit opt-in no completo. Sem cargo no hospedeiro: tool.missing WARN.
 const RUST = PROFILE.runnerRust || {};
 const CWD = RUST.root || repoRoot();
+// F6: RUSTC_WRAPPER=sccache, CARGO_TARGET_DIR etc. via perfil alcançam todos os passos cargo.
+const RUST_ENV = RUST.env || {};
+// Wrapper transparente do step: mescla o env do perfil em qualquer chamada (mesma assinatura).
+const step = (...a) => {
+  const opts = a[5] || {};
+  return stepBase(a[0], a[1], a[2], a[3], a[4], { ...opts, env: { ...RUST_ENV, ...opts.env } });
+};
 
 export const rustScope = (entries) => scanScope(entries, RUST.root, /\.rs$|Cargo\.(toml|lock)$/);
 

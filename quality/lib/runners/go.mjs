@@ -3,13 +3,20 @@ import { repoRoot } from '../util.mjs';
 import { PROFILE } from '../profile.mjs';
 import { which } from '../tools.mjs';
 import { result } from '../report.mjs';
-import { step, tail, parseColonDiag, parseLineList, classifyLintIssues, scanScope } from './common.mjs';
+import { step as stepBase, tail, parseColonDiag, parseLineList, classifyLintIssues, scanScope } from './common.mjs';
 
 // ================================================================ Go (F2 — perfil: runnerGo; camada 'go')
 // docs/parking-lot/runners-go-rust-cpp-csharp-java.md — falha aberta: sem `go` no hospedeiro,
 // tool.missing com impacto; runners só rodam quando o perfil declara a camada 'go'.
 const GO = PROFILE.runnerGo || {};
 const CWD = GO.root || repoRoot();
+// F6: cache/ambiente da toolchain vem do perfil (ex.: GOPROXY, GOCACHE) e alcança todos os passos.
+const GO_ENV = GO.env || {};
+// Wrapper transparente do step: mescla o env do perfil em qualquer chamada (mesma assinatura).
+const step = (...a) => {
+  const opts = a[5] || {};
+  return stepBase(a[0], a[1], a[2], a[3], a[4], { ...opts, env: { ...GO_ENV, ...opts.env } });
+};
 
 export const goScope = (entries) => scanScope(entries, GO.root, /\.go$|go\.mod$|go\.sum$/);
 

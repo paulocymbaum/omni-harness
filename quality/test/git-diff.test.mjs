@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { tempRepo } from './helpers.mjs';
-import { collectEntries, diffGlobal, headSha } from '../lib/git.mjs';
+import { collectEntries, diffGlobal, fileAtRev, fileAtRevBatch, headSha } from '../lib/git.mjs';
 
 test('diffGlobal: hunks de vários arquivos num único Map (novo caminho b/)', () => {
   const repo = tempRepo({ 'a.txt': 'l1\nl2\nl3\n', 'dir/b.txt': 'x\n' });
@@ -20,6 +20,24 @@ test('diffGlobal: hunks de vários arquivos num único Map (novo caminho b/)', (
     assert.deepEqual(a.removed, ['l2']);
     assert.ok(mapa.has('dir/b.txt'), 'deleção entra no Map pelo caminho novo');
     assert.deepEqual(mapa.get('dir/b.txt').removed, ['x']);
+  } finally {
+    repo.cleanup();
+  }
+});
+
+test('fileAtRevBatch == fileAtRev para presente, ausente e não-commitado', () => {
+  const repo = tempRepo({ 'a.txt': 'um\ndois\n', 'dir/b.txt': 'conteúdo b çãã\n' });
+  try {
+    repo.write('a.txt', 'um\ndois\ntrês\n');
+    const rev = headSha(repo.dir);
+    const pedidos = ['a.txt', 'dir/b.txt', 'nao-existe.txt'];
+    const lote = fileAtRevBatch(rev, pedidos, repo.dir);
+    for (const p of pedidos) {
+      assert.equal(lote.get(p), fileAtRev(rev, p, repo.dir), `batch == unitário para ${p}`);
+    }
+    assert.ok(lote.get('a.txt').includes('dois'));
+    assert.ok(lote.get('dir/b.txt').includes('çãã'), 'UTF-8 multibyte intacto no parse por bytes');
+    assert.equal(lote.get('nao-existe.txt'), null);
   } finally {
     repo.cleanup();
   }

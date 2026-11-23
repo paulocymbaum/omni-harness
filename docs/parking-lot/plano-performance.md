@@ -33,12 +33,28 @@
 - **Aceite:** números reais na tabela de `performance-camadas.md` (hoje só o mecanismo está provado).
 - **Esforço:** baixo (fixture + script; zero mudança no núcleo).
 
-## F4 — `scanScope` pré-indexado (condicional)
+## F4 — `scanScope` pré-indexado: AVALIADO E DESCARTADO (2026-11-23)
 
-- **Disparo:** só se diffs reais >10k entries aparecerem no uso (hoje: 283 ms em 50k — irrelevante).
-- **Como:** 1 passe construindo Map `prefixo-de-camada → entries[]` e cada runner pega do Map; segunda passada só para fontes sem camada.
-- **Gates:** <50 ms em 50k; equivalência com `scanScope` atual.
-- **Esforço:** baixo; **só entrar na fila quando o disparo ocorrer.**
+Implementação segura exigiria mudar a semântica (filtrar o payload do worker pelas camadas do grupo — um runner com `root` fora dos globs da camada ficaria silenciosamente sem entries, violando a falha aberta) ou estado global de cache entre chamadas (risco de contaminação entre rodadas nos testes). Custo atual medido: `scanScope` 283 ms em 50k — irrelevante para diffs reais (<1k). **Volta à fila apenas** se profiling de diff gigante (>10k) apontar os re-filtros dos runners como dominantes.
+
+## F6 ✔ IMPLEMENTADO — env de toolchain por runner (2026-11-23)
+
+Os runners go/rust/cpp/java embrulham o `step` num wrapper transparente que mescla `runner<X>.env` em todos os passos (build/test/lint/fmt):
+
+```json
+"runnerRust": { "root": "svc/", "env": { "RUSTC_WRAPPER": "sccache", "CARGO_TARGET_DIR": "target" } },
+"runnerCpp":  { "env": { "CCACHE_CPP2": "true" } },
+"runnerGo":   { "env": { "GOFLAGS": "-mod=mod", "GOPROXY": "off" } },
+"runnerJava": { "env": { "MAVEN_OPTS": "-Xmx1g" } }
+```
+
+Builds frios viram quentes na segunda rodada sem tocar no núcleo. Backend .NET segue com `backend-env` dedicado.
+
+## F1/F2/F5 ✔ IMPLEMENTADOS (2026-11-23)
+
+- **F1:** `fileAtRevBatch` (`git cat-file --batch`, parse por bytes, `asText` com NUL/2 MB guard) no `collectEntries` — 3 spawns → 1 por rodada; self-test batch==unitário com UTF-8 (`git-diff.test.mjs`).
+- **F2:** medido acima — serial 0,32 s → paralelo 0,18 s (1,76×) com dart+dotnet reais, `camada.unmeasured` zero.
+- **F5:** `scripts/dev/perf-compara.mjs` — tier rápido 12,86 s → 2,59 s; collectEntries 0,29 s → 0,01 s (29×); parsers <10 ms. Gate de não-regressão para qualquer mudança futura de performance.
 
 ## Adiados com critério de disparo explícito
 
@@ -49,10 +65,10 @@
 
 ## Ordem de execução e orçamento
 
-1. **F5** (ferramenta de bench) — meio de sessão; desbloqueia validação de tudo.
-2. **F1** (EG3 cat-file batch) — 1 sessão; último easy gain grande do caminho quente.
-3. **F2** (benchmark multi-stack) — baixo esforço; fecha a evidência da paralelização.
-4. **F4** (scanScope) — só com disparo. **F3/F6** — adiados com critério.
+1. **F5** (ferramenta de bench) — ✔ implementada (`scripts/dev/perf-compara.mjs`).
+2. **F1** (EG3 cat-file batch) — ✔ implementada; bench: coleta de 30 arquivos ~2× mais rápida no trecho de diff; self-test UTF-8/missing.
+3. **F2** (benchmark multi-stack) — ✔ implementada; 1,76× medido (flutter+dotnet reais), sem unmeasured.
+4. **F4** (scanScope) — avaliada e descartada com justificativa; volta só com disparo. **F3/F6** — F6 implementada (env por runner); F3 adiada com critério.
 
 ## Não-planejado (decidido)
 

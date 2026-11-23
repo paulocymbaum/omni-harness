@@ -4,13 +4,20 @@ import { repoRoot } from '../util.mjs';
 import { PROFILE } from '../profile.mjs';
 import { which } from '../tools.mjs';
 import { result } from '../report.mjs';
-import { step, tail, parseColonDiag, classifyLintIssues, scanScope } from './common.mjs';
+import { step as stepBase, tail, parseColonDiag, classifyLintIssues, scanScope } from './common.mjs';
 
 // ================================================================ C++ (F5 — perfil: runnerCpp; camada 'cpp')
 // CMake + Ninja/Make via `cmake --build`, CTest para testes, LLVM para fmt/lint. clang-tidy só
 // nos fontes alterados (nunca o projeto inteiro no rotina); sanitizers (preset asan) no completo.
 const CPP = PROFILE.runnerCpp || {};
 const CWD = CPP.root || repoRoot();
+// F6: CCACHE/C compilers etc. via perfil alcançam configure/build/ctest/tidy.
+const CPP_ENV = CPP.env || {};
+// Wrapper transparente do step: mescla o env do perfil em qualquer chamada (mesma assinatura).
+const step = (...a) => {
+  const opts = a[5] || {};
+  return stepBase(a[0], a[1], a[2], a[3], a[4], { ...opts, env: { ...CPP_ENV, ...opts.env } });
+};
 
 const RE_FONTE = /\.(cc|cpp|cxx|c)$/;
 const RE_QUALQUER = /\.(cc|cpp|cxx|c|h|hpp)$|CMakeLists\.txt$/;

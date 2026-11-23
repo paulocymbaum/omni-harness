@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { run, repoRoot, stateDir, toPosix } from './util.mjs';
 
 const MAX_TEXT_BYTES = 2 * 1024 * 1024;
@@ -80,6 +81,43 @@ export function fileAtRev(rev, file, root = repoRoot()) {
   if (!rev) return null;
   const r = git(['show', `${rev}:${file}`], root);
   return r.code === 0 ? asText(r.stdout) : null;
+}
+
+/**
+ * oldText de TODOS os `rev:path` em UM processo (EG3): `git cat-file --batch` com os pedidos
+ * no stdin e resposta `<sha> <tipo> <size>\n<bytes>\n` (ou `<pedido> missing\n`). O parse é
+ * por BYTES (size em bytes — UTF-8 multibyte proíbe fatiar string). `asText` aplica os mesmos
+ * guards do fileAtRev (NUL e 2 MB). Qualquer anomalia no protocolo = null (nunca lança).
+ */
+export function fileAtRevBatch(rev, paths, root = repoRoot()) {
+  const out = new Map();
+  const unicos = [...new Set(paths)];
+  if (!rev || !unicos.length) return out;
+  const res = spawnSync('git', ['cat-file', '--batch'], {
+    cwd: root,
+    input: unicos.map((p) => `${rev}:${p}\n`).join(''),
+    timeout: 60_000,
+    maxBuffer: 256 * 1024 * 1024,
+  });
+  const buf = res.stdout;
+  if (!buf || !buf.length) {
+    for (const p of unicos) out.set(p, null);
+    return out;
+  }
+  let off = 0;
+  for (const p of unicos) {
+    const nl = buf.indexOf(0x0a, off);
+    if (nl === -1) { out.set(p, null); break; }
+    const header = buf.slice(off, nl).toString('utf8');
+    off = nl + 1;
+    if (header === `${rev}:${p} missing`) { out.set(p, null); continue; }
+    const m = / (\d+)$/.exec(header);
+    if (!m) { out.set(p, null); continue; }
+    const size = Number(m[1]);
+    out.set(p, asText(buf.slice(off, off + size)));
+    off += size + 1; // conteúdo + \n do fim do objeto
+  }
+  return out;
 }
 
 export function readWorking(file, root = repoRoot()) {
@@ -174,10 +212,12 @@ export function collectEntries({ root = repoRoot(), base = 'HEAD', only } = {}) 
     const set = new Set(only);
     files = files.filter((f) => set.has(f.path));
   }
-  // 1 diff global (EG1) em vez de um `git diff --no-index` + tmpdir por arquivo.
+  // 1 diff global (EG1) + 1 cat-file batch (EG3) em vez de 2 spawns por arquivo.
   const mapaDiff = diffGlobal(root, baseSha ?? 'HEAD');
+  const precisamOld = files.filter((f) => f.status !== 'A');
+  const olds = fileAtRevBatch(baseSha ?? 'HEAD', precisamOld.map((f) => f.oldPath ?? f.path), root);
   return files.map((f) => {
-    const oldText = f.status === 'A' ? null : fileAtRev(baseSha, f.oldPath ?? f.path, root);
+    const oldText = f.status === 'A' ? null : (olds.get(f.oldPath ?? f.path) ?? null);
     const newText = f.status === 'D' ? null : readWorking(f.path, root);
     const { added, removed } = mapaDiff.get(f.path) ?? diffTexts(oldText, newText);
     return { ...f, oldText, newText, added, removed };

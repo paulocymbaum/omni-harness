@@ -1317,6 +1317,7 @@ quality/tools/package-lock.json
 quality/tools/package.json
 quality/version/bump.mjs
 scripts/dev/liberar-portas.mjs
+scripts/dev/perf-compara.mjs
 scripts/harness-init.mjs
 scripts/tracker/attachments.mjs
 scripts/tracker/ensure-statuses.mjs

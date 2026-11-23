@@ -4,13 +4,20 @@ import { repoRoot } from '../util.mjs';
 import { PROFILE } from '../profile.mjs';
 import { which } from '../tools.mjs';
 import { result } from '../report.mjs';
-import { step, tail, scanScope } from './common.mjs';
+import { step as stepBase, tail, scanScope } from './common.mjs';
 
 // ================================================================ Java (F4 — perfil: runnerJava; camada 'java')
 // Wrapper primeiro (./mvnw, ./gradlew), binário global como fallback; plugins de lint/estilo são
 // opt-in (runnerJava.tools) e só invocam o que o projeto declara. Sem pom/gradle: aviso aberto.
 const JAVA = PROFILE.runnerJava || {};
 const CWD = JAVA.root || repoRoot();
+// F6: MAVEN_OPTS/GRADLE_OPTS/JAVA_HOME via perfil alcançam build/test/lint (wrapper incluso).
+const JAVA_ENV = JAVA.env || {};
+// Wrapper transparente do step: mescla o env do perfil em qualquer chamada (mesma assinatura).
+const step = (...a) => {
+  const opts = a[5] || {};
+  return stepBase(a[0], a[1], a[2], a[3], a[4], { ...opts, env: { ...JAVA_ENV, ...opts.env } });
+};
 
 export const javaScope = (entries) => scanScope(entries, JAVA.root, /\.java$|pom\.xml$|build\.gradle(\.kts)?$|gradle\.lockfile$/);
 
