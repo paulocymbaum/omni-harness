@@ -2,6 +2,7 @@
 // Testa os helpers puros: contagem de supressões (com strings sanitizadas),
 // violações de fronteira por regra e a lógica de comparação do ratchet.
 // Rode: node --test quality/test/baseline.test.mjs
+import './bootstrap-example-profile.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

@@ -1,4 +1,5 @@
 // Paridade Claude ↔ Cline: o Cline roda os MESMOS scripts de hook do Claude através de quality/lib/cline-bridge.mjs.
+import './bootstrap-example-profile.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

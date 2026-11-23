@@ -1,5 +1,6 @@
 // Despachante único do PreToolUse: mesma precedência e mesmos efeitos das 4 entradas anteriores
 // (guarda de busca, evidência de testes, gitflow, rtk), em UM processo, com falha aberta por etapa.
+import './bootstrap-example-profile.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

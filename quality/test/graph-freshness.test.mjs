@@ -1,5 +1,6 @@
 // WP3: grafo ausente ou velho. Dica no SessionStart, atualização com debounce depois de editar
 // código, e armazenamento do grafo fora da árvore (symlink) para sobreviver a git clean/checkpoints.
+import './bootstrap-example-profile.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

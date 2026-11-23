@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { test } from 'node:test';
-import { STEPS, FEITOS, topoOrdem, mermaid, planoTexto } from '../../scripts/deploy/grafo.mjs';
+import { STEPS, FEITOS, topoOrdem, mermaid, planoTexto } from '../../../examples/fluxo/scripts/deploy/grafo.mjs';
 
 test('ordem topológica: nenhum passo antes das deps; todos presentes; validação primeiro', () => {
   const ordem = topoOrdem();
@@ -30,9 +30,9 @@ test('plano: passos FEITOS sem gate humano; passo opcional marcado', () => {
   assert.match(plano, /✓ feito/);
 });
 
-test('FEITOS: produção, seguranca, main-merge, deploy-api, deploy-worker e deploy-web registrados', () => {
-  assert.equal(FEITOS.length, 6);
-  for (const id of ['jira-production', 'seguranca', 'main-merge', 'deploy-api', 'deploy-worker', 'deploy-web']) {
+test('FEITOS: os 9 passos concluídos do exemplo estão registrados', () => {
+  assert.equal(FEITOS.length, 9);
+  for (const id of ['jira-production', 'seguranca', 'main-merge', 'deploy-api', 'deploy-worker', 'deploy-web', 'jira-done', 'verificar', 'validacao']) {
     assert.ok(FEITOS.some((f) => f.id === id), `${id} deve estar em FEITOS`);
   }
 });
@@ -46,7 +46,7 @@ test('modo local: passos de deploy têm variante local com prereq; worker usa o 
   }
   assert.match(porId.get('deploy-worker').local.cmd, /southamerica-east1-docker\.pkg\.dev\/fluxo-ath\/fluxo\/fluxo-creator-worker/);
   assert.match(porId.get('deploy-api').local.cmd, /scripts\/deploy\/local\/deploy-api\.sh/);
-  assert.ok(existsSync(new URL('../../scripts/deploy/local/deploy-api.sh', import.meta.url)),
+  assert.ok(existsSync(new URL('../../../examples/fluxo/scripts/deploy/local/deploy-api.sh', import.meta.url)),
     'script de replicação da API deve existir');
 });
 
