@@ -1191,6 +1191,7 @@ quality/integration/jira.integration.test.mjs
 quality/lib/anti-loop.mjs
 quality/lib/autofix.mjs
 quality/lib/cline-bridge.mjs
+quality/lib/camada-filha.mjs
 quality/lib/cost-job.mjs
 quality/lib/deploy-pendente.mjs
 quality/lib/env.mjs
@@ -1308,6 +1309,7 @@ quality/test/sanitize.test.mjs
 quality/test/search-guard.test.mjs
 quality/test/shell.test.mjs
 quality/test/teto-fuzzy.test.mjs
+quality/test/tiers-paralelo.test.mjs
 quality/tools/biome.json
 quality/tools/package-lock.json
 quality/tools/package.json

@@ -75,31 +75,44 @@ function riskCmd(args, { entries, scope }, risk) {
   return 0;
 }
 
-function tierCmd(args, { entries, scope }, risk) {
+async function tierCmd(args, { entries, scope }, risk) {
   const migration = args.migration
     ? { active: true, reason: args.migrationReason || MIGRATION_DEFAULT_REASON }
     : { active: false };
   const hashBefore = worktreeHash();
-  const { results, ignoredGates } = applyMigrationOverride(runTier(args.tier, entries), migration);
-  const header = [renderRisk(risk), ''];
-  if (args.tier === 'completo' && LEVELS.indexOf(risk.level) < LEVELS.indexOf('alto')) {
-    header.push(t('summary.overkill', { level: levelLabel(risk.level), tier: tierLabel(risk.requiredTier) }), '');
-  }
-  if (migration.active) {
-    header.push(t('migration.banner', { reason: migration.reason, gates: ignoredGates.join(', ') }), '');
-  }
+  const { results, ignoredGates } = applyMigrationOverride(await runTier(args.tier, entries), migration);
   const c = counts(results);
   const status = c.fail > 0 ? 'fail' : 'pass';
-  let evidenceLine = '';
+  const header = headerDoTier(args.tier, risk, migration, ignoredGates);
+  const evidenciaLinha = linhaDeEvidencia(args, scope, hashBefore, results, entries);
+  if (args.json) {
+    console.log(JSON.stringify({ tier: args.tier, scope, risk, status, counts: c, results, migration: migration.active ? { reason: migration.reason, ignoredGates } : undefined }, null, 2));
+  } else {
+    console.log(renderReport(args.tier, results, header) + (evidenciaLinha ? `\n${evidenciaLinha}` : ''));
+  }
+  return status === 'fail' ? 1 : 0;
+}
+
+function headerDoTier(tier, risk, migration, ignoredGates) {
+  const header = [renderRisk(risk), ''];
+  if (tier === 'completo' && LEVELS.indexOf(risk.level) < LEVELS.indexOf('alto')) {
+    header.push(t('summary.overkill', { level: levelLabel(risk.level), tier: tierLabel(risk.requiredTier) }), '');
+  }
+  if (migration.active) header.push(t('migration.banner', { reason: migration.reason, gates: ignoredGates.join(', ') }), '');
+  return header;
+}
+
+/** Evidência por hash quando o worktree não mudou durante a rodada; sujo = tool.dirtied (WARN). */
+function linhaDeEvidencia(args, scope, hashBefore, results, entries) {
+  const tier = args.tier;
   if (hashBefore !== worktreeHash()) {
     results.push(result('ferramentas', 'warn', 'tool.dirtied', { files: 'git status' }));
-  } else if (entries.length) {
-    recordEvidence(hashBefore, { tier: args.tier, scope, status, counts: c, migration: migration.active ? migration.reason : undefined });
-    evidenceLine = t('evidence.recorded', { tier: tierLabel(args.tier), scope, hash: hashBefore.slice(0, 12) });
+    return '';
   }
-  if (args.json) console.log(JSON.stringify({ tier: args.tier, scope, risk, status, counts: c, results, migration: migration.active ? { reason: migration.reason, ignoredGates } : undefined }, null, 2));
-  else console.log(renderReport(args.tier, results, header) + (evidenceLine ? `\n${evidenceLine}` : ''));
-  return status === 'fail' ? 1 : 0;
+  if (!entries.length) return '';
+  const c = counts(results);
+  recordEvidence(hashBefore, { tier, scope, status: c.fail > 0 ? 'fail' : 'pass', counts: c, migration: args.migration ? (args.migrationReason || MIGRATION_DEFAULT_REASON) : undefined });
+  return t('evidence.recorded', { tier: tierLabel(tier), scope, hash: hashBefore.slice(0, 12) });
 }
 
 function fixCmd(scope) {
@@ -113,7 +126,7 @@ function fixCmd(scope) {
   return bad ? 1 : 0;
 }
 
-function main() {
+async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (args.help || args.unknown || (!args.risk && !args.tier && !args.relatorio && !args.fix)) {
     console.log(`${t('error.usage')}\n${HELP}`);
@@ -128,7 +141,10 @@ function main() {
   const scope = resolveScope(args);
   if (args.fix) return fixCmd(scope);
   const risk = classifyRisk(scope.entries);
-  return args.tier ? tierCmd(args, scope, risk) : riskCmd(args, scope, risk);
+  return args.tier ? await tierCmd(args, scope, risk) : riskCmd(args, scope, risk);
 }
 
-process.exit(main());
+main().then((code) => process.exit(code)).catch((err) => {
+  process.stderr.write(`${err.stack ?? err}\n`);
+  process.exit(2);
+});

@@ -14,9 +14,9 @@ const MAX_BLOCKS_PER_STATE = 2;
 const MAX_BLOCKS_PER_SESSION = 5;
 
 /** Roda o nível automático, ou reaproveita uma execução aprovada para o mesmo estado. */
-function evaluate(entries, tier, hash, root) {
+async function evaluate(entries, tier, hash, root) {
   if (findEvidence(hash, { minTier: tier, scope: 'session' }).pass) return { results: [], reused: true };
-  const results = runTier(tier, entries, { budgetMs: 240_000 });
+  const results = await runTier(tier, entries, { budgetMs: 240_000 });
   const c = counts(results);
   if (worktreeHash(root) === hash) recordEvidence(hash, { tier, scope: 'session', status: c.fail ? 'fail' : 'pass', counts: c });
   return { results, reused: false };
@@ -52,11 +52,11 @@ function releaseMessage({ risk, tier, results, reused, detail }) {
 }
 
 /** Avalia o risco da sessão, decide bloqueio/liberação e anexa os lembretes de deploy (QG-027). */
-function resolverSessao({ input, root, session, entries, lembretes }) {
+async function resolverSessao({ input, root, session, entries, lembretes }) {
   const risk = classifyRisk(entries);
   const tier = AUTO_TIER[risk.level];
   const hash = worktreeHash(root);
-  const { results, reused } = evaluate(entries, tier, hash, root);
+  const { results, reused } = await evaluate(entries, tier, hash, root);
   const needFull = risk.level === 'critico' && !findEvidence(hash, { minTier: 'completo', scope: 'session' }).pass;
   const detail = results.filter((r) => r.status === 'fail' || r.status === 'warn').map(renderLine);
   const ctx = { session, sessionId: input.session_id, hash, risk, tier, results, reused, needFull, detail };
@@ -68,7 +68,7 @@ function resolverSessao({ input, root, session, entries, lembretes }) {
   return resultado;
 }
 
-function main() {
+async function main() {
   const input = readStdinJson();
   const root = repoRoot();
   if (!isGitRepo(root)) {
@@ -84,7 +84,10 @@ function main() {
   return resolverSessao({ input, root, session, entries, lembretes });
 }
 
-let out = null;
-try { out = main(); } catch (err) { process.stderr.write(`quality/stop: ${err.stack ?? err}\n`); }
-if (out) process.stdout.write(JSON.stringify(out));
-process.exit(0);
+main().then((out) => {
+  if (out) process.stdout.write(JSON.stringify(out));
+  process.exit(0);
+}).catch((err) => {
+  process.stderr.write(`quality/stop: ${err.stack ?? err}\n`);
+  process.exit(0);
+});
