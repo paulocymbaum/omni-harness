@@ -1217,7 +1217,11 @@ quality/lib/rtk-rewrite.mjs
 quality/lib/runners/backend-env.mjs
 quality/lib/runners/backend.mjs
 quality/lib/runners/common.mjs
+quality/lib/runners/cpp.mjs
 quality/lib/runners/flutter.mjs
+quality/lib/runners/go.mjs
+quality/lib/runners/java.mjs
+quality/lib/runners/rust.mjs
 quality/lib/runners/typescript.mjs
 quality/lib/sanitize.mjs
 quality/lib/scope.mjs
@@ -1297,6 +1301,7 @@ quality/test/pre-bash-dispatch.test.mjs
 quality/test/profile.test.mjs
 quality/test/release-flow.test.mjs
 quality/test/risk.test.mjs
+quality/test/runners-stacks.test.mjs
 quality/test/sanitize.test.mjs
 quality/test/search-guard.test.mjs
 quality/test/shell.test.mjs

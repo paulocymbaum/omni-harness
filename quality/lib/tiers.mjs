@@ -11,6 +11,10 @@ import { costBudgetGate } from './cost-job.mjs';
 import { flutterAnalyze, flutterRelatedTests, flutterFull } from './runners/flutter.mjs';
 import { functionsRoutine, ocrRoutine, webRoutine } from './runners/typescript.mjs';
 import { backendRoutine, infraRoutine, supplyChain } from './runners/backend.mjs';
+import { goRoutine } from './runners/go.mjs';
+import { rustRoutine } from './runners/rust.mjs';
+import { javaRoutine } from './runners/java.mjs';
+import { cppRoutine } from './runners/cpp.mjs';
 
 export { diffCoverage } from './runners/flutter.mjs';
 export { ocrRouterScan } from './runners/typescript.mjs';
@@ -44,6 +48,11 @@ function rodarCamadas(tier, entries, byLayer, out, budget) {
   if (WEB_LAYERS.some((id) => byLayer.has(id))) webRoutine(entries, out, budget, full);
   if (byLayer.has('backend') || byLayer.has('rules')) backendRoutine(entries, out, budget, full);
   if (byLayer.has('infra')) infraRoutine(entries, out);
+  // Runners por stack (F2–F5): a camada é declarada no perfil do hospedeiro; sem ela, inerte.
+  if (byLayer.has('go')) goRoutine(entries, out, budget, full);
+  if (byLayer.has('rust')) rustRoutine(entries, out, budget, full);
+  if (byLayer.has('cpp')) cppRoutine(entries, out, budget, full);
+  if (byLayer.has('java')) javaRoutine(entries, out, budget, full);
   if (full) rodarCompleto(entries, out);
 }
 

@@ -57,3 +57,50 @@ function classifyMemoryFailure(r, killsBefore) {
 }
 
 export const addedLineSet = (e) => new Set(e.added.map((a) => a.line));
+
+// ================================================================ parsers compartilhados (F1)
+// Runners por stack (docs/parking-lot/runners-go-rust-cpp-csharp-java.md): parser puro, testável
+// sem o binário — a rotina real só roda quando which() acha a toolchain no hospedeiro.
+
+/** Escopo de um runner por stack: arquivos vivos sob o root do perfil que casam a regex. */
+export function scanScope(entries, root, re) {
+  const base = (root || '').replace(/\/$/, '');
+  const prefixo = base ? `${base}/` : '';
+  return entries.filter((e) => e.status !== 'D' && e.path.startsWith(prefixo) && re.test(e.path));
+}
+
+/**
+ * Diagnóstico `file:line[:col]: [severity: ]msg` — cobre go vet, golangci (line-number),
+ * rustc/clippy (error[E0308]) e clang-tidy (warning… [check]). Ignora snippets de contexto
+ * do rustc (linhas com espaço inicial, `--> file:line:col`, `12 |`). Sem severity explícita
+ * o diagnóstico é tratado como error (a tool só reporta problema real).
+ */
+export function parseColonDiag(text) {
+  const out = [];
+  for (const linha of text.split('\n')) {
+    if (/^\s/.test(linha) || !linha.trim()) continue;
+    const m = /^(.+?):(\d+):(?:(\d+):)?\s*(?:(?:fatal error|error|warning)(?:\[E\d+\])?\s*:\s*)?(.+)$/.exec(linha);
+    if (!m || m[1].includes('-->')) continue;
+    const severity = /warning/.test(linha) ? 'warning' : 'error';
+    out.push({ file: m[1].trim(), line: Number(m[2]), col: m[3] ? Number(m[3]) : null, severity, msg: (m[4] || '').trim() });
+  }
+  return out;
+}
+
+/** Lista de caminhos por linha (gofmt -l, cargos de saída simples). */
+export function parseLineList(text) {
+  return text.split('\n').map((l) => l.trim()).filter(Boolean);
+}
+
+/**
+ * Diagnóstico focado nas linhas adicionadas (padrão dos runners): issue em linha adicionada
+ * reprova (fail); fora, é dívida legada (warn). Reusa addedLineSet do diff em memória.
+ */
+export function classifyLintIssues(entries, diags) {
+  const porArquivo = new Map(entries.filter((e) => e.status !== 'D').map((e) => [e.path, e]));
+  return diags.map((d) => {
+    const e = porArquivo.get(d.file);
+    const adicionada = Boolean(e) && addedLineSet(e).has(d.line);
+    return result('lint', adicionada ? 'fail' : 'warn', 'lint.issue', { file: d.file, line: d.line, msg: d.msg });
+  });
+}

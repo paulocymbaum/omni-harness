@@ -29,6 +29,9 @@ export function isTest(file) {
 const LANG_BY_EXT = {
   '.dart': 'dart', '.ts': 'typescript', '.tsx': 'tsx', '.js': 'javascript', '.mjs': 'javascript', '.cjs': 'javascript',
   '.jsx': 'javascript', '.cs': 'csharp', '.py': 'python',
+  // F2–F5 (runners por stack). `.rs` de fora de propósito: lizard não parseia Rust, e isSource
+  // true mentiria nas métricas — fica sem medição (honesto) até o lizard suportar.
+  '.go': 'go', '.java': 'java', '.cc': 'cpp', '.cpp': 'cpp', '.cxx': 'cpp', '.c': 'c', '.h': 'cpp', '.hpp': 'cpp',
 };
 
 export function languageOf(file) {

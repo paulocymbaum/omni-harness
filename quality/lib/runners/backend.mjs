@@ -9,6 +9,11 @@ import { backendTestEnvironment } from './backend-env.mjs';
 // ================================================================ backend .NET (perfil, R4-total)
 const DOTNET = PROFILE.runnerDotnet || {};
 
+/** Saída de `dotnet list package --vulnerable` menciona pacote vulnerável? (puro, testável) */
+export function dotnetHasVulnerabilities(stdout) {
+  return /has the following vulnerable packages|is vulnerable to/i.test(stdout);
+}
+
 export function backendRoutine(entries, out, budget, full) {
   const rootPrefix = DOTNET.root || 'backend/';
   if (!entries.some((e) => e.path.startsWith(rootPrefix) && /\.(cs|csproj|props|json)$/.test(e.path))) return;
@@ -22,6 +27,19 @@ export function backendRoutine(entries, out, budget, full) {
   if (!b) return;
   if (b.code !== 0) { out.push(result('tipos', 'fail', 'build.fail', { tool: 'dotnet build', scope: 'backend', tail: tail(b.stdout + b.stderr) })); return; }
   out.push(result('tipos', 'pass', 'build.pass', { tool: 'dotnet build -warnaserror', scope: 'backend' }));
+  // F6 — gates finos de C# (opt-in pelo perfil): formato e supply chain nativo.
+  if (DOTNET.format) {
+    const f = step(out, budget, 'dotnet format', 'dotnet', ['format', sln, '--verify-no-changes', '--nologo'], { capMs: 300_000 });
+    if (f) out.push(f.code === 0
+      ? result('formato', 'pass', 'format.pass', { tool: 'dotnet format', scope: 'backend' })
+      : result('formato', 'fail', 'format.fail', { tool: 'dotnet format', scope: 'backend', tail: tail(f.stdout + f.stderr) }));
+  }
+  if (DOTNET.vulnCheck) {
+    const v = step(out, budget, 'dotnet list package --vulnerable', 'dotnet', ['list', sln, 'package', '--vulnerable', '--include-transitive', '--nologo'], { capMs: 180_000 });
+    if (v) out.push(dotnetHasVulnerabilities(v.stdout)
+      ? result('supply-chain', 'fail', 'osv.fail', { tool: 'dotnet list package --vulnerable', scope: 'backend' })
+      : result('supply-chain', 'pass', 'osv.pass', { tool: 'dotnet list package --vulnerable', scope: 'backend' }));
+  }
   const filter = DOTNET.testFilter;
   if (filter) {
     const r = step(out, budget, 'dotnet test', 'dotnet', ['test', sln, '-c', 'Release', '--no-build', '--filter', filter, '-nologo'], { capMs: 600_000, env: backendTestEnvironment() });

@@ -49,6 +49,10 @@ export const DEFAULTS = {
   boundaries: [],
   tracker: { provider: 'none' },
   runnerDotnet: {},
+  runnerGo: {},
+  runnerRust: {},
+  runnerCpp: {},
+  runnerJava: {},
   gitflow: null,
   prompt: { overlay: '', domainSkills: [], domainRules: [] },
   pii: { literalPatterns: [], publicLayers: [], rawDocFields: [], blockchainDeps: [] },
@@ -72,6 +76,9 @@ export function discoverProfile(dir, env) {
   if (files.length === 1) return { file: path.join(dir, files[0]), files, erro: null };
   return { file: null, files, erro: null };
 }
+
+/** Campos objeto opcionais do schema v1 — o perfil do hospedeiro pode omitir ou trazer {}. */
+const CAMPOS_OBJETO = ['metrics', 'flutter', 'runnerTs', 'tracker', 'gitflow', 'runnerDotnet', 'runnerGo', 'runnerRust', 'runnerCpp', 'runnerJava'];
 
 /** Valida o JSON bruto contra o schema v1. Devolve erros em pt-BR (lista vazia = válido). */
 export function validateProfile(raw) {
@@ -117,8 +124,9 @@ export function validateProfile(raw) {
       if (!ok) { erros.push('cada boundary precisa de { rule, applies, bad[], internalBad[] }'); break; }
     }
   }
-  const objetos = [['metrics', raw.metrics], ['flutter', raw.flutter], ['runnerTs', raw.runnerTs], ['tracker', raw.tracker], ['gitflow', raw.gitflow], ['runnerDotnet', raw.runnerDotnet]];
-  for (const [nome, v] of objetos) {
+  const objetos = CAMPOS_OBJETO;
+  for (const nome of objetos) {
+    const v = raw[nome];
     if (v != null && (typeof v !== 'object' || Array.isArray(v))) erros.push(`${nome} deve ser objeto`);
   }
   if (raw.tracker != null && typeof raw.tracker === 'object' && raw.tracker.provider != null && typeof raw.tracker.provider !== 'string') {

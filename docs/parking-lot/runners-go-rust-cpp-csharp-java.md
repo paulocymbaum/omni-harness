@@ -1,6 +1,6 @@
 # Runners por linguagem — Go, Rust, C++, C#/dotnet, Java
 
-- **Status:** PROPOSTA (desenho aprovado pendente de implementação faseada — F1 a F4)
+- **Status:** IMPLEMENTADO (F1–F6, 2026-11-23) — runners em `quality/lib/runners/{go,rust,cpp,java}.mjs` + gates finos de C# em `backend.mjs`; self-tests em `quality/test/runners-stacks.test.mjs`
 - **Atualizado:** 2026-11-23
 - **Origem:** pedido do dono: habilitar o harness para Go, Rust, C++, C# e Java, considerando as libs principais de teste e os scripts de build.
 - **Domínio:** `quality/lib/runners/` (mecanismo), `quality/profile/` (dado), `quality/lib/tiers.mjs` (composição), `quality/lib/gates/` (níveis).
@@ -120,10 +120,12 @@ Lockfiles: + `go.sum`, `Cargo.lock`, `packages.lock.json` (NuGet lock), `gradle.
 
 Self-tests de runner seguem o padrão da suíte: **parser e montagem de comando com fixtures sintéticos** (a função pura recebe a saída gravada de uma execução real da tool e o veredito esperado); o smoke com binário real só roda quando `which()` acha a tool (como dart/dotnet hoje) — hospedeiro sem a stack fica no aviso aberto, nunca quebra.
 
-## Decisões abertas
+## Decisões fechadas na implementação (2026-11-23)
 
-1. **Ordem das fases** — proposta F1→F6 acima (Go primeiro: parser trivial, toolchain única).
-2. **Camada por stack no exemplo** — o exemplo `fluxo` é Dart/TS: criar fixture mínima de cada stack (ex.: `quality/examples/go-exemplo/` com go.mod + 1 teste testify) para o self-test de integração opcional, ou só fixtures sintéticos de saída? Proposta: sintéticos primeiro, fixture real só se o hospedeiro tiver a toolchain.
-3. **Golangci-lint como obrigatório ou opcional** — proposta: `vet` no rápido (stdlib, zero config), `golangci-lint` no rotina com WARN se ausente.
-4. **Sanitizers C++** — preset separado `asan` no completo: reprova ou vira aviso? Proposta: reprova (é teste rodando), mas só no tier completo.
-5. **Nome do campo do perfil C#** — manter `runnerDotnet` (compat) e aceitar `runnerCsharp` como alias no carregamento.
+1. **Ordem das fases** — F1 (parsers puros em `common.mjs`: `scanScope`, `parseColonDiag`, `parseLineList`, `classifyLintIssues`) → F2 Go → F3 Rust → F4 Java → F5 C++ → F6 C# fino, conforme planejado.
+2. **Camada por stack** — sem fixture real por stack: parsers/montagens com fixtures sintéticos (`runners-stacks.test.mjs`); o caminho "tool ausente" é testado por hospedeiro sem a toolchain (skip condicional com motivo quando a tool existe). Smoke real continua condicional a `which()`.
+3. **Golangci-lint** — **opt-in** (`runnerGo.golangci`); `go vet` roda sempre (stdlib, zero config). Ausente no hospedeiro = `tool.delegated` WARN com o workflow do perfil.
+4. **Sanitizers C++** — **reprovam** (`tests.fail` com tail do sanitizer) no completo, via `runnerCpp.presets.asan` (preset do `CMakePresets.json` do projeto); sem preset declarado, não roda (não inventa config).
+5. **Alias `runnerCsharp`** — **não implementado**: `runnerDotnet` único (um nome, zero ambiguidade; o campo já estava documentado e consumido).
+6. **Extras ficados fora do desenho original** — Java: `detectBuildTool` aceita injeção de `exists`/`globalHas` (testável sem JDK); C++: `runnerCpp.cmakeArgs` e `testRegex`; Rust: teste relacionado por `--manifest-path` do `Cargo.toml` mais próximo (workspace sem saber o nome do pacote).
+7. **languageOf** — `.go`/`.java`/`.cc`/`.cpp`/`.cxx`/`.c`/`.h`/`.hpp` mapeados (lizard parseia); **`.rs` de fora de propósito** (lizard não suporta Rust; `isSource` true mentiria nas métricas).

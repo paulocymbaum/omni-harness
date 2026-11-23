@@ -76,6 +76,16 @@ test('tracker plugável: exemplo=jira espelha; núcleo=none desliga; fora do rep
   assert.equal(mirrorsToJira(path.join(os.tmpdir(), 'fora'), {}, exemplo.profile), false);
 });
 
+test('runners por stack (F2–F6): campos no DEFAULTS, objeto ou ausente no schema', () => {
+  for (const campo of ['runnerDotnet', 'runnerGo', 'runnerRust', 'runnerCpp', 'runnerJava']) {
+    assert.deepEqual(PROFILE[campo], {});
+  }
+  const erros = validateProfile({ schemaVersion: 1, name: 'x', locale: 'pt-BR', packs: [], runnerGo: 'não' });
+  assert.ok(erros.some((e) => e.includes('runnerGo deve ser objeto')));
+  const ok = validateProfile({ schemaVersion: 1, name: 'x', locale: 'pt-BR', packs: [], runnerGo: { root: 'svc/', packages: './svc/...', golangci: true, race: true } });
+  assert.deepEqual(ok, []);
+});
+
 test('gitflow: exemplo traz RELEASE permanente; núcleo cai no fallback legado', () => {
   assert.deepEqual(exemplo.profile.gitflow.permanent, ['main', 'develop', 'RELEASE']);
   assert.deepEqual(PERMANENT, ['main', 'develop', 'RELEASE'], 'fallback legado do gitflow.mjs');
