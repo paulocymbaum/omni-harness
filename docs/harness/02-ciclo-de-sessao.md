@@ -10,6 +10,8 @@ fontes: [quality/hooks/session-start.mjs, quality/hooks/stop.mjs, quality/hooks/
 
 Preparar o ambiente no início da sessão do agente, acompanhar o risco acumulado e garantir que **nada encerra sem os gates do nível exigido passarem** — no máximo duas recusas por estado, para não prender o usuário. Também guarda a **evidência por hash**: um gate só vale para o estado exato da árvore que existia quando ele rodou.
 
+**Hospedeiro sem git** (núcleo apartado): os hooks de abertura e encerramento **seguem ativos com o mesmo contexto** (inventário, gates, tracker); o que fica indisponível é a **evidência por hash** e os gates de sessão do Stop — o Stop informa isso em vez de silenciar, e o fluxo segue via CLI (`node quality/run.mjs --tier rapido`).
+
 ## Quando dispara
 
 | Evento | Claude Code | Cline | Script |
