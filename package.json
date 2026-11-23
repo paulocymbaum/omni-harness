@@ -1,0 +1,43 @@
+{
+  "name": "omni-harness",
+  "version": "0.1.0",
+  "description": "Núcleo agnóstico de stack/arquitetura para agentes de código: hooks, gates determinísticos, ciclo de entrega em backlog, perfis por projeto (Claude Code + Cline). Node 22, zero dependências.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "omni-harness": "bin/omni-harness.mjs"
+  },
+  "files": [
+    "bin/",
+    "scripts/harness-init.mjs",
+    "scripts/tracker/**",
+    "quality/run.mjs",
+    "quality/baseline.mjs",
+    "quality/messages.pt-BR.json",
+    "quality/lib/**",
+    "quality/hooks/**",
+    "quality/agents/**",
+    "quality/delivery/**",
+    "quality/packs/**",
+    "quality/test/**",
+    "quality/version/**",
+    "quality/config/**",
+    "quality/tools/biome.json",
+    "quality/tools/package.json",
+    "quality/tools/package-lock.json",
+    ".claude/settings.json",
+    ".claude/hooks/**",
+    ".claude/agents/**",
+    ".claude/rules/**",
+    ".clinerules/hooks/**",
+    "docs/harness/**",
+    ".gitignore"
+  ],
+  "scripts": {
+    "test": "node --test quality/test/profile.test.mjs quality/test/attach.test.mjs",
+    "sync": "node quality/agents/sync-clinerules.mjs",
+    "doctor": "node bin/omni-harness.mjs doctor"
+  }
+}

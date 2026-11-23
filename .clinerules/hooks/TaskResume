@@ -1,0 +1,15 @@
+#!/usr/bin/env node
+// Hook TaskResume do Cline (nome exato, sem extensão, executável). Delega a quality/hooks/cline-lifecycle.mjs, que roda os mesmos
+// scripts do Claude Code (SessionStart/Stop). Arquivo CommonJS fino; falha aberta.
+const fs = require('node:fs');
+const path = require('node:path');
+const { spawnSync } = require('node:child_process');
+
+let out = '{}';
+try {
+  const input = fs.readFileSync(0, 'utf8');
+  const target = path.join(__dirname, '..', '..', 'quality', 'hooks', 'cline-lifecycle.mjs');
+  const r = spawnSync(process.execPath, [target, path.basename(__filename)], { input, encoding: 'utf8', timeout: 115000 });
+  if (r.status === 0 && r.stdout.trim()) out = r.stdout.trim();
+} catch { /* libera */ }
+process.stdout.write(out);

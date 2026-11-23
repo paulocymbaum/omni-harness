@@ -1,0 +1,10 @@
+{
+  "name": "pii-br",
+  "_comment": "Pack de política PII do Brasil (decisão R0). Ativado pelo perfil (packs: [\"pii-br\"]). O mecanismo (regex -> aviso/bloqueio) vive no core (.claude/hooks/lib/regras.mjs); os padrões vivem aqui. Camadas públicas são DADO DO HOST: declare-as no próprio perfil (pii.publicLayers), não no pack. Projetos fora do Brasil criam seu próprio pack com os padrões locais.",
+  "piiPatterns": [
+    { "id": "cpf", "label": "CPF", "re": "\\b\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}\\b", "flags": "g" },
+    { "id": "cnpj", "label": "CNPJ", "re": "\\b\\d{2}\\.\\d{3}\\.\\d{3}\\/\\d{4}-\\d{2}\\b", "flags": "g" }
+  ],
+  "rawDocFields": ["cpf", "cnpj"],
+  "blockchainDeps": ["ethers", "web3", "web3dart", "viem", "wagmi", "@solana\\/[\\w-]+", "@walletconnect\\/[\\w-]+", "Nethereum[\\w.]*"]
+}

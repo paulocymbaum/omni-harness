@@ -1,0 +1,107 @@
+{
+  "_comment": "Baseline do ratchet global (QUALITY.md §3/§6). Gere com: node quality/baseline.mjs --write. Só desce; nunca altere à mão para fazer um gate passar.",
+  "generated": "2026-10-23",
+  "layers": {
+    "quality": {
+      "sourceFiles": 40,
+      "maxNloc": 398,
+      "filesOverNloc": 0,
+      "suppressions": 0
+    },
+    "ocr": {
+      "sourceFiles": 115,
+      "maxNloc": 1117,
+      "filesOverNloc": 1,
+      "suppressions": 0
+    },
+    "admin-web": {
+      "sourceFiles": 114,
+      "maxNloc": 576,
+      "filesOverNloc": 2,
+      "suppressions": 1
+    },
+    "automation": {
+      "sourceFiles": 36,
+      "maxNloc": 386,
+      "filesOverNloc": 0,
+      "suppressions": 0
+    },
+    "backend": {
+      "sourceFiles": 182,
+      "maxNloc": 605,
+      "filesOverNloc": 4,
+      "suppressions": 0
+    },
+    "docs": {
+      "sourceFiles": 1,
+      "maxNloc": 378,
+      "filesOverNloc": 0,
+      "suppressions": 0
+    },
+    "outros": {
+      "sourceFiles": 9,
+      "maxNloc": 374,
+      "filesOverNloc": 0,
+      "suppressions": 0
+    },
+    "functions": {
+      "sourceFiles": 181,
+      "maxNloc": 3353,
+      "filesOverNloc": 33,
+      "suppressions": 42
+    },
+    "flutter": {
+      "sourceFiles": 675,
+      "maxNloc": 8810,
+      "filesOverNloc": 87,
+      "suppressions": 13
+    },
+    "site": {
+      "sourceFiles": 220,
+      "maxNloc": 2145,
+      "filesOverNloc": 10,
+      "suppressions": 2
+    },
+    "debate-worker": {
+      "sourceFiles": 66,
+      "maxNloc": 315,
+      "filesOverNloc": 0,
+      "suppressions": 0
+    }
+  },
+  "repo": {
+    "suppressions": 58,
+    "suppressionsByKind": {
+      "eslint-disable": 45,
+      "// ignore:": 11,
+      "ignore_for_file": 2
+    },
+    "dartBoundaries": 113,
+    "dartBoundariesByRule": {
+      "rule.sharedFeatures": 33,
+      "rule.domainInfra": 80
+    },
+    "apiFallbacks": 17,
+    "functionsExports": 30,
+    "flutterFeaturesNoTest": 17,
+    "flutterFeaturesNoTestList": [
+      "agenda",
+      "artists",
+      "auth",
+      "business_accounts",
+      "chat",
+      "communities",
+      "feed",
+      "friends",
+      "home",
+      "insights",
+      "interactions",
+      "messages",
+      "notifications",
+      "route_share",
+      "settings",
+      "share_route",
+      "tribes"
+    ]
+  }
+}

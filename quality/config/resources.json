@@ -1,0 +1,9 @@
+{
+  "_comment": "Teto de recursos dos gates (node quality/run.mjs --tier ...) e do build do graphify. Só reduz o ritmo: os gates verificam exatamente o mesmo. Aumente apenas se um gate for encerrado por falta de memória (mensagem tool.oom). Não use MemoryHigh: sem swap ele estrangula o gate em vez de encerrá-lo e ele pode ficar preso por minutos. Sobrescritas por ambiente: QUALITY_MEM_MAX_MB, QUALITY_CPU_QUOTA, QUALITY_WORKERS. QUALITY_RESOURCES=off desliga os limites (uso em CI); não desliga nenhum gate.",
+  "memoryMaxMB": 3072,
+  "cpuQuotaPercent": 200,
+  "workers": 2,
+  "nodeHeapMB": 1536,
+  "nice": 19,
+  "timeFactor": 3
+}

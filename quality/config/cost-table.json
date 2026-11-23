@@ -1,0 +1,9 @@
+{
+  "_comment": "Preços de referência para estimar custo em R$. Mantido à mão: confira com a fatura/calculadora GCP (fonte usada em 2026-11-22: Cloud Run SA-east1 gen2 — vCPU US$ 0,0864/h, memória US$ 0,009/GiB-h; câmbio ≈ R$ 5,35/US$). Com null o relatório mostra só unidades (instância-hora, execuções/dia, vCPU-h, chamadas).",
+  "updatedAt": "2026-11-22",
+  "currency": "BRL",
+  "cloudRunMinInstancePerMonth": 357,
+  "schedulerRunCost": 0.0005,
+  "cloudRunJobVcpuHour": 0.47,
+  "cloudRunJobGibHour": 0.05
+}

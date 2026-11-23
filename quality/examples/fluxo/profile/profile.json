@@ -1,0 +1,1011 @@
+{
+  "schemaVersion": 1,
+  "name": "fluxo",
+  "locale": "pt-BR",
+  "packs": [
+    "pii-br"
+  ],
+  "layers": [
+    {
+      "id": "rules",
+      "nome": "Dados e regras",
+      "stack": "Firestore/Storage Security Rules, índices Firestore, SQL versionado (PostgreSQL 17)",
+      "globs": [
+        "firestore.rules",
+        "storage.rules",
+        "firestore.indexes.json",
+        "backend/deploy/sql/**"
+      ],
+      "doc": "docs/firestore_schema.md"
+    },
+    {
+      "id": "quality",
+      "nome": "Gates de qualidade",
+      "stack": "Node 22 sem dependências, hooks e skill do Claude Code; scripts do harness (deploy local, espelho Jira)",
+      "globs": [
+        "quality/**",
+        "scripts/deploy/**",
+        "scripts/jira/**",
+        ".claude/**",
+        ".clinerules/**",
+        "QUALITY.md"
+      ],
+      "doc": "QUALITY.md"
+    },
+    {
+      "id": "flutter",
+      "nome": "App mobile",
+      "stack": "Flutter 3.38 / Dart 3.8, BLoC, go_router, get_it, Mapbox, flutter_test",
+      "globs": [
+        "lib/**",
+        "test/**",
+        "packages/fluxo_presence_bridge/**",
+        "pubspec.yaml",
+        "analysis_options.yaml"
+      ],
+      "doc": "README.md"
+    },
+    {
+      "id": "backend",
+      "nome": "API principal",
+      "stack": ".NET 10 Minimal API, EF Core + Npgsql, PostgreSQL 17, outbox, xUnit",
+      "globs": [
+        "backend/**"
+      ],
+      "doc": "backend/README.md"
+    },
+    {
+      "id": "functions",
+      "nome": "Backend legado e jobs",
+      "stack": "Firebase Functions (TypeScript), Cloud Run Jobs, node:test, emulador Firestore",
+      "globs": [
+        "functions/**"
+      ],
+      "doc": "functions/README.md"
+    },
+    {
+      "id": "ocr",
+      "nome": "Menu Extractor (OCR)",
+      "stack": "TypeScript (Hono, esbuild), pnpm workspaces, Vitest, Document AI/Gemini/Firecrawl, validador Python (uv + pytest)",
+      "globs": [
+        "OCR_webscraper_crawler/**"
+      ],
+      "doc": "OCR_webscraper_crawler/ARCHITECTURE.md"
+    },
+    {
+      "id": "admin-web",
+      "nome": "Painel admin",
+      "stack": "React + Vite, TanStack Query, Zustand, Vitest, Playwright",
+      "globs": [
+        "admin-web/**"
+      ],
+      "doc": "admin-web/README.md"
+    },
+    {
+      "id": "site",
+      "nome": "Site público",
+      "stack": "React + Vite, Vitest, Playwright",
+      "globs": [
+        "ofluxo_site/**"
+      ],
+      "doc": null
+    },
+    {
+      "id": "infra",
+      "nome": "Infra e CI",
+      "stack": "Terraform (GCP), Cloud Build, Cloud Run, GitHub Actions",
+      "globs": [
+        "infra/**",
+        "cloud/**",
+        ".github/**"
+      ],
+      "doc": "infra/gcp/README.md"
+    },
+    {
+      "id": "automation",
+      "nome": "Automação e ETL",
+      "stack": "Python 3 (biblioteca padrão), SQLite, Docker (limite de 5 GiB)",
+      "globs": [
+        "automation/**"
+      ],
+      "doc": "automation/README.md"
+    },
+    {
+      "id": "debate-worker",
+      "nome": "Worker de debates",
+      "stack": "TypeScript Node 22, ffmpeg, Soniox, Vitest",
+      "globs": [
+        "services/debate-worker/**"
+      ],
+      "doc": "services/debate-worker/README.md"
+    },
+    {
+      "id": "creator-worker",
+      "nome": "Worker do Creator",
+      "stack": "TypeScript Node 22, fila Postgres (pg, SKIP LOCKED), Zod, Vitest",
+      "globs": [
+        "services/creator-worker/**"
+      ],
+      "doc": "services/creator-worker/README.md"
+    },
+    {
+      "id": "creator-render",
+      "nome": "Render do Creator",
+      "stack": "TypeScript Node 22, React sem hooks, Satori, resvg, Vitest",
+      "globs": [
+        "packages/creator-render/**"
+      ],
+      "doc": "packages/creator-render/README.md"
+    },
+    {
+      "id": "docs",
+      "nome": "Documentação",
+      "stack": "Markdown",
+      "globs": [
+        "docs/**",
+        "**/*.md"
+      ],
+      "doc": null
+    }
+  ],
+  "riskMatrix": {
+    "levels": [
+      "baixo",
+      "medio",
+      "alto",
+      "critico"
+    ],
+    "ignoreGlobs": [
+      "quality/**",
+      ".claude/**",
+      "**/*.md",
+      "docs/**",
+      "**/node_modules/**",
+      "**/dist/**",
+      "functions/lib/**",
+      "build/**"
+    ],
+    "breakage": [
+      {
+        "level": "critico",
+        "reason": "fronteira de segurança, idempotência, outbox ou tráfego da API",
+        "globs": [
+          "backend/src/Fluxo.Api/Infrastructure/Security/**",
+          "backend/src/Fluxo.Api/Infrastructure/Idempotency/**",
+          "backend/src/Fluxo.Api/Infrastructure/Messaging/**",
+          "backend/src/Fluxo.Api/Infrastructure/Traffic/**",
+          "backend/src/Fluxo.Api/Program.cs"
+        ]
+      },
+      {
+        "level": "critico",
+        "reason": "schema do PostgreSQL (migrations/SQL/migrator)",
+        "globs": [
+          "backend/src/Fluxo.Api/Infrastructure/Persistence/Migrations/**",
+          "backend/src/Fluxo.Api/Infrastructure/Persistence/EntityConfigurations.cs",
+          "backend/deploy/sql/**",
+          "backend/deploy/migrator/**"
+        ]
+      },
+      {
+        "level": "critico",
+        "reason": "imagem ou pipeline de deploy",
+        "globs": [
+          "backend/Dockerfile",
+          "functions/Dockerfile*",
+          ".github/workflows/*deploy*.yml",
+          "**/cloudbuild*.yaml",
+          "backend/deploy/jobs/**",
+          "OCR_webscraper_crawler/deploy/**"
+        ]
+      },
+      {
+        "level": "critico",
+        "reason": "regras de segurança do Firestore/Storage",
+        "globs": [
+          "firestore.rules",
+          "storage.rules"
+        ]
+      },
+      {
+        "level": "critico",
+        "reason": "pagamentos ou criptografia",
+        "globs": [
+          "functions/src/payments/**",
+          "functions/src/crypto/**",
+          "lib/features/user_coordinated_payments/data/**"
+        ]
+      },
+      {
+        "level": "critico",
+        "reason": "cobrança (Billing)",
+        "globs": [
+          "backend/src/Fluxo.Api/Modules/Billing/**",
+          "backend/src/Fluxo.Api/Infrastructure/Persistence/BillingConfigurations.cs",
+          "admin-web/src/modules/billing/**",
+          "ofluxo_site/src/platform/**/billing*"
+        ]
+      },
+      {
+        "level": "critico",
+        "reason": "infraestrutura GCP (Terraform)",
+        "globs": [
+          "infra/gcp/terraform/**"
+        ]
+      },
+      {
+        "level": "alto",
+        "reason": "contrato REST consumido pelo app",
+        "globs": [
+          "backend/src/Fluxo.Api/Modules/**",
+          "backend/src/Fluxo.Api/Infrastructure/Persistence/**"
+        ]
+      },
+      {
+        "level": "alto",
+        "reason": "cliente HTTP, ambiente ou flags USE_API_* do app",
+        "globs": [
+          "lib/core/**",
+          "lib/service_locator.dart",
+          "lib/main.dart"
+        ]
+      },
+      {
+        "level": "alto",
+        "reason": "identidade, presença ou admin no backend legado",
+        "globs": [
+          "functions/src/identity/**",
+          "functions/src/presence/**",
+          "functions/src/admin/**",
+          "functions/src/jobs/runner.ts",
+          "functions/src/index.ts"
+        ]
+      },
+      {
+        "level": "alto",
+        "reason": "router/serviço combinado do OCR ou fetch SSRF-safe",
+        "globs": [
+          "OCR_webscraper_crawler/apps/router/**",
+          "OCR_webscraper_crawler/apps/combined/**",
+          "OCR_webscraper_crawler/packages/scraper/**",
+          "OCR_webscraper_crawler/packages/shared/src/config.ts"
+        ]
+      },
+      {
+        "level": "alto",
+        "reason": "índices do Firestore",
+        "globs": [
+          "firestore.indexes.json"
+        ]
+      },
+      {
+        "level": "medio",
+        "reason": "código de backend/serviço",
+        "globs": [
+          "backend/src/**",
+          "functions/src/**",
+          "OCR_webscraper_crawler/apps/**",
+          "OCR_webscraper_crawler/packages/**",
+          "OCR_webscraper_crawler/python/src/**"
+        ]
+      },
+      {
+        "level": "medio",
+        "reason": "camada de dados/domínio do app",
+        "globs": [
+          "lib/features/*/data/**",
+          "lib/features/*/domain/**",
+          "lib/shared/**",
+          "lib/navigation/**",
+          "packages/fluxo_presence_bridge/**"
+        ]
+      },
+      {
+        "level": "medio",
+        "reason": "acesso a API do painel admin",
+        "globs": [
+          "admin-web/src/api/**",
+          "admin-web/src/lib/**"
+        ]
+      },
+      {
+        "level": "medio",
+        "reason": "dependências ou configuração de build",
+        "globs": [
+          "**/package.json",
+          "pubspec.yaml",
+          "**/*.csproj",
+          "**/Directory.Build.props",
+          "**/tsconfig*.json",
+          "OCR_webscraper_crawler/python/pyproject.toml"
+        ]
+      }
+    ],
+    "cost": [
+      {
+        "level": "critico",
+        "reason": "recursos de Cloud Run/Cloud SQL alterados (CPU, memória, tier)",
+        "added": [
+          "--cpu[= ]",
+          "--memory[= ]",
+          "\\bcpu\\s*[:=]\\s*[\"']?\\d",
+          "\\bmemory\\s*[:=]\\s*[\"']?\\d",
+          "\\btier\\s*=\\s*\"db-",
+          "--tier[= ]db-",
+          "--concurrency[= ]"
+        ]
+      },
+      {
+        "level": "alto",
+        "reason": "limites de uso/quotas/rate limit alterados",
+        "added": [
+          "MENU_EXTRACTOR_[A-Z_]*LIMIT",
+          "RateLimiting",
+          "PermitLimit",
+          "SYNC_ALL_LIMIT",
+          "MaximumPoolSize",
+          "_(DAILY|HOURLY|MONTHLY)_LIMIT",
+          "usage_?guard"
+        ]
+      },
+      {
+        "level": "alto",
+        "reason": "retry/backoff/prazo de ack alterados",
+        "globs": [
+          "functions/src/**",
+          "backend/src/**",
+          "OCR_webscraper_crawler/apps/**",
+          "OCR_webscraper_crawler/packages/**",
+          "infra/**",
+          "**/cloudbuild*.yaml"
+        ],
+        "added": [
+          "maxAttempts",
+          "max_attempts",
+          "maxRetries",
+          "retryCount",
+          "\\bretries\\s*[:=]",
+          "ackDeadline",
+          "backoff"
+        ]
+      },
+      {
+        "level": "alto",
+        "reason": "reprocessamento de cardápio (cache → OCR/LLM pago)",
+        "globs": [
+          "OCR_webscraper_crawler/packages/cardapios/**"
+        ],
+        "added": [
+          "shouldReprocess",
+          "refresh",
+          "ttl",
+          "TTL",
+          "days",
+          "Days"
+        ]
+      },
+      {
+        "level": "alto",
+        "reason": "nova chamada a API paga",
+        "netIncrease": {
+          "Document AI": "documentai|DocumentProcessorServiceClient|processDocument\\(",
+          "Gemini/Vertex AI": "generateContent\\(|VertexAI\\b|GoogleGenerativeAI|@google/genai",
+          "Firecrawl": "firecrawl",
+          "Google Places": "places\\.googleapis|searchNearby|searchText\\(|PlacesClient",
+          "Mapbox API": "api\\.mapbox\\.com",
+          "Bandsintown": "rest\\.bandsintown\\.com",
+          "Ticketmaster": "app\\.ticketmaster\\.com",
+          "Spotify": "api\\.spotify\\.com"
+        }
+      },
+      {
+        "level": "alto",
+        "reason": "novo trigger Firestore (verifique se não escreve na coleção observada → loop)",
+        "globs": [
+          "functions/src/**"
+        ],
+        "netIncrease": {
+          "trigger Firestore": "onDocument(Written|Created|Updated|Deleted)\\(|firestore\\s*\\.\\s*document\\("
+        }
+      },
+      {
+        "level": "alto",
+        "reason": "nova consulta collectionGroup (varredura ampla)",
+        "globs": [
+          "functions/src/**",
+          "backend/src/**"
+        ],
+        "netIncrease": {
+          "collectionGroup": "collectionGroup\\("
+        }
+      },
+      {
+        "level": "medio",
+        "reason": "novo listener em tempo real no app (leituras contínuas)",
+        "globs": [
+          "lib/**"
+        ],
+        "netIncrease": {
+          "listener Firestore": "\\.snapshots\\("
+        }
+      }
+    ],
+    "modifiers": {
+      "maxSourceLines": 400,
+      "maxLayers": 3
+    }
+  },
+  "generatedGlobs": [
+    "**/*.g.dart",
+    "**/*.freezed.dart",
+    "**/*.mocks.dart",
+    "**/*.gr.dart",
+    "lib/l10n/**",
+    "lib/firebase_options.dart",
+    "**/Migrations/**",
+    "**/node_modules/**",
+    "**/dist/**",
+    "functions/lib/**",
+    "build/**",
+    "**/build/**",
+    "out/**",
+    "**/*.lock",
+    "**/package-lock.json",
+    "**/pnpm-lock.yaml",
+    "**/pubspec.lock",
+    "assets/**",
+    "**/*.min.js",
+    "admin-web/test-results/**",
+    "ofluxo_site/artifacts/**",
+    "quality/.state/**",
+    "quality/reports/**",
+    "ios/**",
+    "android/**",
+    "web/**",
+    "local_overrides/**",
+    "firebase-debug.log",
+    "*.log"
+  ],
+  "testGlobs": [
+    "test/**",
+    "**/test/**",
+    "**/tests/**",
+    "**/__tests__/**",
+    "**/*_test.dart",
+    "**/*.test.{ts,tsx,js,mjs,cjs}",
+    "**/*.spec.{ts,tsx,js}",
+    "**/*Tests.cs",
+    "**/test_*.py",
+    "**/*_test.py",
+    "**/e2e/**",
+    "quality/test/**"
+  ],
+  "featureMatchers": [
+    {
+      "id": "flutterFeature",
+      "re": "^(?:lib|test)/features/([^/]+)/",
+      "group": 1
+    },
+    {
+      "id": "ocrPackage",
+      "re": "^OCR_webscraper_crawler/((?:packages|apps)/[^/]+)/",
+      "group": 1
+    },
+    {
+      "id": "ocrPackage",
+      "re": "^OCR_webscraper_crawler/python/",
+      "value": "python"
+    }
+  ],
+  "docsMatchers": [
+    {
+      "re": "^lib/features/[^/]+/domain/",
+      "label": "domínio do app"
+    },
+    {
+      "re": "^backend/src/Fluxo\\.Api/Modules/",
+      "label": "módulo da API"
+    },
+    {
+      "re": "^backend/src/Fluxo\\.Api/Infrastructure/Persistence/Migrations/",
+      "label": "migration EF"
+    },
+    {
+      "re": "^backend/deploy/sql/",
+      "label": "SQL do migrator"
+    },
+    {
+      "re": "^functions/src/(features|identity|payments|presence)/",
+      "label": "feature das Functions"
+    },
+    {
+      "re": "^OCR_webscraper_crawler/packages/[^/]+/src/",
+      "label": "package do Menu Extractor"
+    }
+  ],
+  "docsGenerated": "\\.(g|freezed|mocks)\\.dart$|\\.Designer\\.cs$|ModelSnapshot\\.cs$",
+  "l10nPatterns": [
+    "^lib/l10n/",
+    "\\.arb$"
+  ],
+  "testHygiene": {
+    "stackRoots": [
+      "functions",
+      "admin-web",
+      "ofluxo_site",
+      "quality",
+      "scripts"
+    ],
+    "workspaceDirs": [
+      "OCR_webscraper_crawler"
+    ],
+    "defaultTargets": [
+      "lib",
+      "test",
+      "functions/src",
+      "functions/test",
+      "admin-web/src",
+      "ofluxo_site/src",
+      "OCR_webscraper_crawler",
+      "quality"
+    ]
+  },
+  "graphify": {
+    "exclude": "^(docs|assets|fluxo_branding_book|interface_mobile)/"
+  },
+  "homologacao": {
+    "envDirs": [
+      {
+        "env": "FLUXO_CREATOR_PULSO_DIR",
+        "path": "~/.cache/fluxo-creator-local/site/public/data/civic/contexts"
+      }
+    ]
+  },
+  "metrics": {
+    "featuresDir": "lib/features",
+    "featuresTestDir": "test/features",
+    "exportsEntry": "functions/src/index.ts",
+    "apiFallbacks": {
+      "files": "^lib/.*\\.dart$",
+      "marker": "API fallback to Firestore"
+    }
+  },
+  "flutter": {
+    "sharedCore": {
+      "applies": "^lib/(shared|core)/",
+      "testDir": "test/shared"
+    }
+  },
+  "dartPackage": "package:fluxo/",
+  "boundaries": [
+    {
+      "rule": "rule.domainInfra",
+      "dart": true,
+      "applies": "^lib/features/[^/]+/domain/",
+      "bad": [
+        "^package:(cloud_firestore|firebase_[a-z_]+)/",
+        "^package:flutter/(?!foundation\\.dart$)"
+      ],
+      "internalBad": [
+        "(^|/)(data|presentation)/"
+      ]
+    },
+    {
+      "rule": "rule.dataPresentation",
+      "dart": true,
+      "applies": "^lib/features/[^/]+/data/",
+      "internalBad": [
+        "(^|/)presentation/"
+      ]
+    },
+    {
+      "rule": "rule.sharedFeatures",
+      "dart": true,
+      "applies": "^lib/(shared|core)/",
+      "internalBad": [
+        "(^|/)features/"
+      ]
+    },
+    {
+      "rule": "rule.routerThin",
+      "dart": false,
+      "applies": "^OCR_webscraper_crawler/apps/router/src/",
+      "bad": [
+        "^@menu-extractor/(ocr|scraper|structurer)(/|$)",
+        "^cheerio$",
+        "^@google-cloud/(documentai|vertexai)",
+        "^@google/genai",
+        "^firecrawl",
+        "(^|/)packages/(ocr|scraper|structurer)/"
+      ]
+    },
+    {
+      "rule": "rule.adminFirestore",
+      "dart": false,
+      "applies": "^admin-web/src/",
+      "bad": [
+        "^firebase/firestore(/|$)",
+        "^@firebase/firestore$"
+      ]
+    }
+  ],
+  "runnerTs": {
+    "workspaces": [
+      {
+        "label": "OCR",
+        "root": "OCR_webscraper_crawler",
+        "build": {
+          "tool": "pnpm",
+          "cwd": "OCR_webscraper_crawler",
+          "args": [
+            "-r",
+            "--filter",
+            "./packages/*",
+            "build"
+          ],
+          "label": "pnpm build (pacotes OCR)"
+        },
+        "python": {
+          "tool": "uv",
+          "args": [
+            "run",
+            "--directory",
+            "OCR_webscraper_crawler/python",
+            "pytest",
+            "-q"
+          ],
+          "label": "pytest (menu-schema)"
+        },
+        "vitestHint": "pnpm ocr:install",
+        "routerScan": {
+          "dir": "OCR_webscraper_crawler/apps/router/src",
+          "rule": "o router do OCR deve continuar enxuto",
+          "badRe": "(?:from\\s+|require\\s*\\(\\s*|import\\s*\\(\\s*)['\"](@menu-extractor/(?:ocr|scraper|structurer)[^']*|cheerio|@google-cloud/(?:documentai|vertexai)[^']*|@google/genai)['\"]"
+        }
+      }
+    ]
+  },
+  "autofix": {
+    "include": [
+      "test/**/*_test.dart"
+    ]
+  },
+  "tracker": {
+    "provider": "jira"
+  },
+  "gitflow": {
+    "permanent": [
+      "main",
+      "develop",
+      "RELEASE"
+    ],
+    "parentOf": {
+      "feat": "develop",
+      "fix": "develop",
+      "chore": "develop",
+      "hotfix": "main",
+      "release": "develop"
+    },
+    "mergeOk": {
+      "main": [
+        "release",
+        "hotfix"
+      ],
+      "RELEASE": [
+        "release"
+      ],
+      "develop": [
+        "feat",
+        "fix",
+        "chore",
+        "hotfix",
+        "release"
+      ],
+      "feat": [
+        "develop"
+      ],
+      "fix": [
+        "develop"
+      ],
+      "chore": [
+        "develop"
+      ],
+      "hotfix": [
+        "main"
+      ],
+      "release": [
+        "fix",
+        "hotfix"
+      ]
+    }
+  },
+  "prompt": {
+    "overlay": ".claude/PROJETO.md",
+    "domainSkills": [
+      "modelo-de-contas",
+      "identidade-e-privacidade",
+      "eventos",
+      "mapa-multimodal",
+      "ui-fluxo",
+      "contratos-backend",
+      "analytics-negocios"
+    ],
+    "domainRules": [
+      "layering.md"
+    ]
+  },
+  "enums": {
+    "AccountKind": [
+      "functions/src/identity/shared/types.ts",
+      "ofluxo_site/src/platform/application/platform-store.ts"
+    ],
+    "BusinessType": [
+      "lib/features/businesses/domain/model/business_profile_model.dart",
+      "functions/src/features/businesses.ts",
+      "ofluxo_site/src/platform/domain/business-workspace.ts"
+    ],
+    "BusinessCategory": [
+      "lib/features/businesses/domain/model/business_profile_model.dart",
+      "functions/src/features/businesses.ts"
+    ],
+    "VerificationDocumentKind": [],
+    "DebateStatus": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "DebatePublicMode": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "ParticipantRole": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "UtteranceOrigin": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "ClaimType": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "ClaimStatus": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "Verdict": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "FactCheckOrigin": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "FactCheckState": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "FactCheckValidationStatus": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "FactCheckDisplay": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "RevisionAuthorKind": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "AnswerStatus": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "TimelineEventType": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "AudioSourceKind": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "IngestionState": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "AiPublication": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "WorkState": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "WorkKind": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "AiRunPurpose": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "SourceKind": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "EditorialActionType": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "ChangeReasonCode": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "DiscardReasonCode": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "ReplyRequestState": [
+      "backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs",
+      "admin-web/src/modules/debates/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/debate-enums.ts",
+      "services/debate-worker/src/domain/debate-enums.ts"
+    ],
+    "BillingSubscriptionStatus": [
+      "backend/src/Fluxo.Api/Modules/Billing/Domain/BillingEnums.cs",
+      "admin-web/src/modules/billing/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/billing-enums.ts"
+    ],
+    "BillingRail": [
+      "backend/src/Fluxo.Api/Modules/Billing/Domain/BillingEnums.cs",
+      "admin-web/src/modules/billing/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/billing-enums.ts"
+    ],
+    "BillingInvoiceStatus": [
+      "backend/src/Fluxo.Api/Modules/Billing/Domain/BillingEnums.cs",
+      "admin-web/src/modules/billing/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/billing-enums.ts"
+    ],
+    "BillingChargeStatus": [
+      "backend/src/Fluxo.Api/Modules/Billing/Domain/BillingEnums.cs",
+      "admin-web/src/modules/billing/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/billing-enums.ts"
+    ],
+    "BillingProductKind": [
+      "backend/src/Fluxo.Api/Modules/Billing/Domain/BillingEnums.cs",
+      "admin-web/src/modules/billing/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/billing-enums.ts"
+    ],
+    "BillingAudience": [
+      "backend/src/Fluxo.Api/Modules/Billing/Domain/BillingEnums.cs",
+      "admin-web/src/modules/billing/domain/enums.ts",
+      "ofluxo_site/src/platform/domain/billing-enums.ts"
+    ],
+    "CreatorViewportPreset": [
+      "backend/src/Fluxo.Api/Modules/Creator/Domain/CreatorEnums.cs",
+      "ofluxo_site/src/platform/domain/creator-enums.ts",
+      "packages/creator-render/src/domain/creator-enums.ts"
+    ],
+    "WatermarkCorner": [
+      "backend/src/Fluxo.Api/Modules/Creator/Domain/CreatorEnums.cs",
+      "ofluxo_site/src/platform/domain/creator-enums.ts",
+      "packages/creator-render/src/domain/creator-enums.ts"
+    ],
+    "CreatorProjectKind": [
+      "backend/src/Fluxo.Api/Modules/Creator/Domain/CreatorEnums.cs",
+      "ofluxo_site/src/platform/domain/creator-enums.ts",
+      "packages/creator-render/src/domain/creator-enums.ts"
+    ],
+    "SlideRole": [
+      "backend/src/Fluxo.Api/Modules/Creator/Domain/CreatorEnums.cs",
+      "ofluxo_site/src/platform/domain/creator-enums.ts",
+      "packages/creator-render/src/domain/creator-enums.ts"
+    ],
+    "SlideTaskStatus": [
+      "backend/src/Fluxo.Api/Modules/Creator/Domain/CreatorEnums.cs",
+      "ofluxo_site/src/platform/domain/creator-enums.ts",
+      "packages/creator-render/src/domain/creator-enums.ts"
+    ],
+    "CreatorMemberRole": [
+      "backend/src/Fluxo.Api/Modules/Creator/Domain/CreatorEnums.cs",
+      "ofluxo_site/src/platform/domain/creator-enums.ts",
+      "packages/creator-render/src/domain/creator-enums.ts"
+    ],
+    "CreatorPermission": [
+      "backend/src/Fluxo.Api/Modules/Creator/Domain/CreatorEnums.cs",
+      "ofluxo_site/src/platform/domain/creator-enums.ts",
+      "packages/creator-render/src/domain/creator-enums.ts"
+    ],
+    "CreatorAssetPurpose": [
+      "backend/src/Fluxo.Api/Modules/Creator/Domain/CreatorEnums.cs",
+      "ofluxo_site/src/platform/domain/creator-enums.ts",
+      "packages/creator-render/src/domain/creator-enums.ts"
+    ],
+    "CreatorAssetStatus": [
+      "backend/src/Fluxo.Api/Modules/Creator/Domain/CreatorEnums.cs",
+      "ofluxo_site/src/platform/domain/creator-enums.ts",
+      "packages/creator-render/src/domain/creator-enums.ts"
+    ],
+    "CreatorAssetFormat": [
+      "backend/src/Fluxo.Api/Modules/Creator/Domain/CreatorEnums.cs",
+      "ofluxo_site/src/platform/domain/creator-enums.ts",
+      "packages/creator-render/src/domain/creator-enums.ts"
+    ],
+    "CreatorPaletteRole": [
+      "backend/src/Fluxo.Api/Modules/Creator/Domain/CreatorEnums.cs",
+      "ofluxo_site/src/platform/domain/creator-enums.ts",
+      "packages/creator-render/src/domain/creator-enums.ts"
+    ],
+    "CreatorContrastLevel": [
+      "backend/src/Fluxo.Api/Modules/Creator/Domain/CreatorEnums.cs",
+      "ofluxo_site/src/platform/domain/creator-enums.ts",
+      "packages/creator-render/src/domain/creator-enums.ts"
+    ],
+    "CreatorJobKind": [
+      "backend/src/Fluxo.Api/Modules/Creator/Domain/CreatorEnums.cs",
+      "services/creator-worker/src/domain/creator-job-enums.ts"
+    ],
+    "CreatorJobLane": [
+      "backend/src/Fluxo.Api/Modules/Creator/Domain/CreatorEnums.cs",
+      "services/creator-worker/src/domain/creator-job-enums.ts"
+    ],
+    "CreatorJobStatus": [
+      "backend/src/Fluxo.Api/Modules/Creator/Domain/CreatorEnums.cs",
+      "services/creator-worker/src/domain/creator-job-enums.ts"
+    ]
+  },
+  "pii": {
+    "publicLayers": [
+      "backend\\/src\\/Fluxo\\.Api\\/Modules\\/.*(Response|Public|View)[^/]*\\.cs$",
+      "functions\\/src\\/http\\/"
+    ]
+  }
+}

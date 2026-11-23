@@ -1,0 +1,331 @@
+{
+  "id": "harness-entrega-em-ciclo",
+  "title": "Harness de entrega em ciclo",
+  "created": "2026-10-01",
+  "tasks": [
+    {
+      "id": "RB-001",
+      "title": "Corrigir referências quebradas do harness atual",
+      "status": "done",
+      "depends_on": [],
+      "done_at": "2026-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "RB-002",
+      "title": "Biblioteca comum quality/delivery/lib.mjs",
+      "status": "done",
+      "depends_on": [],
+      "done_at": "2026-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "RB-003",
+      "title": "backlog.mjs init, status e render",
+      "status": "done",
+      "depends_on": [
+        "RB-002"
+      ],
+      "done_at": "2026-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "RB-004",
+      "title": "backlog.mjs validate e congelamento dos gates",
+      "status": "done",
+      "depends_on": [
+        "RB-003"
+      ],
+      "done_at": "2026-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "RB-005",
+      "title": "Runner eval.mjs sem shell, com relatório",
+      "status": "done",
+      "depends_on": [
+        "RB-002"
+      ],
+      "done_at": "2026-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "RB-006",
+      "title": "backlog.mjs mark condicionado aos gates",
+      "status": "done",
+      "depends_on": [
+        "RB-004",
+        "RB-005"
+      ],
+      "done_at": "2026-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "RB-007",
+      "title": "Migrar backlog para docs/entregas/",
+      "status": "done",
+      "depends_on": [
+        "RB-006"
+      ],
+      "done_at": "2026-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "RB-008",
+      "title": "Prova de falha (eval.mjs --baseline)",
+      "status": "done",
+      "depends_on": [
+        "RB-005",
+        "RB-007"
+      ],
+      "done_at": "2026-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "RB-009",
+      "title": "Detector de force-pass integridade.mjs",
+      "status": "done",
+      "depends_on": [
+        "RB-002",
+        "RB-007"
+      ],
+      "done_at": "2026-10-01T14:16:46Z"
+    },
+    {
+      "id": "RB-010",
+      "title": "Hook guarda-entrega.mjs",
+      "status": "done",
+      "depends_on": [
+        "RB-004",
+        "RB-006",
+        "RB-007"
+      ],
+      "done_at": "2026-10-01T14:16:46Z"
+    },
+    {
+      "id": "RB-011",
+      "title": "Agentes do ciclo e extensão do planejador",
+      "status": "done",
+      "depends_on": [
+        "RB-006",
+        "RB-008"
+      ],
+      "done_at": "2026-10-01T14:16:46Z"
+    },
+    {
+      "id": "RB-012",
+      "title": "Skills entrega-em-ciclo e implementar-tarefa",
+      "status": "done",
+      "depends_on": [
+        "RB-010",
+        "RB-011"
+      ],
+      "done_at": "2026-10-01T14:16:46Z"
+    },
+    {
+      "id": "RB-013",
+      "title": "Skill e script compactar-entregas",
+      "status": "done",
+      "depends_on": [
+        "RB-004"
+      ],
+      "done_at": "2026-10-01T14:16:46Z"
+    },
+    {
+      "id": "RB-014",
+      "title": "Skill product-owner e espelho no Jira",
+      "status": "done",
+      "depends_on": [
+        "RB-006"
+      ],
+      "done_at": "2026-10-01T15:36:18Z"
+    },
+    {
+      "id": "RB-015",
+      "title": "Documentação final e entrega piloto",
+      "status": "done",
+      "depends_on": [
+        "RB-001",
+        "RB-002",
+        "RB-003",
+        "RB-004",
+        "RB-005",
+        "RB-006",
+        "RB-007",
+        "RB-008",
+        "RB-009",
+        "RB-010",
+        "RB-011",
+        "RB-012",
+        "RB-013"
+      ],
+      "started_at": "2026-10-02T01:45:44.605Z",
+      "done_at": "2026-10-02T01:47:39.357Z"
+    }
+  ],
+  "gates": [
+    {
+      "id": "EG-REFS",
+      "type": "command",
+      "task": "RB-001",
+      "command": [
+        "node",
+        "--test",
+        "quality/test/delivery/referencias.test.mjs"
+      ]
+    },
+    {
+      "id": "EG-LIB",
+      "type": "command",
+      "task": "RB-002",
+      "command": [
+        "node",
+        "--test",
+        "quality/test/delivery/lib.test.mjs"
+      ]
+    },
+    {
+      "id": "EG-BACKLOG",
+      "type": "command",
+      "task": "RB-003",
+      "command": [
+        "node",
+        "--test",
+        "quality/test/delivery/backlog.test.mjs"
+      ]
+    },
+    {
+      "id": "EG-VALIDATE",
+      "type": "command",
+      "task": "RB-004",
+      "command": [
+        "node",
+        "--test",
+        "quality/test/delivery/validate.test.mjs"
+      ]
+    },
+    {
+      "id": "EG-EVAL",
+      "type": "command",
+      "task": "RB-005",
+      "command": [
+        "node",
+        "--test",
+        "quality/test/delivery/eval.test.mjs"
+      ]
+    },
+    {
+      "id": "EG-MARK",
+      "type": "command",
+      "task": "RB-006",
+      "command": [
+        "node",
+        "--test",
+        "quality/test/delivery/mark.test.mjs"
+      ]
+    },
+    {
+      "id": "EG-MIGRA",
+      "type": "command",
+      "task": "RB-007",
+      "command": [
+        "node",
+        "quality/delivery/backlog.mjs",
+        "validate",
+        "docs/entregas/2026-10-01-harness-entrega-em-ciclo"
+      ]
+    },
+    {
+      "id": "EG-BASELINE",
+      "type": "command",
+      "task": "RB-008",
+      "command": [
+        "node",
+        "--test",
+        "quality/test/delivery/baseline.test.mjs"
+      ]
+    },
+    {
+      "id": "EG-INTEG",
+      "type": "command",
+      "task": "RB-009",
+      "command": [
+        "node",
+        "--test",
+        "quality/test/delivery/integridade.test.mjs"
+      ]
+    },
+    {
+      "id": "EG-GUARDA",
+      "type": "command",
+      "task": "RB-010",
+      "command": [
+        "node",
+        "--test",
+        "quality/test/delivery/guarda.test.mjs"
+      ]
+    },
+    {
+      "id": "EG-AGENTES",
+      "type": "command",
+      "task": "RB-011",
+      "command": [
+        "node",
+        "--test",
+        "quality/test/delivery/agentes.test.mjs"
+      ]
+    },
+    {
+      "id": "EG-SKILLS",
+      "type": "command",
+      "task": "RB-012",
+      "command": [
+        "node",
+        "--test",
+        "quality/test/delivery/skills.test.mjs"
+      ]
+    },
+    {
+      "id": "EG-CICLO",
+      "type": "manual",
+      "task": "RB-012",
+      "description": "Executar a skill entrega-em-ciclo em uma entrega real e confirmar que o fluxo completo funciona (planejamento → implementação → gates → mark done)"
+    },
+    {
+      "id": "EG-COMPACTA",
+      "type": "command",
+      "task": "RB-013",
+      "command": [
+        "node",
+        "--test",
+        "quality/test/delivery/compactar.test.mjs"
+      ]
+    },
+    {
+      "id": "EG-JIRA",
+      "type": "command",
+      "task": "RB-014",
+      "command": [
+        "node",
+        "--test",
+        "quality/test/delivery/jira.test.mjs"
+      ]
+    },
+    {
+      "id": "EG-JIRA-MANUAL",
+      "type": "manual",
+      "task": "RB-014",
+      "description": "Abrir um card no Jira via skill product-owner e confirmar que o espelho criou o card corretamente"
+    },
+    {
+      "id": "EG-PILOTO",
+      "type": "manual",
+      "task": "RB-015",
+      "description": "Executar a entrega piloto de ponta a ponta usando o harness e confirmar que todos os artefatos foram criados"
+    },
+    {
+      "id": "EG-REG",
+      "type": "command",
+      "task": "RB-015",
+      "command": [
+        "node",
+        "quality/delivery/backlog.mjs",
+        "validate",
+        "docs/entregas/2026-10-01-harness-entrega-em-ciclo",
+        "--require-specs"
+      ]
+    }
+  ]
+}

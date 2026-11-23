@@ -1,0 +1,160 @@
+# Miscellaneous
+*.class
+*.log
+firepit-log.txt
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+.vscode/launch.json
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+functions/node_modules/
+backend/scripts/backfill-artist-events/node_modules/
+
+# Menu Extractor layer (OCR_webscraper_crawler)
+OCR_webscraper_crawler/**/dist/
+OCR_webscraper_crawler/.turbo/
+OCR_webscraper_crawler/coverage/
+OCR_webscraper_crawler/.venv/
+OCR_webscraper_crawler/**/__pycache__/
+OCR_webscraper_crawler/**/*.egg-info/
+OCR_webscraper_crawler/apps/local-dev/
+OCR_webscraper_crawler/testdata/menus/html/
+OCR_webscraper_crawler/testdata/menus/pdf/
+
+# Produto — rascunhos locais (roadmaps, notas de produto)
+temp/
+
+# Gradle local build cache — got accidentally committed under nested plugin
+# subprojects before; never meant to be tracked.
+**/.gradle/
+
+# Local environment files can contain API credentials.
+.env
+.env.*
+!/.env.example
+functions/.env
+functions/.env.*
+!functions/.env.example
+!ofluxo_site/.env.example
+!OCR_webscraper_crawler/.env.example
+!services/debate-worker/.env.example
+functions/.keys/
+functions/scripts/reports/
+functions/scripts/migration-reports/
+*.jks
+*.keystore
+ios/Flutter/Secrets.xcconfig
+
+
+# Snyk Security Extension - AI Rules (auto-generated)
+.cursor/rules/snyk_rules.mdc
+linux/*
+macos/*
+windows/*
+# Node / JS-TS build artifacts (any nested project: admin-web, functions, ofluxo_site,
+# backend scripts, etc.)
+**/node_modules/
+*.tsbuildinfo
+firebase-debug.log
+
+# .NET build artifacts (backend/)
+backend/**/bin/
+backend/**/obj/
+
+# Terraform local state/cache (infra/)
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+
+# Generic build output dirs anywhere in the repo
+**/build/
+
+# Dart package lockfiles (only apps should commit pubspec.lock, not packages)
+packages/**/pubspec.lock
+
+# Generated report/backup dumps from maintenance scripts
+functions/scripts/reports/
+
+# Playwright/test runner artifacts
+ofluxo_site/test-results/
+
+# Native build outputs accidentally exported to the repo root
+*.ipa
+*.dSYM.zip
+ios/Runner.ipa
+ios/Runner.app.dSYM.zip
+ios/*.ipa
+ios/*.dSYM.zip
+ios/**/*.dSYM/
+ios/**/*.xcarchive/
+
+# admin-web/dist/**
+admin-web/*.tsbuildinfo
+
+# Gates de qualidade (estado local dos hooks e relatórios gerados)
+quality/.state/
+quality/reports/
+
+# Configuração local do Claude Code (pode conter tokens na allowlist)
+.claude/settings.local.json
+
+# Raw TSE electoral CSVs (multi-GB; derived data lives in ofluxo_site/public/data/civic)
+docs/eleicao-abstensao/*.csv
+docs/eleicao-abstensao/*.db*
+.claude/.state/
+
+# Grafo de conhecimento do graphify (gerado localmente: graphify extract . --code-only)
+graphify-out
+
+# Segredos locais (raiz) — fora do versionamento
+/.env
+/.env.local
+
+# Doppler CLI local (escopo do projeto e estado do CLI) — nunca versionar
+doppler.json
+doppler.yml
+.doppler/
+services/creator-worker/var/
+ofluxo_site/vitest-gate-report.json
+nohup.out

@@ -1,0 +1,42 @@
+name: quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Biome (lint do autofix)
+        run: npm ci --prefix quality/tools
+
+      - name: Núcleo genérico (perfil, pacote, hosts, attach, ciclo)
+        run: node --test quality/test/profile.test.mjs quality/test/package.test.mjs quality/test/hosts.test.mjs quality/test/attach.test.mjs quality/test/delivery/referencias.test.mjs quality/test/delivery/skills.test.mjs quality/test/delivery/agentes.test.mjs quality/test/delivery/backlog.test.mjs
+
+      - name: Motor com o exemplo completo (HARNESS_PROFILE_DIR)
+        env:
+          HARNESS_PROFILE_DIR: ${{ github.workspace }}/quality/examples/fluxo/profile
+        run: node --test quality/test/gates.test.mjs quality/test/gates-novos.test.mjs quality/test/risk.test.mjs quality/test/hooks.test.mjs quality/test/baseline.test.mjs quality/test/messages.test.mjs .claude/hooks/test/regras.test.mjs quality/test/jira-spec-sync.test.mjs quality/test/jira-workflow-statuses.test.mjs quality/test/jira-load-env.test.mjs quality/test/jira-rank.test.mjs
+
+      - name: Núcleo sem host (cline-bridge, busca, tracker none)
+        run: node --test quality/test/cline-bridge.test.mjs quality/test/search-guard.test.mjs quality/test/jira-labels.test.mjs quality/test/delivery/homologacao.test.mjs quality/test/delivery/integridade.test.mjs
+
+      - name: Espelho Cline em sincronia
+        run: node quality/agents/sync-clinerules.mjs --check
+
+      - name: Integridade da entrega do próprio harness
+        run: node quality/delivery/integridade.mjs docs/entregas/2026-10-01-harness-entrega-em-ciclo

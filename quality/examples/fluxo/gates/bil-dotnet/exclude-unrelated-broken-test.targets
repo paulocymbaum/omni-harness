@@ -1,0 +1,8 @@
+<Project>
+  <!-- Só nos gates BIL-*: Mobility/GtfsStaticFeedTests.cs não compila desde 9b4a2167 (CS1503, CS0021), sem relação com
+       Billing. Sem isto, todo gate .NET falharia por esse erro, e não por falta da implementação. Remover quando o teste
+       for corrigido. -->
+  <ItemGroup>
+    <Compile Remove="Mobility/GtfsStaticFeedTests.cs" />
+  </ItemGroup>
+</Project>

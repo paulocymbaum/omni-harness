@@ -1,0 +1,2098 @@
+{
+ "commit": "6839c7d219e0a82d2368b943c5e76e98a5572c63",
+ "command": "node quality/test/delivery/bil-017-workspace-golden.mjs",
+ "source": [
+  "lib/features/fluxo_empresas/presentation/pages/fluxo_empresas_pages.dart",
+  "lib/features/fluxo_empresas/presentation/bloc/fluxo_empresas_cubit.dart"
+ ],
+ "cases": [
+  {
+   "primaryType": "FOOD_PLACE",
+   "cnaes": [],
+   "expected": {
+    "type": "FOOD_PLACE",
+    "merchantType": "restaurant",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Cardapio",
+      "title": "Cardapio digital"
+     },
+     {
+      "key": "orders",
+      "label": "Pedidos",
+      "title": "Pedidos"
+     },
+     {
+      "key": "agenda",
+      "label": "Agenda",
+      "title": "Agenda"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     }
+    ],
+    "leadTitle": "Operacao local conectada",
+    "leadSubtitle": "Venda, cardapio, agenda e repasses em uma frente unica para bares, restaurantes e experiencias de bairro.",
+    "leadChips": [
+     "Cardapio",
+     "Pedidos",
+     "Agenda"
+    ],
+    "dashboardTitle": "Painel operacional",
+    "dashboardSubtitle": "Centro de operacoes da sua empresa dentro do Fluxo.",
+    "catalogTitle": "Cardapio vivo",
+    "catalogSubtitle": "Itens, categorias, precos e disponibilidade para vender no momento certo.",
+    "catalogActionLabel": "Criar categoria",
+    "catalogEmptyText": "Crie uma categoria para iniciar seu cardapio.",
+    "categoryHint": "Ex: Burgers",
+    "orderTitle": "Pedidos ao vivo",
+    "orderSubtitle": "Producao, retirada, entrega local e pagamento manual.",
+    "orderActionLabel": "Novo pedido",
+    "orderEmptyText": "Nenhum pedido neste filtro.",
+    "agendaTitle": "Agenda e reservas",
+    "agendaSubtitle": "Reservas, comandas futuras e experiencias com horario marcado.",
+    "serviceActionLabel": "Adicionar servico",
+    "serviceEmptyText": "Cadastre uma experiencia ou reserva para abrir horarios.",
+    "teamSubtitle": "Permissoes para caixa, cozinha, atendimento e financeiro.",
+    "linksTitle": "Links e monetizacao",
+    "linksSubtitle": "Divulgue promocoes, parcerias e reservas rastreaveis.",
+    "catalogItemLabel": "prato",
+    "catalogItemNameLabel": "Nome do prato",
+    "catalogImageTitle": "Foto do prato",
+    "catalogImageSubtitle": "Use uma imagem real do prato, bem iluminada e sem texto pesado.",
+    "defaultOrderItemName": "Pedido balcão",
+    "defaultServiceName": "Reserva"
+   }
+  },
+  {
+   "primaryType": "SERVICE_PROVIDER",
+   "cnaes": [],
+   "expected": {
+    "type": "SERVICE_PROVIDER",
+    "merchantType": "service",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "agenda",
+      "label": "Agenda",
+      "title": "Agenda"
+     },
+     {
+      "key": "orders",
+      "label": "Vendas",
+      "title": "Vendas"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     }
+    ],
+    "leadTitle": "Agenda que vira recorrencia",
+    "leadSubtitle": "Organize servicos, horarios, atendimentos e recebimentos para transformar clientes locais em retorno.",
+    "leadChips": [
+     "Servicos",
+     "Agenda",
+     "Retorno"
+    ],
+    "dashboardTitle": "Painel de atendimento",
+    "dashboardSubtitle": "Acompanhe agenda, servicos ativos e receita recebida.",
+    "catalogTitle": "Servicos empacotados",
+    "catalogSubtitle": "Pacotes, produtos complementares e ofertas para clientes do atendimento.",
+    "catalogActionLabel": "Criar grupo",
+    "catalogEmptyText": "Crie grupos para organizar pacotes e produtos complementares.",
+    "categoryHint": "Ex: Cabelo",
+    "orderTitle": "Vendas e comandas",
+    "orderSubtitle": "Produtos, pacotes e pagamentos manuais ligados aos atendimentos.",
+    "orderActionLabel": "Nova venda",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Agenda de servicos",
+    "agendaSubtitle": "Servicos, horarios disponiveis e confirmacao manual.",
+    "serviceActionLabel": "Adicionar servico",
+    "serviceEmptyText": "Cadastre um servico para abrir horarios.",
+    "teamSubtitle": "Controle profissionais, agenda compartilhada e permissao operacional.",
+    "linksTitle": "Links de indicacao",
+    "linksSubtitle": "Links rastreaveis para pacotes, profissionais e campanhas locais.",
+    "catalogItemLabel": "pacote",
+    "catalogItemNameLabel": "Nome do pacote",
+    "catalogImageTitle": "Imagem do pacote",
+    "catalogImageSubtitle": "Use uma imagem que comunique o resultado do serviço ou pacote.",
+    "defaultOrderItemName": "Venda complementar",
+    "defaultServiceName": "Atendimento"
+   }
+  },
+  {
+   "primaryType": "SELLER",
+   "cnaes": [],
+   "expected": {
+    "type": "SELLER",
+    "merchantType": "other",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Vitrine",
+      "title": "Vitrine digital"
+     },
+     {
+      "key": "orders",
+      "label": "Vendas",
+      "title": "Vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Vitrine local conectada",
+    "leadSubtitle": "Organize produtos, vendas e links para transformar descoberta no mapa em compra no comercio local.",
+    "leadChips": [
+     "Vitrine",
+     "Vendas",
+     "Links"
+    ],
+    "dashboardTitle": "Painel de loja",
+    "dashboardSubtitle": "Produtos, vendas e repasses em uma operacao enxuta.",
+    "catalogTitle": "Vitrine de produtos",
+    "catalogSubtitle": "Categorias, disponibilidade e precos para descoberta local.",
+    "catalogActionLabel": "Criar colecao",
+    "catalogEmptyText": "Crie uma colecao para iniciar sua vitrine.",
+    "categoryHint": "Ex: Lancamentos",
+    "orderTitle": "Vendas locais",
+    "orderSubtitle": "Retirada, entrega combinada e pagamento manual.",
+    "orderActionLabel": "Nova venda",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Atendimentos",
+    "agendaSubtitle": "Horarios especiais, provas, retiradas e consultorias.",
+    "serviceActionLabel": "Adicionar horario",
+    "serviceEmptyText": "Cadastre um atendimento para abrir horarios.",
+    "teamSubtitle": "Permissoes para venda, estoque, links e financeiro.",
+    "linksTitle": "Links de campanha",
+    "linksSubtitle": "Divulgue produtos e parcerias com rastreio de origem.",
+    "catalogItemLabel": "produto",
+    "catalogItemNameLabel": "Nome do produto",
+    "catalogImageTitle": "Foto do produto",
+    "catalogImageSubtitle": "Use uma foto limpa do produto, preferencialmente em fundo simples.",
+    "defaultOrderItemName": "Produto vendido",
+    "defaultServiceName": "Retirada agendada"
+   }
+  },
+  {
+   "primaryType": "VENUE",
+   "cnaes": [],
+   "expected": {
+    "type": "VENUE",
+    "merchantType": "host",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "agenda",
+      "label": "Programacao",
+      "title": "Programacao"
+     },
+     {
+      "key": "orders",
+      "label": "Receitas",
+      "title": "Receitas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Fluxo de publico e parceiros",
+    "leadSubtitle": "Conecte programacao, reservas, consumo e links de afiliados para ativar o entorno do evento.",
+    "leadChips": [
+     "Programacao",
+     "Consumo",
+     "Parceiros"
+    ],
+    "dashboardTitle": "Painel de fluxo",
+    "dashboardSubtitle": "Visao de agenda, consumo e monetizacao por origem.",
+    "catalogTitle": "Ofertas do espaco",
+    "catalogSubtitle": "Mesas, experiencias, combos e itens que acompanham a programacao.",
+    "catalogActionLabel": "Criar grupo",
+    "catalogEmptyText": "Crie grupos para ofertas do espaco.",
+    "categoryHint": "Ex: Mesas",
+    "orderTitle": "Receitas operacionais",
+    "orderSubtitle": "Consumo, reservas e pagamentos manuais conectados ao evento.",
+    "orderActionLabel": "Nova receita",
+    "orderEmptyText": "Nenhuma receita neste filtro.",
+    "agendaTitle": "Programacao e reservas",
+    "agendaSubtitle": "Horarios, experiencias e atendimentos ligados ao local.",
+    "serviceActionLabel": "Adicionar experiencia",
+    "serviceEmptyText": "Cadastre uma experiencia para abrir horarios.",
+    "teamSubtitle": "Permissoes para producao, recepcao, bar e financeiro.",
+    "linksTitle": "Links de parceiros",
+    "linksSubtitle": "Monetize indicacoes, listas e campanhas com origem rastreavel.",
+    "catalogItemLabel": "experiência",
+    "catalogItemNameLabel": "Nome da experiência",
+    "catalogImageTitle": "Imagem da experiência",
+    "catalogImageSubtitle": "Use uma imagem que mostre a experiência, mesa, espaço ou ativação.",
+    "defaultOrderItemName": "Receita manual",
+    "defaultServiceName": "Experiencia"
+   }
+  },
+  {
+   "primaryType": "EVENT_ORGANIZER",
+   "cnaes": [],
+   "expected": {
+    "type": "VENUE",
+    "merchantType": "other",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "agenda",
+      "label": "Programacao",
+      "title": "Programacao"
+     },
+     {
+      "key": "orders",
+      "label": "Receitas",
+      "title": "Receitas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Fluxo de publico e parceiros",
+    "leadSubtitle": "Conecte programacao, reservas, consumo e links de afiliados para ativar o entorno do evento.",
+    "leadChips": [
+     "Programacao",
+     "Consumo",
+     "Parceiros"
+    ],
+    "dashboardTitle": "Painel de fluxo",
+    "dashboardSubtitle": "Visao de agenda, consumo e monetizacao por origem.",
+    "catalogTitle": "Ofertas do espaco",
+    "catalogSubtitle": "Mesas, experiencias, combos e itens que acompanham a programacao.",
+    "catalogActionLabel": "Criar grupo",
+    "catalogEmptyText": "Crie grupos para ofertas do espaco.",
+    "categoryHint": "Ex: Mesas",
+    "orderTitle": "Receitas operacionais",
+    "orderSubtitle": "Consumo, reservas e pagamentos manuais conectados ao evento.",
+    "orderActionLabel": "Nova receita",
+    "orderEmptyText": "Nenhuma receita neste filtro.",
+    "agendaTitle": "Programacao e reservas",
+    "agendaSubtitle": "Horarios, experiencias e atendimentos ligados ao local.",
+    "serviceActionLabel": "Adicionar experiencia",
+    "serviceEmptyText": "Cadastre uma experiencia para abrir horarios.",
+    "teamSubtitle": "Permissoes para producao, recepcao, bar e financeiro.",
+    "linksTitle": "Links de parceiros",
+    "linksSubtitle": "Monetize indicacoes, listas e campanhas com origem rastreavel.",
+    "catalogItemLabel": "experiência",
+    "catalogItemNameLabel": "Nome da experiência",
+    "catalogImageTitle": "Imagem da experiência",
+    "catalogImageSubtitle": "Use uma imagem que mostre a experiência, mesa, espaço ou ativação.",
+    "defaultOrderItemName": "Receita manual",
+    "defaultServiceName": "Experiencia"
+   }
+  },
+  {
+   "primaryType": "DIGITAL_CREATOR",
+   "cnaes": [],
+   "expected": {
+    "type": "DIGITAL_CREATOR",
+    "merchantType": "other",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "menu",
+      "label": "Ofertas",
+      "title": "Ofertas"
+     },
+     {
+      "key": "orders",
+      "label": "Conversoes",
+      "title": "Conversoes"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Criador conectado ao comercio local",
+    "leadSubtitle": "Transforme influencia em fluxo para lugares, produtos e experiencias com links rastreaveis.",
+    "leadChips": [
+     "Links",
+     "Ofertas",
+     "Conversao"
+    ],
+    "dashboardTitle": "Painel de monetizacao",
+    "dashboardSubtitle": "Campanhas, conversoes e ganhos ligados ao ecossistema local.",
+    "catalogTitle": "Ofertas promovidas",
+    "catalogSubtitle": "Organize ofertas, collabs e produtos para divulgar.",
+    "catalogActionLabel": "Criar grupo",
+    "catalogEmptyText": "Crie um grupo para organizar suas ofertas.",
+    "categoryHint": "Ex: Publis locais",
+    "orderTitle": "Conversoes",
+    "orderSubtitle": "Registros manuais de vendas, leads e validacoes de campanha.",
+    "orderActionLabel": "Nova conversao",
+    "orderEmptyText": "Nenhuma conversao neste filtro.",
+    "agendaTitle": "Agenda de collabs",
+    "agendaSubtitle": "Horarios de criacao, visitas e campanhas presenciais.",
+    "serviceActionLabel": "Adicionar agenda",
+    "serviceEmptyText": "Cadastre um formato de collab para abrir horarios.",
+    "teamSubtitle": "Permissoes para operacao, campanhas e financeiro.",
+    "linksTitle": "Links afiliados",
+    "linksSubtitle": "Links publicos com rastreio para monetizar sua audiencia.",
+    "catalogItemLabel": "oferta",
+    "catalogItemNameLabel": "Nome da oferta",
+    "catalogImageTitle": "Imagem da oferta",
+    "catalogImageSubtitle": "Use uma imagem de campanha ou criativo que identifique a collab.",
+    "defaultOrderItemName": "Conversao manual",
+    "defaultServiceName": "Collab local"
+   }
+  },
+  {
+   "primaryType": "BRAND",
+   "cnaes": [],
+   "expected": {
+    "type": "BRAND",
+    "merchantType": "other",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Ofertas",
+      "title": "Ofertas"
+     },
+     {
+      "key": "orders",
+      "label": "Operacao",
+      "title": "Operacao"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Marca ativando fluxos locais",
+    "leadSubtitle": "Conecte ofertas, parceiros, conversoes e equipe para gerar movimento mensuravel no territorio.",
+    "leadChips": [
+     "Ofertas",
+     "Parceiros",
+     "Operacao"
+    ],
+    "dashboardTitle": "Painel da marca",
+    "dashboardSubtitle": "Operacao, links e resultados em uma visao unica.",
+    "catalogTitle": "Ofertas e campanhas",
+    "catalogSubtitle": "Agrupe produtos, beneficios e campanhas para distribuicao local.",
+    "catalogActionLabel": "Criar campanha",
+    "catalogEmptyText": "Crie uma campanha para iniciar sua operacao.",
+    "categoryHint": "Ex: Verão",
+    "orderTitle": "Operacao local",
+    "orderSubtitle": "Registros de vendas, leads e entregas operacionais.",
+    "orderActionLabel": "Novo registro",
+    "orderEmptyText": "Nenhum registro neste filtro.",
+    "agendaTitle": "Agenda operacional",
+    "agendaSubtitle": "Ativacoes, visitas e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar agenda",
+    "serviceEmptyText": "Cadastre uma ativacao para abrir horarios.",
+    "teamSubtitle": "Permissoes para campanhas, atendimento, links e financeiro.",
+    "linksTitle": "Links e parcerias",
+    "linksSubtitle": "Campanhas rastreaveis para medir origem e resultado.",
+    "catalogItemLabel": "campanha",
+    "catalogItemNameLabel": "Nome da campanha",
+    "catalogImageTitle": "Imagem da campanha",
+    "catalogImageSubtitle": "Use uma peça visual da campanha ou benefício local.",
+    "defaultOrderItemName": "Registro operacional",
+    "defaultServiceName": "Ativacao local"
+   }
+  },
+  {
+   "primaryType": "VALOR_DESCONHECIDO",
+   "cnaes": [],
+   "expected": {
+    "type": "BRAND",
+    "merchantType": "other",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Ofertas",
+      "title": "Ofertas"
+     },
+     {
+      "key": "orders",
+      "label": "Operacao",
+      "title": "Operacao"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Marca ativando fluxos locais",
+    "leadSubtitle": "Conecte ofertas, parceiros, conversoes e equipe para gerar movimento mensuravel no territorio.",
+    "leadChips": [
+     "Ofertas",
+     "Parceiros",
+     "Operacao"
+    ],
+    "dashboardTitle": "Painel da marca",
+    "dashboardSubtitle": "Operacao, links e resultados em uma visao unica.",
+    "catalogTitle": "Ofertas e campanhas",
+    "catalogSubtitle": "Agrupe produtos, beneficios e campanhas para distribuicao local.",
+    "catalogActionLabel": "Criar campanha",
+    "catalogEmptyText": "Crie uma campanha para iniciar sua operacao.",
+    "categoryHint": "Ex: Verão",
+    "orderTitle": "Operacao local",
+    "orderSubtitle": "Registros de vendas, leads e entregas operacionais.",
+    "orderActionLabel": "Novo registro",
+    "orderEmptyText": "Nenhum registro neste filtro.",
+    "agendaTitle": "Agenda operacional",
+    "agendaSubtitle": "Ativacoes, visitas e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar agenda",
+    "serviceEmptyText": "Cadastre uma ativacao para abrir horarios.",
+    "teamSubtitle": "Permissoes para campanhas, atendimento, links e financeiro.",
+    "linksTitle": "Links e parcerias",
+    "linksSubtitle": "Campanhas rastreaveis para medir origem e resultado.",
+    "catalogItemLabel": "campanha",
+    "catalogItemNameLabel": "Nome da campanha",
+    "catalogImageTitle": "Imagem da campanha",
+    "catalogImageSubtitle": "Use uma peça visual da campanha ou benefício local.",
+    "defaultOrderItemName": "Registro operacional",
+    "defaultServiceName": "Ativacao local"
+   }
+  },
+  {
+   "primaryType": "",
+   "cnaes": [],
+   "expected": {
+    "type": "BRAND",
+    "merchantType": "other",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Ofertas",
+      "title": "Ofertas"
+     },
+     {
+      "key": "orders",
+      "label": "Operacao",
+      "title": "Operacao"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Marca ativando fluxos locais",
+    "leadSubtitle": "Conecte ofertas, parceiros, conversoes e equipe para gerar movimento mensuravel no territorio.",
+    "leadChips": [
+     "Ofertas",
+     "Parceiros",
+     "Operacao"
+    ],
+    "dashboardTitle": "Painel da marca",
+    "dashboardSubtitle": "Operacao, links e resultados em uma visao unica.",
+    "catalogTitle": "Ofertas e campanhas",
+    "catalogSubtitle": "Agrupe produtos, beneficios e campanhas para distribuicao local.",
+    "catalogActionLabel": "Criar campanha",
+    "catalogEmptyText": "Crie uma campanha para iniciar sua operacao.",
+    "categoryHint": "Ex: Verão",
+    "orderTitle": "Operacao local",
+    "orderSubtitle": "Registros de vendas, leads e entregas operacionais.",
+    "orderActionLabel": "Novo registro",
+    "orderEmptyText": "Nenhum registro neste filtro.",
+    "agendaTitle": "Agenda operacional",
+    "agendaSubtitle": "Ativacoes, visitas e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar agenda",
+    "serviceEmptyText": "Cadastre uma ativacao para abrir horarios.",
+    "teamSubtitle": "Permissoes para campanhas, atendimento, links e financeiro.",
+    "linksTitle": "Links e parcerias",
+    "linksSubtitle": "Campanhas rastreaveis para medir origem e resultado.",
+    "catalogItemLabel": "campanha",
+    "catalogItemNameLabel": "Nome da campanha",
+    "catalogImageTitle": "Imagem da campanha",
+    "catalogImageSubtitle": "Use uma peça visual da campanha ou benefício local.",
+    "defaultOrderItemName": "Registro operacional",
+    "defaultServiceName": "Ativacao local"
+   }
+  },
+  {
+   "primaryType": "FOOD_PLACE",
+   "cnaes": [
+    "47.81-4/00"
+   ],
+   "expected": {
+    "type": "FOOD_PLACE",
+    "merchantType": "restaurant",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Vitrine",
+      "title": "Cardapio e vitrine"
+     },
+     {
+      "key": "agenda",
+      "label": "Agenda",
+      "title": "Agenda e servicos"
+     },
+     {
+      "key": "orders",
+      "label": "Vendas",
+      "title": "Vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Operacao local hibrida",
+    "leadSubtitle": "Misture vitrine, servicos, agenda, pedidos e links conforme as frentes reais da empresa.",
+    "leadChips": [
+     "Cardapio",
+     "Vitrine"
+    ],
+    "dashboardTitle": "Painel integrado",
+    "dashboardSubtitle": "Vendas, agenda, vitrine e links em uma operacao unica.",
+    "catalogTitle": "Cardapio e vitrine",
+    "catalogSubtitle": "Produtos, cardapio, pacotes e ofertas convivem na vitrine da empresa.",
+    "catalogActionLabel": "Criar colecao",
+    "catalogEmptyText": "Crie uma colecao para iniciar a vitrine hibrida.",
+    "categoryHint": "Ex: Burgers",
+    "orderTitle": "Vendas locais",
+    "orderSubtitle": "Pedidos, pacotes, reservas e registros manuais.",
+    "orderActionLabel": "Nova venda",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Agenda e servicos",
+    "agendaSubtitle": "Servicos, reservas, programacao e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar servico",
+    "serviceEmptyText": "Cadastre servicos ou experiencias para abrir horarios.",
+    "teamSubtitle": "Permissoes para todas as frentes da operacao.",
+    "linksTitle": "Links e monetizacao",
+    "linksSubtitle": "Links rastreaveis para produtos, reservas, servicos e parceiros.",
+    "catalogItemLabel": "prato",
+    "catalogItemNameLabel": "Nome do prato",
+    "catalogImageTitle": "Foto do prato",
+    "catalogImageSubtitle": "Use uma imagem real do prato, bem iluminada e sem texto pesado.",
+    "defaultOrderItemName": "Pedido balcão",
+    "defaultServiceName": "Reserva"
+   }
+  },
+  {
+   "primaryType": "FOOD_PLACE",
+   "cnaes": [
+    "9001-9/01"
+   ],
+   "expected": {
+    "type": "FOOD_PLACE",
+    "merchantType": "restaurant",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Cardapio",
+      "title": "Cardapio, mesas e combos"
+     },
+     {
+      "key": "agenda",
+      "label": "Programacao",
+      "title": "Agenda e programacao"
+     },
+     {
+      "key": "orders",
+      "label": "Receitas",
+      "title": "Receitas e vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Operacao local hibrida",
+    "leadSubtitle": "Misture vitrine, servicos, agenda, pedidos e links conforme as frentes reais da empresa.",
+    "leadChips": [
+     "Cardapio",
+     "Programacao"
+    ],
+    "dashboardTitle": "Painel integrado",
+    "dashboardSubtitle": "Vendas, agenda, vitrine e links em uma operacao unica.",
+    "catalogTitle": "Cardapio, mesas e combos",
+    "catalogSubtitle": "Produtos, cardapio, pacotes e ofertas convivem na vitrine da empresa.",
+    "catalogActionLabel": "Criar categoria",
+    "catalogEmptyText": "Crie uma colecao para iniciar a vitrine hibrida.",
+    "categoryHint": "Ex: Burgers",
+    "orderTitle": "Receitas e vendas",
+    "orderSubtitle": "Pedidos, pacotes, reservas e registros manuais.",
+    "orderActionLabel": "Nova receita",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Agenda e programacao",
+    "agendaSubtitle": "Servicos, reservas, programacao e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar experiencia",
+    "serviceEmptyText": "Cadastre servicos ou experiencias para abrir horarios.",
+    "teamSubtitle": "Permissoes para todas as frentes da operacao.",
+    "linksTitle": "Links e monetizacao",
+    "linksSubtitle": "Links rastreaveis para produtos, reservas, servicos e parceiros.",
+    "catalogItemLabel": "prato",
+    "catalogItemNameLabel": "Nome do prato",
+    "catalogImageTitle": "Foto do prato",
+    "catalogImageSubtitle": "Use uma imagem real do prato, bem iluminada e sem texto pesado.",
+    "defaultOrderItemName": "Pedido balcão",
+    "defaultServiceName": "Reserva"
+   }
+  },
+  {
+   "primaryType": "FOOD_PLACE",
+   "cnaes": [
+    "96.02-5/01"
+   ],
+   "expected": {
+    "type": "FOOD_PLACE",
+    "merchantType": "restaurant",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Cardapio",
+      "title": "Cardapio vivo"
+     },
+     {
+      "key": "agenda",
+      "label": "Agenda",
+      "title": "Agenda e servicos"
+     },
+     {
+      "key": "orders",
+      "label": "Vendas",
+      "title": "Vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Operacao local hibrida",
+    "leadSubtitle": "Misture vitrine, servicos, agenda, pedidos e links conforme as frentes reais da empresa.",
+    "leadChips": [
+     "Cardapio",
+     "Servicos"
+    ],
+    "dashboardTitle": "Painel integrado",
+    "dashboardSubtitle": "Vendas, agenda, vitrine e links em uma operacao unica.",
+    "catalogTitle": "Cardapio vivo",
+    "catalogSubtitle": "Produtos, cardapio, pacotes e ofertas convivem na vitrine da empresa.",
+    "catalogActionLabel": "Criar categoria",
+    "catalogEmptyText": "Crie uma colecao para iniciar a vitrine hibrida.",
+    "categoryHint": "Ex: Burgers",
+    "orderTitle": "Vendas locais",
+    "orderSubtitle": "Pedidos, pacotes, reservas e registros manuais.",
+    "orderActionLabel": "Nova venda",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Agenda e servicos",
+    "agendaSubtitle": "Servicos, reservas, programacao e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar servico",
+    "serviceEmptyText": "Cadastre servicos ou experiencias para abrir horarios.",
+    "teamSubtitle": "Permissoes para todas as frentes da operacao.",
+    "linksTitle": "Links e monetizacao",
+    "linksSubtitle": "Links rastreaveis para produtos, reservas, servicos e parceiros.",
+    "catalogItemLabel": "prato",
+    "catalogItemNameLabel": "Nome do prato",
+    "catalogImageTitle": "Foto do prato",
+    "catalogImageSubtitle": "Use uma imagem real do prato, bem iluminada e sem texto pesado.",
+    "defaultOrderItemName": "Pedido balcão",
+    "defaultServiceName": "Reserva"
+   }
+  },
+  {
+   "primaryType": "FOOD_PLACE",
+   "cnaes": [
+    "73.19-0/02"
+   ],
+   "expected": {
+    "type": "FOOD_PLACE",
+    "merchantType": "restaurant",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Cardapio",
+      "title": "Cardapio vivo"
+     },
+     {
+      "key": "agenda",
+      "label": "Agenda",
+      "title": "Agenda e servicos"
+     },
+     {
+      "key": "orders",
+      "label": "Vendas",
+      "title": "Vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Operacao local hibrida",
+    "leadSubtitle": "Misture vitrine, servicos, agenda, pedidos e links conforme as frentes reais da empresa.",
+    "leadChips": [
+     "Cardapio",
+     "Campanhas"
+    ],
+    "dashboardTitle": "Painel integrado",
+    "dashboardSubtitle": "Vendas, agenda, vitrine e links em uma operacao unica.",
+    "catalogTitle": "Cardapio vivo",
+    "catalogSubtitle": "Produtos, cardapio, pacotes e ofertas convivem na vitrine da empresa.",
+    "catalogActionLabel": "Criar categoria",
+    "catalogEmptyText": "Crie uma colecao para iniciar a vitrine hibrida.",
+    "categoryHint": "Ex: Burgers",
+    "orderTitle": "Vendas locais",
+    "orderSubtitle": "Pedidos, pacotes, reservas e registros manuais.",
+    "orderActionLabel": "Nova venda",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Agenda e servicos",
+    "agendaSubtitle": "Servicos, reservas, programacao e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar servico",
+    "serviceEmptyText": "Cadastre servicos ou experiencias para abrir horarios.",
+    "teamSubtitle": "Permissoes para todas as frentes da operacao.",
+    "linksTitle": "Links e monetizacao",
+    "linksSubtitle": "Links rastreaveis para produtos, reservas, servicos e parceiros.",
+    "catalogItemLabel": "prato",
+    "catalogItemNameLabel": "Nome do prato",
+    "catalogImageTitle": "Foto do prato",
+    "catalogImageSubtitle": "Use uma imagem real do prato, bem iluminada e sem texto pesado.",
+    "defaultOrderItemName": "Pedido balcão",
+    "defaultServiceName": "Reserva"
+   }
+  },
+  {
+   "primaryType": "SERVICE_PROVIDER",
+   "cnaes": [
+    "4781-4/00"
+   ],
+   "expected": {
+    "type": "SERVICE_PROVIDER",
+    "merchantType": "service",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Vitrine",
+      "title": "Vitrine e portfolio"
+     },
+     {
+      "key": "agenda",
+      "label": "Agenda",
+      "title": "Agenda e servicos"
+     },
+     {
+      "key": "orders",
+      "label": "Vendas",
+      "title": "Vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Operacao local hibrida",
+    "leadSubtitle": "Misture vitrine, servicos, agenda, pedidos e links conforme as frentes reais da empresa.",
+    "leadChips": [
+     "Vitrine",
+     "Servicos"
+    ],
+    "dashboardTitle": "Painel integrado",
+    "dashboardSubtitle": "Vendas, agenda, vitrine e links em uma operacao unica.",
+    "catalogTitle": "Vitrine e portfolio",
+    "catalogSubtitle": "Produtos, cardapio, pacotes e ofertas convivem na vitrine da empresa.",
+    "catalogActionLabel": "Criar colecao",
+    "catalogEmptyText": "Crie uma colecao para iniciar a vitrine hibrida.",
+    "categoryHint": "Ex: Cabelo",
+    "orderTitle": "Vendas locais",
+    "orderSubtitle": "Pedidos, pacotes, reservas e registros manuais.",
+    "orderActionLabel": "Nova venda",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Agenda e servicos",
+    "agendaSubtitle": "Servicos, reservas, programacao e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar servico",
+    "serviceEmptyText": "Cadastre servicos ou experiencias para abrir horarios.",
+    "teamSubtitle": "Permissoes para todas as frentes da operacao.",
+    "linksTitle": "Links de indicacao",
+    "linksSubtitle": "Links rastreaveis para produtos, reservas, servicos e parceiros.",
+    "catalogItemLabel": "pacote",
+    "catalogItemNameLabel": "Nome do pacote",
+    "catalogImageTitle": "Imagem do pacote",
+    "catalogImageSubtitle": "Use uma imagem que comunique o resultado do serviço ou pacote.",
+    "defaultOrderItemName": "Venda complementar",
+    "defaultServiceName": "Atendimento"
+   }
+  },
+  {
+   "primaryType": "SERVICE_PROVIDER",
+   "cnaes": [
+    "9329-8/99"
+   ],
+   "expected": {
+    "type": "SERVICE_PROVIDER",
+    "merchantType": "service",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "agenda",
+      "label": "Programacao",
+      "title": "Agenda e programacao"
+     },
+     {
+      "key": "orders",
+      "label": "Receitas",
+      "title": "Receitas e vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Operacao local hibrida",
+    "leadSubtitle": "Misture vitrine, servicos, agenda, pedidos e links conforme as frentes reais da empresa.",
+    "leadChips": [
+     "Servicos",
+     "Programacao"
+    ],
+    "dashboardTitle": "Painel integrado",
+    "dashboardSubtitle": "Vendas, agenda, vitrine e links em uma operacao unica.",
+    "catalogTitle": "Pacotes e experiencias",
+    "catalogSubtitle": "Produtos, cardapio, pacotes e ofertas convivem na vitrine da empresa.",
+    "catalogActionLabel": "Criar grupo",
+    "catalogEmptyText": "Crie uma colecao para iniciar a vitrine hibrida.",
+    "categoryHint": "Ex: Cabelo",
+    "orderTitle": "Receitas e vendas",
+    "orderSubtitle": "Pedidos, pacotes, reservas e registros manuais.",
+    "orderActionLabel": "Nova receita",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Agenda e programacao",
+    "agendaSubtitle": "Servicos, reservas, programacao e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar experiencia",
+    "serviceEmptyText": "Cadastre servicos ou experiencias para abrir horarios.",
+    "teamSubtitle": "Permissoes para todas as frentes da operacao.",
+    "linksTitle": "Links de indicacao",
+    "linksSubtitle": "Links rastreaveis para produtos, reservas, servicos e parceiros.",
+    "catalogItemLabel": "pacote",
+    "catalogItemNameLabel": "Nome do pacote",
+    "catalogImageTitle": "Imagem do pacote",
+    "catalogImageSubtitle": "Use uma imagem que comunique o resultado do serviço ou pacote.",
+    "defaultOrderItemName": "Venda complementar",
+    "defaultServiceName": "Atendimento"
+   }
+  },
+  {
+   "primaryType": "SELLER",
+   "cnaes": [
+    "5611-2/01"
+   ],
+   "expected": {
+    "type": "SELLER",
+    "merchantType": "other",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Vitrine",
+      "title": "Cardapio e vitrine"
+     },
+     {
+      "key": "agenda",
+      "label": "Agenda",
+      "title": "Agenda e servicos"
+     },
+     {
+      "key": "orders",
+      "label": "Vendas",
+      "title": "Vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Operacao local hibrida",
+    "leadSubtitle": "Misture vitrine, servicos, agenda, pedidos e links conforme as frentes reais da empresa.",
+    "leadChips": [
+     "Cardapio",
+     "Vitrine"
+    ],
+    "dashboardTitle": "Painel integrado",
+    "dashboardSubtitle": "Vendas, agenda, vitrine e links em uma operacao unica.",
+    "catalogTitle": "Cardapio e vitrine",
+    "catalogSubtitle": "Produtos, cardapio, pacotes e ofertas convivem na vitrine da empresa.",
+    "catalogActionLabel": "Criar colecao",
+    "catalogEmptyText": "Crie uma colecao para iniciar a vitrine hibrida.",
+    "categoryHint": "Ex: Burgers",
+    "orderTitle": "Vendas locais",
+    "orderSubtitle": "Pedidos, pacotes, reservas e registros manuais.",
+    "orderActionLabel": "Nova venda",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Agenda e servicos",
+    "agendaSubtitle": "Servicos, reservas, programacao e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar servico",
+    "serviceEmptyText": "Cadastre servicos ou experiencias para abrir horarios.",
+    "teamSubtitle": "Permissoes para todas as frentes da operacao.",
+    "linksTitle": "Links de campanha",
+    "linksSubtitle": "Links rastreaveis para produtos, reservas, servicos e parceiros.",
+    "catalogItemLabel": "produto",
+    "catalogItemNameLabel": "Nome do produto",
+    "catalogImageTitle": "Foto do produto",
+    "catalogImageSubtitle": "Use uma foto limpa do produto, preferencialmente em fundo simples.",
+    "defaultOrderItemName": "Produto vendido",
+    "defaultServiceName": "Retirada agendada"
+   }
+  },
+  {
+   "primaryType": "SELLER",
+   "cnaes": [
+    "9602-5/01"
+   ],
+   "expected": {
+    "type": "SELLER",
+    "merchantType": "other",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Vitrine",
+      "title": "Vitrine e portfolio"
+     },
+     {
+      "key": "agenda",
+      "label": "Agenda",
+      "title": "Agenda e servicos"
+     },
+     {
+      "key": "orders",
+      "label": "Vendas",
+      "title": "Vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Operacao local hibrida",
+    "leadSubtitle": "Misture vitrine, servicos, agenda, pedidos e links conforme as frentes reais da empresa.",
+    "leadChips": [
+     "Vitrine",
+     "Servicos"
+    ],
+    "dashboardTitle": "Painel integrado",
+    "dashboardSubtitle": "Vendas, agenda, vitrine e links em uma operacao unica.",
+    "catalogTitle": "Vitrine e portfolio",
+    "catalogSubtitle": "Produtos, cardapio, pacotes e ofertas convivem na vitrine da empresa.",
+    "catalogActionLabel": "Criar colecao",
+    "catalogEmptyText": "Crie uma colecao para iniciar a vitrine hibrida.",
+    "categoryHint": "Ex: Cabelo",
+    "orderTitle": "Vendas locais",
+    "orderSubtitle": "Pedidos, pacotes, reservas e registros manuais.",
+    "orderActionLabel": "Nova venda",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Agenda e servicos",
+    "agendaSubtitle": "Servicos, reservas, programacao e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar servico",
+    "serviceEmptyText": "Cadastre servicos ou experiencias para abrir horarios.",
+    "teamSubtitle": "Permissoes para todas as frentes da operacao.",
+    "linksTitle": "Links de campanha",
+    "linksSubtitle": "Links rastreaveis para produtos, reservas, servicos e parceiros.",
+    "catalogItemLabel": "produto",
+    "catalogItemNameLabel": "Nome do produto",
+    "catalogImageTitle": "Foto do produto",
+    "catalogImageSubtitle": "Use uma foto limpa do produto, preferencialmente em fundo simples.",
+    "defaultOrderItemName": "Produto vendido",
+    "defaultServiceName": "Retirada agendada"
+   }
+  },
+  {
+   "primaryType": "SELLER",
+   "cnaes": [
+    "7319-0/02"
+   ],
+   "expected": {
+    "type": "SELLER",
+    "merchantType": "other",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Vitrine",
+      "title": "Campanhas e produtos"
+     },
+     {
+      "key": "orders",
+      "label": "Vendas",
+      "title": "Vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Operacao local hibrida",
+    "leadSubtitle": "Misture vitrine, servicos, agenda, pedidos e links conforme as frentes reais da empresa.",
+    "leadChips": [
+     "Vitrine",
+     "Campanhas"
+    ],
+    "dashboardTitle": "Painel integrado",
+    "dashboardSubtitle": "Vendas, agenda, vitrine e links em uma operacao unica.",
+    "catalogTitle": "Campanhas e produtos",
+    "catalogSubtitle": "Produtos, cardapio, pacotes e ofertas convivem na vitrine da empresa.",
+    "catalogActionLabel": "Criar colecao",
+    "catalogEmptyText": "Crie uma colecao para iniciar a vitrine hibrida.",
+    "categoryHint": "Ex: Lancamentos",
+    "orderTitle": "Vendas locais",
+    "orderSubtitle": "Pedidos, pacotes, reservas e registros manuais.",
+    "orderActionLabel": "Nova venda",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Agenda e servicos",
+    "agendaSubtitle": "Servicos, reservas, programacao e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar servico",
+    "serviceEmptyText": "Cadastre servicos ou experiencias para abrir horarios.",
+    "teamSubtitle": "Permissoes para todas as frentes da operacao.",
+    "linksTitle": "Links de campanha",
+    "linksSubtitle": "Links rastreaveis para produtos, reservas, servicos e parceiros.",
+    "catalogItemLabel": "produto",
+    "catalogItemNameLabel": "Nome do produto",
+    "catalogImageTitle": "Foto do produto",
+    "catalogImageSubtitle": "Use uma foto limpa do produto, preferencialmente em fundo simples.",
+    "defaultOrderItemName": "Produto vendido",
+    "defaultServiceName": "Retirada agendada"
+   }
+  },
+  {
+   "primaryType": "VENUE",
+   "cnaes": [
+    "5611-2/01"
+   ],
+   "expected": {
+    "type": "VENUE",
+    "merchantType": "host",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Cardapio",
+      "title": "Cardapio, mesas e combos"
+     },
+     {
+      "key": "agenda",
+      "label": "Programacao",
+      "title": "Agenda e programacao"
+     },
+     {
+      "key": "orders",
+      "label": "Receitas",
+      "title": "Receitas e vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Operacao local hibrida",
+    "leadSubtitle": "Misture vitrine, servicos, agenda, pedidos e links conforme as frentes reais da empresa.",
+    "leadChips": [
+     "Cardapio",
+     "Programacao"
+    ],
+    "dashboardTitle": "Painel integrado",
+    "dashboardSubtitle": "Vendas, agenda, vitrine e links em uma operacao unica.",
+    "catalogTitle": "Cardapio, mesas e combos",
+    "catalogSubtitle": "Produtos, cardapio, pacotes e ofertas convivem na vitrine da empresa.",
+    "catalogActionLabel": "Criar categoria",
+    "catalogEmptyText": "Crie uma colecao para iniciar a vitrine hibrida.",
+    "categoryHint": "Ex: Burgers",
+    "orderTitle": "Receitas e vendas",
+    "orderSubtitle": "Pedidos, pacotes, reservas e registros manuais.",
+    "orderActionLabel": "Nova receita",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Agenda e programacao",
+    "agendaSubtitle": "Servicos, reservas, programacao e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar experiencia",
+    "serviceEmptyText": "Cadastre servicos ou experiencias para abrir horarios.",
+    "teamSubtitle": "Permissoes para todas as frentes da operacao.",
+    "linksTitle": "Links de parceiros",
+    "linksSubtitle": "Links rastreaveis para produtos, reservas, servicos e parceiros.",
+    "catalogItemLabel": "experiência",
+    "catalogItemNameLabel": "Nome da experiência",
+    "catalogImageTitle": "Imagem da experiência",
+    "catalogImageSubtitle": "Use uma imagem que mostre a experiência, mesa, espaço ou ativação.",
+    "defaultOrderItemName": "Receita manual",
+    "defaultServiceName": "Experiencia"
+   }
+  },
+  {
+   "primaryType": "EVENT_ORGANIZER",
+   "cnaes": [
+    "4781-4/00"
+   ],
+   "expected": {
+    "type": "VENUE",
+    "merchantType": "other",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Vitrine",
+      "title": "Ofertas do espaco"
+     },
+     {
+      "key": "agenda",
+      "label": "Programacao",
+      "title": "Agenda e programacao"
+     },
+     {
+      "key": "orders",
+      "label": "Receitas",
+      "title": "Receitas e vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Operacao local hibrida",
+    "leadSubtitle": "Misture vitrine, servicos, agenda, pedidos e links conforme as frentes reais da empresa.",
+    "leadChips": [
+     "Vitrine",
+     "Programacao"
+    ],
+    "dashboardTitle": "Painel integrado",
+    "dashboardSubtitle": "Vendas, agenda, vitrine e links em uma operacao unica.",
+    "catalogTitle": "Ofertas do espaco",
+    "catalogSubtitle": "Produtos, cardapio, pacotes e ofertas convivem na vitrine da empresa.",
+    "catalogActionLabel": "Criar colecao",
+    "catalogEmptyText": "Crie uma colecao para iniciar a vitrine hibrida.",
+    "categoryHint": "Ex: Lancamentos",
+    "orderTitle": "Receitas e vendas",
+    "orderSubtitle": "Pedidos, pacotes, reservas e registros manuais.",
+    "orderActionLabel": "Nova receita",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Agenda e programacao",
+    "agendaSubtitle": "Servicos, reservas, programacao e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar experiencia",
+    "serviceEmptyText": "Cadastre servicos ou experiencias para abrir horarios.",
+    "teamSubtitle": "Permissoes para todas as frentes da operacao.",
+    "linksTitle": "Links de parceiros",
+    "linksSubtitle": "Links rastreaveis para produtos, reservas, servicos e parceiros.",
+    "catalogItemLabel": "experiência",
+    "catalogItemNameLabel": "Nome da experiência",
+    "catalogImageTitle": "Imagem da experiência",
+    "catalogImageSubtitle": "Use uma imagem que mostre a experiência, mesa, espaço ou ativação.",
+    "defaultOrderItemName": "Receita manual",
+    "defaultServiceName": "Experiencia"
+   }
+  },
+  {
+   "primaryType": "DIGITAL_CREATOR",
+   "cnaes": [
+    "4781-4/00"
+   ],
+   "expected": {
+    "type": "DIGITAL_CREATOR",
+    "merchantType": "other",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Ofertas",
+      "title": "Ofertas e collabs"
+     },
+     {
+      "key": "orders",
+      "label": "Vendas",
+      "title": "Vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Operacao local hibrida",
+    "leadSubtitle": "Misture vitrine, servicos, agenda, pedidos e links conforme as frentes reais da empresa.",
+    "leadChips": [
+     "Vitrine",
+     "Campanhas"
+    ],
+    "dashboardTitle": "Painel integrado",
+    "dashboardSubtitle": "Vendas, agenda, vitrine e links em uma operacao unica.",
+    "catalogTitle": "Ofertas e collabs",
+    "catalogSubtitle": "Produtos, cardapio, pacotes e ofertas convivem na vitrine da empresa.",
+    "catalogActionLabel": "Criar colecao",
+    "catalogEmptyText": "Crie uma colecao para iniciar a vitrine hibrida.",
+    "categoryHint": "Ex: Lancamentos",
+    "orderTitle": "Vendas locais",
+    "orderSubtitle": "Pedidos, pacotes, reservas e registros manuais.",
+    "orderActionLabel": "Nova venda",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Agenda e servicos",
+    "agendaSubtitle": "Servicos, reservas, programacao e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar servico",
+    "serviceEmptyText": "Cadastre servicos ou experiencias para abrir horarios.",
+    "teamSubtitle": "Permissoes para todas as frentes da operacao.",
+    "linksTitle": "Links, collabs e campanhas",
+    "linksSubtitle": "Links rastreaveis para produtos, reservas, servicos e parceiros.",
+    "catalogItemLabel": "oferta",
+    "catalogItemNameLabel": "Nome da oferta",
+    "catalogImageTitle": "Imagem da oferta",
+    "catalogImageSubtitle": "Use uma imagem de campanha ou criativo que identifique a collab.",
+    "defaultOrderItemName": "Conversao manual",
+    "defaultServiceName": "Collab local"
+   }
+  },
+  {
+   "primaryType": "DIGITAL_CREATOR",
+   "cnaes": [
+    "7319-0/02"
+   ],
+   "expected": {
+    "type": "DIGITAL_CREATOR",
+    "merchantType": "other",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Ofertas",
+      "title": "Ofertas e collabs"
+     },
+     {
+      "key": "orders",
+      "label": "Vendas",
+      "title": "Vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Operacao local hibrida",
+    "leadSubtitle": "Misture vitrine, servicos, agenda, pedidos e links conforme as frentes reais da empresa.",
+    "leadChips": [
+     "Campanhas"
+    ],
+    "dashboardTitle": "Painel integrado",
+    "dashboardSubtitle": "Vendas, agenda, vitrine e links em uma operacao unica.",
+    "catalogTitle": "Ofertas e collabs",
+    "catalogSubtitle": "Produtos, cardapio, pacotes e ofertas convivem na vitrine da empresa.",
+    "catalogActionLabel": "Criar grupo",
+    "catalogEmptyText": "Crie uma colecao para iniciar a vitrine hibrida.",
+    "categoryHint": "Ex: Lancamentos",
+    "orderTitle": "Vendas locais",
+    "orderSubtitle": "Pedidos, pacotes, reservas e registros manuais.",
+    "orderActionLabel": "Nova venda",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Agenda e servicos",
+    "agendaSubtitle": "Servicos, reservas, programacao e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar servico",
+    "serviceEmptyText": "Cadastre servicos ou experiencias para abrir horarios.",
+    "teamSubtitle": "Permissoes para todas as frentes da operacao.",
+    "linksTitle": "Links, collabs e campanhas",
+    "linksSubtitle": "Links rastreaveis para produtos, reservas, servicos e parceiros.",
+    "catalogItemLabel": "oferta",
+    "catalogItemNameLabel": "Nome da oferta",
+    "catalogImageTitle": "Imagem da oferta",
+    "catalogImageSubtitle": "Use uma imagem de campanha ou criativo que identifique a collab.",
+    "defaultOrderItemName": "Conversao manual",
+    "defaultServiceName": "Collab local"
+   }
+  },
+  {
+   "primaryType": "DIGITAL_CREATOR",
+   "cnaes": [
+    "5611-2/01"
+   ],
+   "expected": {
+    "type": "DIGITAL_CREATOR",
+    "merchantType": "other",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Cardapio",
+      "title": "Ofertas promovidas"
+     },
+     {
+      "key": "agenda",
+      "label": "Agenda",
+      "title": "Agenda e servicos"
+     },
+     {
+      "key": "orders",
+      "label": "Vendas",
+      "title": "Vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Operacao local hibrida",
+    "leadSubtitle": "Misture vitrine, servicos, agenda, pedidos e links conforme as frentes reais da empresa.",
+    "leadChips": [
+     "Cardapio",
+     "Campanhas"
+    ],
+    "dashboardTitle": "Painel integrado",
+    "dashboardSubtitle": "Vendas, agenda, vitrine e links em uma operacao unica.",
+    "catalogTitle": "Ofertas promovidas",
+    "catalogSubtitle": "Produtos, cardapio, pacotes e ofertas convivem na vitrine da empresa.",
+    "catalogActionLabel": "Criar categoria",
+    "catalogEmptyText": "Crie uma colecao para iniciar a vitrine hibrida.",
+    "categoryHint": "Ex: Burgers",
+    "orderTitle": "Vendas locais",
+    "orderSubtitle": "Pedidos, pacotes, reservas e registros manuais.",
+    "orderActionLabel": "Nova venda",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Agenda e servicos",
+    "agendaSubtitle": "Servicos, reservas, programacao e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar servico",
+    "serviceEmptyText": "Cadastre servicos ou experiencias para abrir horarios.",
+    "teamSubtitle": "Permissoes para todas as frentes da operacao.",
+    "linksTitle": "Links, collabs e campanhas",
+    "linksSubtitle": "Links rastreaveis para produtos, reservas, servicos e parceiros.",
+    "catalogItemLabel": "oferta",
+    "catalogItemNameLabel": "Nome da oferta",
+    "catalogImageTitle": "Imagem da oferta",
+    "catalogImageSubtitle": "Use uma imagem de campanha ou criativo que identifique a collab.",
+    "defaultOrderItemName": "Conversao manual",
+    "defaultServiceName": "Collab local"
+   }
+  },
+  {
+   "primaryType": "BRAND",
+   "cnaes": [
+    "4781-4/00"
+   ],
+   "expected": {
+    "type": "BRAND",
+    "merchantType": "other",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Vitrine",
+      "title": "Campanhas e produtos"
+     },
+     {
+      "key": "orders",
+      "label": "Vendas",
+      "title": "Vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Operacao local hibrida",
+    "leadSubtitle": "Misture vitrine, servicos, agenda, pedidos e links conforme as frentes reais da empresa.",
+    "leadChips": [
+     "Vitrine",
+     "Campanhas"
+    ],
+    "dashboardTitle": "Painel integrado",
+    "dashboardSubtitle": "Vendas, agenda, vitrine e links em uma operacao unica.",
+    "catalogTitle": "Campanhas e produtos",
+    "catalogSubtitle": "Produtos, cardapio, pacotes e ofertas convivem na vitrine da empresa.",
+    "catalogActionLabel": "Criar colecao",
+    "catalogEmptyText": "Crie uma colecao para iniciar a vitrine hibrida.",
+    "categoryHint": "Ex: Lancamentos",
+    "orderTitle": "Vendas locais",
+    "orderSubtitle": "Pedidos, pacotes, reservas e registros manuais.",
+    "orderActionLabel": "Nova venda",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Agenda e servicos",
+    "agendaSubtitle": "Servicos, reservas, programacao e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar servico",
+    "serviceEmptyText": "Cadastre servicos ou experiencias para abrir horarios.",
+    "teamSubtitle": "Permissoes para todas as frentes da operacao.",
+    "linksTitle": "Links e parcerias",
+    "linksSubtitle": "Links rastreaveis para produtos, reservas, servicos e parceiros.",
+    "catalogItemLabel": "campanha",
+    "catalogItemNameLabel": "Nome da campanha",
+    "catalogImageTitle": "Imagem da campanha",
+    "catalogImageSubtitle": "Use uma peça visual da campanha ou benefício local.",
+    "defaultOrderItemName": "Registro operacional",
+    "defaultServiceName": "Ativacao local"
+   }
+  },
+  {
+   "primaryType": "BRAND",
+   "cnaes": [
+    "9609-2/08"
+   ],
+   "expected": {
+    "type": "BRAND",
+    "merchantType": "other",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Vitrine",
+      "title": "Ofertas e campanhas"
+     },
+     {
+      "key": "agenda",
+      "label": "Agenda",
+      "title": "Agenda e servicos"
+     },
+     {
+      "key": "orders",
+      "label": "Vendas",
+      "title": "Vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Operacao local hibrida",
+    "leadSubtitle": "Misture vitrine, servicos, agenda, pedidos e links conforme as frentes reais da empresa.",
+    "leadChips": [
+     "Servicos",
+     "Campanhas"
+    ],
+    "dashboardTitle": "Painel integrado",
+    "dashboardSubtitle": "Vendas, agenda, vitrine e links em uma operacao unica.",
+    "catalogTitle": "Ofertas e campanhas",
+    "catalogSubtitle": "Produtos, cardapio, pacotes e ofertas convivem na vitrine da empresa.",
+    "catalogActionLabel": "Criar grupo",
+    "catalogEmptyText": "Crie uma colecao para iniciar a vitrine hibrida.",
+    "categoryHint": "Ex: Cabelo",
+    "orderTitle": "Vendas locais",
+    "orderSubtitle": "Pedidos, pacotes, reservas e registros manuais.",
+    "orderActionLabel": "Nova venda",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Agenda e servicos",
+    "agendaSubtitle": "Servicos, reservas, programacao e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar servico",
+    "serviceEmptyText": "Cadastre servicos ou experiencias para abrir horarios.",
+    "teamSubtitle": "Permissoes para todas as frentes da operacao.",
+    "linksTitle": "Links e parcerias",
+    "linksSubtitle": "Links rastreaveis para produtos, reservas, servicos e parceiros.",
+    "catalogItemLabel": "campanha",
+    "catalogItemNameLabel": "Nome da campanha",
+    "catalogImageTitle": "Imagem da campanha",
+    "catalogImageSubtitle": "Use uma peça visual da campanha ou benefício local.",
+    "defaultOrderItemName": "Registro operacional",
+    "defaultServiceName": "Ativacao local"
+   }
+  },
+  {
+   "primaryType": "VALOR_DESCONHECIDO",
+   "cnaes": [
+    "5611-2/01"
+   ],
+   "expected": {
+    "type": "BRAND",
+    "merchantType": "other",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Cardapio",
+      "title": "Ofertas e campanhas"
+     },
+     {
+      "key": "agenda",
+      "label": "Agenda",
+      "title": "Agenda e servicos"
+     },
+     {
+      "key": "orders",
+      "label": "Vendas",
+      "title": "Vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Operacao local hibrida",
+    "leadSubtitle": "Misture vitrine, servicos, agenda, pedidos e links conforme as frentes reais da empresa.",
+    "leadChips": [
+     "Cardapio",
+     "Campanhas"
+    ],
+    "dashboardTitle": "Painel integrado",
+    "dashboardSubtitle": "Vendas, agenda, vitrine e links em uma operacao unica.",
+    "catalogTitle": "Ofertas e campanhas",
+    "catalogSubtitle": "Produtos, cardapio, pacotes e ofertas convivem na vitrine da empresa.",
+    "catalogActionLabel": "Criar categoria",
+    "catalogEmptyText": "Crie uma colecao para iniciar a vitrine hibrida.",
+    "categoryHint": "Ex: Burgers",
+    "orderTitle": "Vendas locais",
+    "orderSubtitle": "Pedidos, pacotes, reservas e registros manuais.",
+    "orderActionLabel": "Nova venda",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Agenda e servicos",
+    "agendaSubtitle": "Servicos, reservas, programacao e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar servico",
+    "serviceEmptyText": "Cadastre servicos ou experiencias para abrir horarios.",
+    "teamSubtitle": "Permissoes para todas as frentes da operacao.",
+    "linksTitle": "Links e parcerias",
+    "linksSubtitle": "Links rastreaveis para produtos, reservas, servicos e parceiros.",
+    "catalogItemLabel": "campanha",
+    "catalogItemNameLabel": "Nome da campanha",
+    "catalogImageTitle": "Imagem da campanha",
+    "catalogImageSubtitle": "Use uma peça visual da campanha ou benefício local.",
+    "defaultOrderItemName": "Registro operacional",
+    "defaultServiceName": "Ativacao local"
+   }
+  },
+  {
+   "primaryType": "FOOD_PLACE",
+   "cnaes": [
+    "47.81-4/00",
+    "9001-9/01",
+    "9602-5/01"
+   ],
+   "expected": {
+    "type": "FOOD_PLACE",
+    "merchantType": "restaurant",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Vitrine",
+      "title": "Cardapio e vitrine"
+     },
+     {
+      "key": "agenda",
+      "label": "Programacao",
+      "title": "Agenda e programacao"
+     },
+     {
+      "key": "orders",
+      "label": "Receitas",
+      "title": "Receitas e vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Operacao local hibrida",
+    "leadSubtitle": "Misture vitrine, servicos, agenda, pedidos e links conforme as frentes reais da empresa.",
+    "leadChips": [
+     "Cardapio",
+     "Vitrine",
+     "Servicos",
+     "Programacao"
+    ],
+    "dashboardTitle": "Painel integrado",
+    "dashboardSubtitle": "Vendas, agenda, vitrine e links em uma operacao unica.",
+    "catalogTitle": "Cardapio e vitrine",
+    "catalogSubtitle": "Produtos, cardapio, pacotes e ofertas convivem na vitrine da empresa.",
+    "catalogActionLabel": "Criar colecao",
+    "catalogEmptyText": "Crie uma colecao para iniciar a vitrine hibrida.",
+    "categoryHint": "Ex: Burgers",
+    "orderTitle": "Receitas e vendas",
+    "orderSubtitle": "Pedidos, pacotes, reservas e registros manuais.",
+    "orderActionLabel": "Nova receita",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Agenda e programacao",
+    "agendaSubtitle": "Servicos, reservas, programacao e janelas de atendimento.",
+    "serviceActionLabel": "Adicionar experiencia",
+    "serviceEmptyText": "Cadastre servicos ou experiencias para abrir horarios.",
+    "teamSubtitle": "Permissoes para todas as frentes da operacao.",
+    "linksTitle": "Links e monetizacao",
+    "linksSubtitle": "Links rastreaveis para produtos, reservas, servicos e parceiros.",
+    "catalogItemLabel": "prato",
+    "catalogItemNameLabel": "Nome do prato",
+    "catalogImageTitle": "Foto do prato",
+    "catalogImageSubtitle": "Use uma imagem real do prato, bem iluminada e sem texto pesado.",
+    "defaultOrderItemName": "Pedido balcão",
+    "defaultServiceName": "Reserva"
+   }
+  },
+  {
+   "primaryType": "FOOD_PLACE",
+   "cnaes": [
+    "0111-3/01"
+   ],
+   "expected": {
+    "type": "FOOD_PLACE",
+    "merchantType": "restaurant",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Cardapio",
+      "title": "Cardapio digital"
+     },
+     {
+      "key": "orders",
+      "label": "Pedidos",
+      "title": "Pedidos"
+     },
+     {
+      "key": "agenda",
+      "label": "Agenda",
+      "title": "Agenda"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     }
+    ],
+    "leadTitle": "Operacao local conectada",
+    "leadSubtitle": "Venda, cardapio, agenda e repasses em uma frente unica para bares, restaurantes e experiencias de bairro.",
+    "leadChips": [
+     "Cardapio",
+     "Pedidos",
+     "Agenda"
+    ],
+    "dashboardTitle": "Painel operacional",
+    "dashboardSubtitle": "Centro de operacoes da sua empresa dentro do Fluxo.",
+    "catalogTitle": "Cardapio vivo",
+    "catalogSubtitle": "Itens, categorias, precos e disponibilidade para vender no momento certo.",
+    "catalogActionLabel": "Criar categoria",
+    "catalogEmptyText": "Crie uma categoria para iniciar seu cardapio.",
+    "categoryHint": "Ex: Burgers",
+    "orderTitle": "Pedidos ao vivo",
+    "orderSubtitle": "Producao, retirada, entrega local e pagamento manual.",
+    "orderActionLabel": "Novo pedido",
+    "orderEmptyText": "Nenhum pedido neste filtro.",
+    "agendaTitle": "Agenda e reservas",
+    "agendaSubtitle": "Reservas, comandas futuras e experiencias com horario marcado.",
+    "serviceActionLabel": "Adicionar servico",
+    "serviceEmptyText": "Cadastre uma experiencia ou reserva para abrir horarios.",
+    "teamSubtitle": "Permissoes para caixa, cozinha, atendimento e financeiro.",
+    "linksTitle": "Links e monetizacao",
+    "linksSubtitle": "Divulgue promocoes, parcerias e reservas rastreaveis.",
+    "catalogItemLabel": "prato",
+    "catalogItemNameLabel": "Nome do prato",
+    "catalogImageTitle": "Foto do prato",
+    "catalogImageSubtitle": "Use uma imagem real do prato, bem iluminada e sem texto pesado.",
+    "defaultOrderItemName": "Pedido balcão",
+    "defaultServiceName": "Reserva"
+   }
+  },
+  {
+   "primaryType": "FOOD_PLACE",
+   "cnaes": [
+    "5611-2/01"
+   ],
+   "expected": {
+    "type": "FOOD_PLACE",
+    "merchantType": "restaurant",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Cardapio",
+      "title": "Cardapio digital"
+     },
+     {
+      "key": "orders",
+      "label": "Pedidos",
+      "title": "Pedidos"
+     },
+     {
+      "key": "agenda",
+      "label": "Agenda",
+      "title": "Agenda"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     }
+    ],
+    "leadTitle": "Operacao local conectada",
+    "leadSubtitle": "Venda, cardapio, agenda e repasses em uma frente unica para bares, restaurantes e experiencias de bairro.",
+    "leadChips": [
+     "Cardapio",
+     "Pedidos",
+     "Agenda"
+    ],
+    "dashboardTitle": "Painel operacional",
+    "dashboardSubtitle": "Centro de operacoes da sua empresa dentro do Fluxo.",
+    "catalogTitle": "Cardapio vivo",
+    "catalogSubtitle": "Itens, categorias, precos e disponibilidade para vender no momento certo.",
+    "catalogActionLabel": "Criar categoria",
+    "catalogEmptyText": "Crie uma categoria para iniciar seu cardapio.",
+    "categoryHint": "Ex: Burgers",
+    "orderTitle": "Pedidos ao vivo",
+    "orderSubtitle": "Producao, retirada, entrega local e pagamento manual.",
+    "orderActionLabel": "Novo pedido",
+    "orderEmptyText": "Nenhum pedido neste filtro.",
+    "agendaTitle": "Agenda e reservas",
+    "agendaSubtitle": "Reservas, comandas futuras e experiencias com horario marcado.",
+    "serviceActionLabel": "Adicionar servico",
+    "serviceEmptyText": "Cadastre uma experiencia ou reserva para abrir horarios.",
+    "teamSubtitle": "Permissoes para caixa, cozinha, atendimento e financeiro.",
+    "linksTitle": "Links e monetizacao",
+    "linksSubtitle": "Divulgue promocoes, parcerias e reservas rastreaveis.",
+    "catalogItemLabel": "prato",
+    "catalogItemNameLabel": "Nome do prato",
+    "catalogImageTitle": "Foto do prato",
+    "catalogImageSubtitle": "Use uma imagem real do prato, bem iluminada e sem texto pesado.",
+    "defaultOrderItemName": "Pedido balcão",
+    "defaultServiceName": "Reserva"
+   }
+  },
+  {
+   "primaryType": "SELLER",
+   "cnaes": [
+    null,
+    ""
+   ],
+   "expected": {
+    "type": "SELLER",
+    "merchantType": "other",
+    "tabs": [
+     {
+      "key": "dashboard",
+      "label": "Painel",
+      "title": "Conta empresa"
+     },
+     {
+      "key": "menu",
+      "label": "Vitrine",
+      "title": "Vitrine digital"
+     },
+     {
+      "key": "orders",
+      "label": "Vendas",
+      "title": "Vendas"
+     },
+     {
+      "key": "affiliates",
+      "label": "Links",
+      "title": "Parcerias"
+     },
+     {
+      "key": "team",
+      "label": "Equipe",
+      "title": "Equipe"
+     }
+    ],
+    "leadTitle": "Vitrine local conectada",
+    "leadSubtitle": "Organize produtos, vendas e links para transformar descoberta no mapa em compra no comercio local.",
+    "leadChips": [
+     "Vitrine",
+     "Vendas",
+     "Links"
+    ],
+    "dashboardTitle": "Painel de loja",
+    "dashboardSubtitle": "Produtos, vendas e repasses em uma operacao enxuta.",
+    "catalogTitle": "Vitrine de produtos",
+    "catalogSubtitle": "Categorias, disponibilidade e precos para descoberta local.",
+    "catalogActionLabel": "Criar colecao",
+    "catalogEmptyText": "Crie uma colecao para iniciar sua vitrine.",
+    "categoryHint": "Ex: Lancamentos",
+    "orderTitle": "Vendas locais",
+    "orderSubtitle": "Retirada, entrega combinada e pagamento manual.",
+    "orderActionLabel": "Nova venda",
+    "orderEmptyText": "Nenhuma venda neste filtro.",
+    "agendaTitle": "Atendimentos",
+    "agendaSubtitle": "Horarios especiais, provas, retiradas e consultorias.",
+    "serviceActionLabel": "Adicionar horario",
+    "serviceEmptyText": "Cadastre um atendimento para abrir horarios.",
+    "teamSubtitle": "Permissoes para venda, estoque, links e financeiro.",
+    "linksTitle": "Links de campanha",
+    "linksSubtitle": "Divulgue produtos e parcerias com rastreio de origem.",
+    "catalogItemLabel": "produto",
+    "catalogItemNameLabel": "Nome do produto",
+    "catalogImageTitle": "Foto do produto",
+    "catalogImageSubtitle": "Use uma foto limpa do produto, preferencialmente em fundo simples.",
+    "defaultOrderItemName": "Produto vendido",
+    "defaultServiceName": "Retirada agendada"
+   }
+  }
+ ]
+}

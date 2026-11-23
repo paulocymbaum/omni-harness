@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+// Hook PreToolUse do Cline (precisa ser executável e ter exatamente este nome, sem extensão).
+// Delega ao módulo do repo, que aplica a mesma política de busca do Claude Code (graphify
+// primeiro) e, no CLI/SDK, reescreve comandos para `rtk`. Descoberto pela extensão VS Code
+// (.clinerules/hooks, exige "Enable Hooks") e pelo CLI/SDK (que também varre .clinerules/hooks). Arquivo CommonJS fino para não depender do "type" do package.json; falha aberta.
+const fs = require('node:fs');
+const path = require('node:path');
+const { spawnSync } = require('node:child_process');
+
+let out = '{"cancel":false}';
+try {
+  const input = fs.readFileSync(0, 'utf8');
+  const target = path.join(__dirname, '..', '..', 'quality', 'hooks', 'cline-pre-tool-use.mjs');
+  const r = spawnSync(process.execPath, [target], { input, encoding: 'utf8', timeout: 10000 });
+  if (r.status === 0 && r.stdout.trim()) out = r.stdout.trim();
+} catch { /* libera */ }
+process.stdout.write(out);

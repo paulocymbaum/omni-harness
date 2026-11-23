@@ -1,0 +1,9 @@
+<Project>
+  <!-- Só nos gates FC-*: Mobility/GtfsStaticFeedTests.cs não compila desde 9b4a2167 (CS1503, CS0021), sem relação com o
+       Creator. Mobility/TransitSyncTests.cs depende dele (CS0103), então sai junto. Sem isto todo gate .NET falharia por
+       esses erros, e não por falta da implementação. Remover quando os testes de Mobility forem corrigidos. -->
+  <ItemGroup>
+    <Compile Remove="Mobility/GtfsStaticFeedTests.cs" />
+    <Compile Remove="Mobility/TransitSyncTests.cs" />
+  </ItemGroup>
+</Project>

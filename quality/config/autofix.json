@@ -1,0 +1,6 @@
+{
+  "_comment": "Autocorreção e lint leves do arquivo recém-editado (hook post-edit). Só código de gate e de teste.",
+  "include": ["quality/**/*.mjs", ".claude/hooks/**/*.mjs", "scripts/tracker/**/*.mjs", "quality/**/*.json", "test/**/*_test.dart"],
+  "exclude": ["quality/.state/**", "quality/reports/**", "quality/tools/node_modules/**", "quality/tools/package-lock.json", "quality/baseline.json"],
+  "maxConsecutiveFailures": 3
+}

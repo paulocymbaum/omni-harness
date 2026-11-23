@@ -1,0 +1,19 @@
+{
+  "_comment": "Ordem importa: a primeira camada cujo glob casa com o arquivo vence.",
+  "layers": [
+    { "id": "rules", "nome": "Dados e regras", "stack": "Firestore/Storage Security Rules, índices Firestore, SQL versionado (PostgreSQL 17)", "globs": ["firestore.rules", "storage.rules", "firestore.indexes.json", "backend/deploy/sql/**"], "doc": "docs/firestore_schema.md" },
+    { "id": "quality", "nome": "Gates de qualidade", "stack": "Node 22 sem dependências, hooks e skill do Claude Code; scripts do harness (deploy local, espelho Jira)", "globs": ["quality/**", "scripts/deploy/**", "scripts/jira/**", ".claude/**", ".clinerules/**", "QUALITY.md"], "doc": "QUALITY.md" },
+    { "id": "flutter", "nome": "App mobile", "stack": "Flutter 3.38 / Dart 3.8, BLoC, go_router, get_it, Mapbox, flutter_test", "globs": ["lib/**", "test/**", "packages/fluxo_presence_bridge/**", "pubspec.yaml", "analysis_options.yaml"], "doc": "README.md" },
+    { "id": "backend", "nome": "API principal", "stack": ".NET 10 Minimal API, EF Core + Npgsql, PostgreSQL 17, outbox, xUnit", "globs": ["backend/**"], "doc": "backend/README.md" },
+    { "id": "functions", "nome": "Backend legado e jobs", "stack": "Firebase Functions (TypeScript), Cloud Run Jobs, node:test, emulador Firestore", "globs": ["functions/**"], "doc": "functions/README.md" },
+    { "id": "ocr", "nome": "Menu Extractor (OCR)", "stack": "TypeScript (Hono, esbuild), pnpm workspaces, Vitest, Document AI/Gemini/Firecrawl, validador Python (uv + pytest)", "globs": ["OCR_webscraper_crawler/**"], "doc": "OCR_webscraper_crawler/ARCHITECTURE.md" },
+    { "id": "admin-web", "nome": "Painel admin", "stack": "React + Vite, TanStack Query, Zustand, Vitest, Playwright", "globs": ["admin-web/**"], "doc": "admin-web/README.md" },
+    { "id": "site", "nome": "Site público", "stack": "React + Vite, Vitest, Playwright", "globs": ["ofluxo_site/**"], "doc": null },
+    { "id": "infra", "nome": "Infra e CI", "stack": "Terraform (GCP), Cloud Build, Cloud Run, GitHub Actions", "globs": ["infra/**", "cloud/**", ".github/**"], "doc": "infra/gcp/README.md" },
+    { "id": "automation", "nome": "Automação e ETL", "stack": "Python 3 (biblioteca padrão), SQLite, Docker (limite de 5 GiB)", "globs": ["automation/**"], "doc": "automation/README.md" },
+    { "id": "debate-worker", "nome": "Worker de debates", "stack": "TypeScript Node 22, ffmpeg, Soniox, Vitest", "globs": ["services/debate-worker/**"], "doc": "services/debate-worker/README.md" },
+    { "id": "creator-worker", "nome": "Worker do Creator", "stack": "TypeScript Node 22, fila Postgres (pg, SKIP LOCKED), Zod, Vitest", "globs": ["services/creator-worker/**"], "doc": "services/creator-worker/README.md" },
+    { "id": "creator-render", "nome": "Render do Creator", "stack": "TypeScript Node 22, React sem hooks, Satori, resvg, Vitest", "globs": ["packages/creator-render/**"], "doc": "packages/creator-render/README.md" },
+    { "id": "docs", "nome": "Documentação", "stack": "Markdown", "globs": ["docs/**", "**/*.md"], "doc": null }
+  ]
+}

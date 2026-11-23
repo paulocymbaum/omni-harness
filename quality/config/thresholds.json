@@ -1,0 +1,12 @@
+{
+  "_comment": "Espelha QUALITY.md §3. Nunca altere para fazer um gate passar.",
+  "fileNloc": { "limit": 400, "tolerance": 20 },
+  "functionCc": { "target": 10, "ceiling": { "default": 20, "csharp": 15, "python": 15 }, "legacyTolerance": 2 },
+  "functionNloc": { "target": 60, "ceiling": 120, "legacyTolerance": 10 },
+  "params": { "limit": 5 },
+  "halsteadVolume": { "target": 1500, "ceiling": 4000, "legacyTolerance": 200 },
+  "halsteadDifficulty": { "target": 30, "ceiling": 60, "legacyTolerance": 3 },
+  "diffCoverage": { "flutter": 80, "functions": 80, "ocr": 90, "backend": 85, "admin-web": 80, "site": 80, "debate-worker": 85, "creator-worker": 85 },
+  "costJob": { "maxMonthlyBrl": 200 },
+  "costBudget": { "maxMonthlyBrl": 400 }
+}

@@ -1,0 +1,6 @@
+{
+  "hosts": {
+    "vscode": { "carrier": ".github/instructions/omni-harness.instructions.md" },
+    "antigravity": { "carrier": ".antigravity/rules/omni-harness.md" }
+  }
+}

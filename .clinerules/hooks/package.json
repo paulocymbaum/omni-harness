@@ -1,0 +1,4 @@
+{
+  "type": "commonjs",
+  "_comment": "Escopo CJS local: os hooks do Cline não têm extensão e usam require() — sem este package.json eles herdam o type do package.json mais próximo (ex.: type:module num hospedeiro moderno) e quebram."
+}

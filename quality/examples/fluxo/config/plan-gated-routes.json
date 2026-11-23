@@ -1,0 +1,8 @@
+{
+  "description": "Rotas com RequiresPlanFeature. routes: já marcadas, e iguais às do EndpointDataSource. planned: previstas, ainda sem existir; ao nascer, a rota passa para routes.",
+  "routes": [],
+  "planned": [
+    "POST /api/v1/businesses/{id}/mercado-pago/connect/start",
+    "POST /api/v1/internal/merchant-pix/businesses/{businessId}/orders"
+  ]
+}

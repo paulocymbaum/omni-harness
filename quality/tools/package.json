@@ -1,0 +1,6 @@
+{
+  "name": "fluxo-quality-tools",
+  "private": true,
+  "description": "Ferramentas isoladas dos gates (lint leve de código de gate e teste). Não é dependência do produto.",
+  "devDependencies": { "@biomejs/biome": "2.6.4" }
+}
