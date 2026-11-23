@@ -146,6 +146,44 @@ export function lizardOnText(text, ext, lang) {
   return lizardBoth([name], () => text, () => lang, textTimeoutMs());
 }
 
+/**
+ * Métricas por função em LOTE — 1 spawn lizard raw + 1 sanitizado por chunk de 400 arquivos
+ * (em vez de 2 por arquivo no lizardOnText). items: [{ path, text }] com os caminhos relativos
+ * do repo; devolve Map path → funções[] (mesmos caminhos na saída). Chunk não medido fica fora
+ * do Map (o chamador trata como lizard.unmeasured).
+ */
+export function lizardBatch(items, languageOf, { halstead = false } = {}) {
+  const cmd = lizardCommand();
+  if (!cmd) return null;
+  const porArquivo = new Map();
+  for (let i = 0; i < items.length; i += 400) {
+    for (const f of lizardChunk(items.slice(i, i + 400), languageOf, halstead, cmd)) {
+      if (!porArquivo.has(f.file)) porArquivo.set(f.file, []);
+      porArquivo.get(f.file).push(f);
+    }
+  }
+  return porArquivo;
+}
+
+/** 1 chunk = 1 spawn raw + 1 sanitizado; chunk não medido devolve lista vazia. */
+function lizardChunk(chunk, languageOf, halstead, cmd) {
+  const files = chunk.map((c) => c.path);
+  const porPath = new Map(chunk.map((c) => [c.path, c.text]));
+  const rawDir = fs.mkdtempSync(path.join(os.tmpdir(), 'qliz-raw-'));
+  const sanDir = fs.mkdtempSync(path.join(os.tmpdir(), 'qliz-san-'));
+  try {
+    writeTree(rawDir, files, (f) => porPath.get(f) ?? null);
+    writeTree(sanDir, files, (f) => { const t = porPath.get(f); return t == null ? null : stripLiterals(t, languageOf(f)); });
+    const raw = lizardFunctions(files, { cwd: rawDir, timeoutMs: 600_000, halstead });
+    const san = lizardFunctions(files, { cwd: sanDir, timeoutMs: 600_000, halstead });
+    if (raw == null && san == null) return [];
+    return pickPerFile(raw, san);
+  } finally {
+    fs.rmSync(rawDir, { recursive: true, force: true });
+    fs.rmSync(sanDir, { recursive: true, force: true });
+  }
+}
+
 /** Igual a lizardOnText, mas inclui Halstead (hVolume, hDifficulty) em cada função. */
 export function lizardHalsteadOnText(text, ext, lang) {
   if (text == null) return [];

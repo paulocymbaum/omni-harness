@@ -1274,8 +1274,9 @@ quality/test/delivery/referencias.test.mjs
 quality/test/delivery/skills.test.mjs
 quality/test/delivery/test-hygiene.test.mjs
 quality/test/delivery/validate.test.mjs
-quality/test/gates-novos.test.mjs
+quality/test/gates-batch.test.mjs
 quality/test/gates.test.mjs
+quality/test/gates-novos.test.mjs
 quality/test/gitflow-hooks.test.mjs
 quality/test/gitflow.test.mjs
 quality/test/graph-freshness.test.mjs

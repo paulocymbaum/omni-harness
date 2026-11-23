@@ -68,18 +68,18 @@ export function infraRoutine(entries, out) {
  * Sem o binário, segue com o aviso de ferramenta ausente (IGNORADO não é aprovação).
  */
 export function supplyChain(entries, out) {
-  const lockfiles = entries.filter((e) => e.status !== 'D' && /(?:package-lock\.json|pnpm-lock\.yaml|pubspec\.lock|uv\.lock)$/.test(e.path));
-  const fonte = entries.some((e) => /(package\.json|pubspec\.yaml|\.csproj|pyproject\.toml)$/.test(e.path));
+  const lockfiles = entries.filter((e) => e.status !== 'D' && /(?:package-lock\.json|pnpm-lock\.yaml|pubspec\.lock|uv\.lock|go\.sum|Cargo\.lock|packages\.lock\.json|gradle\.lockfile|paket\.lock)$/.test(e.path));
+  const fonte = entries.some((e) => /(package\.json|pubspec\.yaml|\.csproj|pyproject\.toml|go\.mod|Cargo\.toml|pom\.xml|build\.gradle)$/.test(e.path));
   if (!lockfiles.length && !fonte) return;
   if (!which('osv-scanner')) {
     out.push(result('ferramentas', 'warn', 'tool.missing', { tool: 'osv-scanner', impact: 'Vulnerabilidades de dependências não verificadas.' }));
     return;
   }
   if (!lockfiles.length) return;
-  for (const e of lockfiles) {
-    const r = run('osv-scanner', ['--lockfile', e.path], { encoding: 'utf8', timeout: 120_000 });
-    if (r.status === 0) out.push(result('supply-chain', 'pass', 'osv.pass', { file: e.path }));
-    else if (r.status === 1) out.push(result('supply-chain', 'fail', 'osv.fail', { file: e.path }));
-    else out.push(result('supply-chain', 'warn', 'osv.unmeasured', { file: e.path, code: r.status }));
-  }
+  // 1 spawn para todos os lockfiles (flag --lockfile repetida); exit 1 = vulnerabilidade achada.
+  const caminhos = lockfiles.map((e) => e.path).join(', ');
+  const r = run('osv-scanner', lockfiles.map((e) => `--lockfile=${e.path}`), { timeoutMs: 120_000 });
+  if (r.code === 0) out.push(result('supply-chain', 'pass', 'osv.pass', { files: caminhos }));
+  else if (r.code === 1) out.push(result('supply-chain', 'fail', 'osv.fail', { files: caminhos }));
+  else out.push(result('supply-chain', 'warn', 'osv.unmeasured', { files: caminhos, code: r.code }));
 }

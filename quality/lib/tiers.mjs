@@ -1,6 +1,6 @@
 import { TIERS, repoRoot } from './util.mjs';
 import { layerOf, isGenerated } from './layers.mjs';
-import { fastGates } from './gates/fast.mjs';
+import { batchFastGates } from './gates/fast.mjs';
 import { actionsPinsGate } from './gates/workflows.mjs';
 import { lizardCommand, which } from './tools.mjs';
 import { result } from './report.mjs';
@@ -29,7 +29,7 @@ export function rapidoGates(entries) {
   if (live.some((e) => e.path.endsWith('.dart')) && !which('dart')) {
     out.push(result('ferramentas', 'warn', 'tool.missing', { tool: 'dart', impact: 'Formatação Dart não verificada.' }));
   }
-  for (const e of live) out.push(...fastGates(e));
+  out.push(...batchFastGates(live));
   return out;
 }
 

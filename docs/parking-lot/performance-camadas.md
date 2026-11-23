@@ -77,14 +77,14 @@ Cada arquivo **Dart** alterado paga, por gate:
 
 | # | Proposta | Camada | Ganho estimado |
 |---|---|---|---|
-| **P0** | **Lizard em lote no `fastGates`**: coletar arquivos por linguagem e medir via `lizardOnFiles` (chunks de 400 já existem) — 1 spawn raw + 1 sanitizado por chunk; `oldText` só na 2ª passada, sob demanda, para funções reprovadas | todas (tier rápido) | 8 spawns/arq → ~0,02. Diff de 50 dart: ~45 s → **~5 s** |
-| **P0** | **`dart format` em lote**: aceita lista de paths — 1 spawn por chunk de 100; stdin por arquivo só nos reprovados | Dart | ~4 s (50 arq) → ~0,2 s |
-| **P1** | **Runners de camada em paralelo**: hoje em série (`rodarCamadas`); exige `runAsync` + budget compartilhado | rotina/completo multi-stack | soma → máximo |
-| **P1** | **osv-scanner único**: `--lockfile` múltiplo ou scan recursivo | supply chain | N spawns → 1 |
-| **P1** | **eslint agregado por app** (tsc segue por workspace — não aceita multi-config) | TS web | n → 1 por app |
-| **P2** | Cache de toolchain nos builds frios (sccache/ccache/GOFLAGS) via `env` do perfil no `step()` | go/rust/cpp/java | frio → quente |
-| **P2** | `dart analyze` persistente (LSP) | Flutter | 0,2–5 s → ~50 ms |
-| **P2** | `scanScope` pré-indexado (só se diffs >10k) | runners novos | n/a |
+| **P0 ✔ IMPLEMENTADO (2026-11-23)** | **Lizard em lote no `fastGates`**: `batchFastGates` mede todo o diff com `lizardBatch` (1 spawn raw + 1 sanitizado por chunk de 400, raw+sanitizado para cc e halstead) e mede o `oldText` **só dos arquivos suspeitos** (alguma função acima de algum alvo) — veredito idêntico ao ratchet por arquivo, com self-test de equivalência (`quality/test/gates-batch.test.mjs`) | todas (tier rápido) | **medido: 12,3 s → 2,4 s (5,1×) em 30 dart; motor real 2,5 s** |
+| **P0 ✔ IMPLEMENTADO (2026-11-23)** | **`dart format` em lote**: `formatGatesBatch` roda 1 spawn por chunk de 100 paths quando o disco é igual ao diff (checagem barata de leitura); divergentes/reprovados caem no caminho stdin individual (fiel ao diff) | Dart | ~4 s (50 arq) → ~0,2 s |
+| **P1 ✔ IMPLEMENTADO (2026-11-23)** | **osv-scanner único**: 1 spawn com `--lockfile` repetido para todos os lockfiles (+ go.sum/Cargo.lock/gradle.lockfile/paket.lock/packages.lock.json no filtro; bug latente `r.status`/`timeout` do `run()` corrigido para `r.code`/`timeoutMs`) | supply chain | N spawns → 1 |
+| P1 (pendente) | **Runners de camada em paralelo**: hoje em série (`rodarCamadas`); exige `runAsync` + budget compartilhado | rotina/completo multi-stack | soma → máximo |
+| P1 (pendente) | **eslint agregado por app** (tsc segue por workspace — não aceita multi-config) | TS web | n → 1 por app |
+| P2 (pendente) | Cache de toolchain nos builds frios (sccache/ccache/GOFLAGS) via `env` do perfil no `step()` | go/rust/cpp/java | frio → quente |
+| P2 (pendente) | `dart analyze` persistente (LSP) | Flutter | 0,2–5 s → ~50 ms |
+| P2 (pendente) | `scanScope` pré-indexado (só se diffs >10k) | runners novos | n/a |
 
 ## O que NÃO precisa mexer
 
