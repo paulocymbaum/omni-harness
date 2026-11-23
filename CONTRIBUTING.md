@@ -22,6 +22,8 @@ node quality/agents/sync-clinerules.mjs --check
 
 4. Abra o PR para `main`. O CI (`quality`) é obrigatório e a `main` é protegida (sem push direto, sem force-push, sem delete).
 
+> O CI publica o check **`quality`** — é o contexto exigido pela proteção de `main`.
+
 ## Regras do núcleo
 
 - **Nada de produto no motor**: camadas, fronteiras, runners, tracker, gitflow, PII, locale e prompts de domínio são **dado do perfil** (`quality/profile/`, `quality/hosts.json`, `quality/packs/`). Mudança de estrutura de vendor (ex.: Antigravity/VS Code) = atualizar dado/registro, nunca espalhar path no código.

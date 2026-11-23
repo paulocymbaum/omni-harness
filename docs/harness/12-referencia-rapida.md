@@ -79,6 +79,8 @@ node --test quality/test/autofix.test.mjs
 omni-harness hosts [destino] [--json]              # hosts suportados e paths resolvidos (com overrides do hospedeiro)
 node --test quality/test/hosts.test.mjs              # integração por host (claude-code, cline, codex, vscode, antigravity, kiro)
 node --test quality/test/package.test.mjs              # pacote npm: bin, files e fluxo dlx de ponta a ponta
+# Motor que exercita o exemplo (PII, fronteiras, tracker jira) — SEMPRE com HARNESS_PROFILE_DIR:
+HARNESS_PROFILE_DIR="$PWD/quality/examples/fluxo/profile" node --test quality/test/cline-bridge.test.mjs quality/test/search-guard.test.mjs quality/test/gates.test.mjs quality/test/risk.test.mjs quality/test/hooks.test.mjs
 HARNESS_PROFILE_DIR="$PWD/quality/examples/fluxo/profile" node --test quality/examples/fluxo/gates/version.test.mjs quality/examples/fluxo/gates/version-flow.test.mjs
 node --test quality/test/release-flow.test.mjs
 node --test quality/test/cline-bridge.test.mjs
