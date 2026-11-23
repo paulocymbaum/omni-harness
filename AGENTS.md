@@ -57,6 +57,12 @@ Ao final, informe: 1) arquivos criados; 2) arquivos alterados; 3) decisões prin
 - **Docs vivos**: `docs/harness/` — cada workflow com doc próprio.
 - **Instalação/saúde**: `bin/omni-harness.mjs` (`doctor`, `hosts`) — diagnostica o hospedeiro.
 
-## 8. North Star
+## 8. Busca, shell e resposta concisa (processo deste repo)
+
+1. **Buscar com o grafo antes de busca bruta**: `graphify query "<Identificador>"` (e `explain`, `path`, `affected`) antes de `Grep`/`rg`/`find`. Detalhe: `.claude/skills/busca-de-codigo/SKILL.md`.
+2. **Shell com `rtk`**: prefixe comandos ruidosos (`rtk git status`, `rtk test <cmd>`). O hook `quality/hooks/pre-bash-dispatch.mjs` dá dica sem bloquear — e o **Cline nunca cancela** a tarefa por causa dele.
+3. **Resposta concisa**: sem preâmbulo nem recap; termos técnicos exatos. Detalhe: `.claude/skills/modo-conciso/SKILL.md`.
+
+## 9. North Star
 
 O harness é infraestrutura neutra de qualidade e workflow para agentes de código: o mesmo motor, os mesmos gates e o mesmo contexto de sessão em qualquer IDE ou CLI — e o conhecimento do projeto em um perfil que o time edita sem tocar em código.
