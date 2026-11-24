@@ -11,7 +11,7 @@ Obrigado por considerar contribuir! Este repo é o **núcleo agnóstico** do har
 
 1. `fork`/`branch` a partir de `main` — `feat/<slug>`, `fix/<slug>`, `docs/<slug>`.
 2. **Conventional Commits** (`feat:`, `fix:`, `docs:`, `chore:` …).
-3. Antes do PR, rode a bateria local:
+3. Antes do PR, rode a bateria local (item abaixo). **READMEs multilíngues:** `README.md` (EN) é a referência — qualquer seção/tabela/mermaid novo nele deve ser espelhado em `README.pt-BR.md`/`README.es.md`/`README.zh-CN.md`; o gate `quality/test/readme-sync.test.mjs` reprova drift de estrutura.
 
 ```bash
 node --test quality/test/profile.test.mjs quality/test/hosts.test.mjs quality/test/package.test.mjs quality/test/attach.test.mjs

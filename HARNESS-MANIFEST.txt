@@ -1311,6 +1311,7 @@ quality/test/migration-override.test.mjs
 quality/test/package.test.mjs
 quality/test/pre-bash-dispatch.test.mjs
 quality/test/profile.test.mjs
+quality/test/readme-sync.test.mjs
 quality/test/release-flow.test.mjs
 quality/test/risk.test.mjs
 quality/test/runners-stacks.test.mjs
