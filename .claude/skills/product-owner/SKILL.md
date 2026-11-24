@@ -22,7 +22,7 @@ JIRA_API_TOKEN=<token gerado em id.atlassian.com/manage-profile/security/api-tok
 JIRA_PROJECT_KEY=OFLUXO
 ```
 
-## Fluxo de abertura de nova entrega
+## Exemplo SaaS de abertura de nova entrega
 
 ```bash
 # 1. Inicializar backlog (com a categoria da feature para os cards do Jira)
@@ -49,7 +49,7 @@ Todo card criado ou atualizado pelo espelho recebe categorias (labels) do Jira:
 
 Regra: entrega promovida do parking lot usa **o mesmo slug do arquivo da feature** (`docs/parking-lot/<slug>.md`) para o Jira filtrar por feature.
 
-## Fluxo de espelhamento contínuo
+## Exemplo SaaS de espelhamento contínuo
 
 O `backlog.mjs mark` espelha automaticamente se `JIRA_API_TOKEN` estiver no ambiente.
 

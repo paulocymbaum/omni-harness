@@ -1,14 +1,14 @@
 ---
 name: gitflow
-description: Gitflow determinístico do Fluxo na camada do agente (harness). Mapeia feat, fix, chore, hotfix e release com branch pai correta, matriz de merges (develop ⇄ trabalho, release → main via pipeline), push/pull com sincronização obrigatória do remote e runbook de conflitos. Use antes de criar branches, mesclar, puxar, publicar ou resolver conflitos git; os hooks quality/hooks/pre-bash-gitflow.mjs e post-bash-gitflow.mjs bloqueiam desvios com mensagens acionáveis em pt-BR.
+description: Gitflow determinístico do Exemplo SaaS na camada do agente (harness). Mapeia feat, fix, chore, hotfix e release com branch pai correta, matriz de merges (develop ⇄ trabalho, release → main via pipeline), push/pull com sincronização obrigatória do remote e runbook de conflitos. Use antes de criar branches, mesclar, puxar, publicar ou resolver conflitos git; os hooks quality/hooks/pre-bash-gitflow.mjs e post-bash-gitflow.mjs bloqueiam desvios com mensagens acionáveis em pt-BR.
 allowed-tools: Bash(git status *), Bash(git log *), Bash(git diff *), Bash(git branch *), Read, Grep
 ---
 
-# Gitflow do Fluxo (harness do agente)
+# Gitflow do Exemplo SaaS (harness do agente)
 
 O repositório é **compartilhado**: todo push é observado por outras pessoas e pela pipeline. O fluxo é garantido por hooks determinísticos, não pela memória do agente — se um hook bloquear, leia o motivo e siga a receita da mensagem; nunca tente contornar.
 
-## Fluxo canônico
+## Exemplo SaaS canônico
 
 ```
 MAIN → DEVELOP → FEAT ⇄ DEVELOP (versão) → RELEASE (PIPELINE) → MAIN

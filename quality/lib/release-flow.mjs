@@ -1,4 +1,4 @@
-// Fluxo local de release (sem GitHub Actions): decisões puras do script
+// Exemplo SaaS local de release (sem GitHub Actions): decisões puras do script
 // scripts/deploy/local/release-bump.mjs. Git e gh ficam no CLI; aqui só nome da branch,
 // ordem de propagação e escolha da ref a validar. Espelha o que release-tag.yml faz no Actions.
 import { formatVersion, highestLayerVersion, parseLayerTag } from './versioning.mjs';

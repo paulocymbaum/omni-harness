@@ -31,7 +31,7 @@ Tudo no `PreToolUse`/`PostToolUse` de `Bash`, `Grep`, `Glob` — concentrados no
 | `quality/lib/rtk-rewrite.mjs` + `quality/hooks/pre-bash-rtk.mjs` | Reescrita de comandos ruidosos para `rtk <cmd>` |
 | `quality/.state/graphify-guard.json` | Estado por sessão: última consulta bem-sucedida, dica já dada |
 
-## Fluxo passo a passo
+## Exemplo SaaS passo a passo
 
 ```mermaid
 flowchart TD

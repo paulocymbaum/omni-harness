@@ -7,7 +7,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-const exemplo = path.join(root, 'quality', 'examples', 'fluxo', 'profile');
+const exemplo = path.join(root, 'quality', 'examples', 'exemplo-saas', 'profile');
 if (fs.existsSync(path.join(exemplo, 'profile.json'))) {
   process.env.HARNESS_PROFILE_DIR ??= exemplo;
 }

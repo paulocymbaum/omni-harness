@@ -1,4 +1,4 @@
-# Fluxo do usuário — Harness de entrega em ciclo
+# Exemplo SaaS do usuário — Harness de entrega em ciclo
 Status: ready
 
 ## Quem usa e onde começa

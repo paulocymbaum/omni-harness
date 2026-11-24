@@ -30,7 +30,7 @@ fontes: [quality/.state, quality/config, docs/harness]
 |---|---|---|
 | `GRAPHIFY_HOOK_MODE=soft\|strict\|off` (ou `GRAPHIFY_HOOK_STRICT=0\|1`) | guarda de busca: dica única / nega no Claude / desliga | 04 |
 | `HARNESS_PROFILE` (alias `FLUXO_PROFILE`) | escolhe o perfil ativo em `quality/profile/` (obrigatório só se houver mais de um) | 01 |
-| `HARNESS_PROFILE_DIR` | dir de perfis alternativo (ex.: `quality/examples/fluxo/profile` exercita o motor com o exemplo completo) | 01 |
+| `HARNESS_PROFILE_DIR` | dir de perfis alternativo (ex.: `quality/examples/exemplo-saas/profile` exercita o motor com o exemplo completo) | 01 |
 | `RTK_DISABLED=1` | desliga a reescrita rtk | 04 |
 | `HARNESS_SKIP_QUALITY_GATES=1` (alias `FLUXO_SKIP_QUALITY_GATES`) | pula gates do pre-commit | 10 |
 | `HARNESS_AUTOFIX=0` (alias `FLUXO_AUTOFIX`) | desliga autocorreção no post-edit | 03 |
@@ -81,7 +81,7 @@ node --test quality/test/hosts.test.mjs              # integração por host (cl
 node --test quality/test/ide-providers.test.mjs      # matriz funcional dos provedores: init + hook/carrier respondendo + doctor, provedor a provedor
 node --test quality/test/package.test.mjs              # pacote npm: bin, files e fluxo dlx de ponta a ponta
 # Testes de motor com fixtures do exemplo: bootstrap-example-profile ativa o perfil automaticamente (sem env):
-HARNESS_PROFILE_DIR="$PWD/quality/examples/fluxo/profile" node --test quality/examples/fluxo/gates/version.test.mjs quality/examples/fluxo/gates/version-flow.test.mjs
+HARNESS_PROFILE_DIR="$PWD/quality/examples/exemplo-saas/profile" node --test quality/examples/exemplo-saas/gates/version.test.mjs quality/examples/exemplo-saas/gates/version-flow.test.mjs
 node --test quality/test/release-flow.test.mjs
 node --test quality/test/cline-bridge.test.mjs
 node --test quality/test/jira-workflow-statuses.test.mjs

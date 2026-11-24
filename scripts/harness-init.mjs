@@ -88,7 +88,7 @@ for (const id of hostParsed.ids) {
   console.log(`✓ host ${host.nome} (${id}) — ${host.nota}`);
 }
 
-// Configs que eram do perfil legado do Fluxo: um host novo começa SEM elas (o perfil manda).
+// Configs que eram do perfil legado do Exemplo SaaS: um host novo começa SEM elas (o perfil manda).
 for (const legado of ['layers.json', 'risk-matrix.json', 'plan-baseline-routes.json', 'plan-gated-routes.json']) {
   fs.rmSync(path.join(DST, 'quality', 'config', legado), { force: true });
 }

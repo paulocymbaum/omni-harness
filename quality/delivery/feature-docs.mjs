@@ -26,7 +26,7 @@ const STATE_TEXT = { missing: 'ausente', draft: 'em rascunho (falta `Status: rea
 
 /** Pendências (frases pt-BR) dos documentos; vazio quando os dois estão prontos. */
 export function docsProblemas(docs) {
-  return ['brd', 'fluxo'].flatMap((k) => {
+  return ['brd', 'exemplo-saas'].flatMap((k) => {
     const d = docs[k];
     if (d.state === 'ready') return [];
     if (d.state === 'blocked') return [`${LABEL[k]} com dados pessoais (${describeFindings(d.findings)}): ${d.file}`];
@@ -36,7 +36,7 @@ export function docsProblemas(docs) {
 
 const TEMPLATES = {
   [BRD_FILE]: (title) => `# BRD — ${title}\nStatus: draft\n\n## Objetivo e valor\n(Por que a feature existe, para quem, que resultado de negócio entrega.)\n\n## Escopo\n- Dentro:\n- Fora:\n\n## Requisitos de negócio\n- RN-01:\n\n## Regras de negócio\n- (limites, permissões, cobrança, privacidade, estados)\n\n## Cenários de aceite (BDD)\n### Cenário: (nome)\n- Dado\n- Quando\n- Então\n\n## Riscos e dependências\n-\n`,
-  [FLOW_FILE]: (title) => `# Fluxo do usuário — ${title}\nStatus: draft\n\n## Quem usa e onde começa\n(Persona e ponto de entrada.)\n\n## Passos\n1. \n\n## Diagrama\n\`\`\`mermaid\nflowchart TD\n  A[Entrada] --> B[Ação] --> C[Resultado]\n\`\`\`\n\n## Caminhos alternativos e erros\n-\n`,
+  [FLOW_FILE]: (title) => `# Exemplo SaaS do usuário — ${title}\nStatus: draft\n\n## Quem usa e onde começa\n(Persona e ponto de entrada.)\n\n## Passos\n1. \n\n## Diagrama\n\`\`\`mermaid\nflowchart TD\n  A[Entrada] --> B[Ação] --> C[Resultado]\n\`\`\`\n\n## Caminhos alternativos e erros\n-\n`,
 };
 
 /** Cria os rascunhos que ainda não existem (nunca sobrescreve). Devolve os arquivos criados. */

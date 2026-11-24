@@ -67,7 +67,7 @@ O card Jira (projeto `OFLUXO`) é o espelho que o time enxerga. Em **todo** pass
 
 **Card sem spec**: o card criado antes da spec nasce com a label `spec-pendente` e o texto "Spec ainda não escrita"; o hook `sync-spec-jira.mjs` o atualiza quando a spec é gravada e a label sai sozinha. A chave do card fica em `jira_key` na tarefa (o sync acha o card por ela, não por busca). Erro na busca do Jira aborta o sync com aviso e **nunca cria card duplicado**. Para listar tarefas sem spec (local, sem rede): `node scripts/tracker/sync-context.mjs <dir> --audit`.
 
-Status do Jira vêm traduzidos conforme a conta (`A fazer`, `Em Progresso`, `Concluído`): compare sempre com `canonicalStatus` (`scripts/tracker/workflow.mjs`). Credenciais: `.env.local` (token pessoal de quem desenvolve) antes do `.env`; as `JIRA_*` vêm de um só arquivo. Quem move um card com o token do `.env.local` vira o responsável por ele (`FLUXO_JIRA_ASSIGN=0` desliga). Fluxo de movimentação: `docs/jira/regras-de-epicos-e-cards.md`.
+Status do Jira vêm traduzidos conforme a conta (`A fazer`, `Em Progresso`, `Concluído`): compare sempre com `canonicalStatus` (`scripts/tracker/workflow.mjs`). Credenciais: `.env.local` (token pessoal de quem desenvolve) antes do `.env`; as `JIRA_*` vêm de um só arquivo. Quem move um card com o token do `.env.local` vira o responsável por ele (`FLUXO_JIRA_ASSIGN=0` desliga). Exemplo SaaS de movimentação: `docs/jira/regras-de-epicos-e-cards.md`.
 
 Nunca coloque uid, e-mail, `businessId`, CPF/CNPJ ou token real em card, comentário ou título. Se faltar credencial `JIRA_*`, diga isso ao usuário em vez de seguir em silêncio.
 

@@ -5,7 +5,7 @@ Documento derivado de `backlog.json`, `SUMMARY.md`, `specs/RB-001` a `RB-015`, d
 
 ## Objetivo e valor
 
-O harness de entrega em ciclo faz uma entrega de software do Fluxo andar por fases verificáveis por máquina: investigar a spec, provar que os gates falham, implementar, rodar os gates, avaliar, documentar e compactar. O estado fica em `docs/entregas/<slug>/backlog.json`, e o espelho no Jira (projeto `OFLUXO`) acompanha cada passo.
+O harness de entrega em ciclo faz uma entrega de software do Exemplo SaaS andar por fases verificáveis por máquina: investigar a spec, provar que os gates falham, implementar, rodar os gates, avaliar, documentar e compactar. O estado fica em `docs/entregas/<slug>/backlog.json`, e o espelho no Jira (projeto `OFLUXO`) acompanha cada passo.
 
 Valor:
 
@@ -28,7 +28,7 @@ Estado em 2026-11-14 segundo `backlog.json`: as 15 tarefas (RB-001 a RB-015) est
   - Documentação final e specs de todas as tarefas (RB-015).
   - Extensões posteriores presentes no repositório e descritas nas regras e skills: `next`, épico Jira por feature, BRD e fluxo do usuário, homologação em Docker local, bloqueio com motivo, handoff entre fases.
 - Fora:
-  - Regras de domínio do produto Fluxo (contas, eventos, mapa): são tratadas por skills próprias, não pelo harness.
+  - Regras de domínio do produto Exemplo SaaS (contas, eventos, mapa): são tratadas por skills próprias, não pelo harness.
   - Implementação das entregas de produto em si; o harness só as conduz.
   - Alterar o `status` de tarefas fora do CLI `backlog.mjs mark`.
 

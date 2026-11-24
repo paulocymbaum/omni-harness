@@ -1,6 +1,6 @@
 ---
 name: avaliar-qualidade
-description: Avalia a qualidade do código afetado no monorepo Fluxo com gates determinísticos (tamanho, complexidade ciclomática, fronteiras de arquitetura, supressões, lint, tipos, testes, cobertura do diff) e classifica o risco da alteração em dois eixos, quebra do backend e escala de custo, para escolher o nível de teste rápido, rotina ou completo. Use ao concluir uma tarefa ou entrega, antes de commit, push ou deploy, quando um hook de qualidade reprovar ou bloquear um comando, ou quando o usuário pedir para medir, avaliar ou revisar a qualidade do código. O modo relatório (avaliação completa de todas as camadas) só deve rodar quando o usuário pedir explicitamente.
+description: Avalia a qualidade do código afetado no monorepo Exemplo SaaS com gates determinísticos (tamanho, complexidade ciclomática, fronteiras de arquitetura, supressões, lint, tipos, testes, cobertura do diff) e classifica o risco da alteração em dois eixos, quebra do backend e escala de custo, para escolher o nível de teste rápido, rotina ou completo. Use ao concluir uma tarefa ou entrega, antes de commit, push ou deploy, quando um hook de qualidade reprovar ou bloquear um comando, ou quando o usuário pedir para medir, avaliar ou revisar a qualidade do código. O modo relatório (avaliação completa de todas as camadas) só deve rodar quando o usuário pedir explicitamente.
 allowed-tools: Bash(node quality/run.mjs *), Bash(node --test quality/test/*), Bash(git diff *), Bash(git status *), Read, Grep, Glob
 ---
 

@@ -29,7 +29,7 @@ test('allowlist `files`: toda entrada existe no repo e nenhuma vaza dado de prod
     const abs = path.join(ROOT, entry.replace(/\/\*\*$/, ''));
     assert.ok(fs.existsSync(abs), `files: "${entry}" não existe no repo`);
   }
-  assert.ok(!PKG.files.some((f) => f.startsWith('quality/examples')), 'exemplo do Fluxo não vai no pacote npm');
+  assert.ok(!PKG.files.some((f) => f.startsWith('quality/examples')), 'exemplo do Exemplo SaaS não vai no pacote npm');
   assert.ok(!PKG.files.includes('docs/parking-lot/**'), 'parking-lot é decisão interna, não vai no pacote');
 });
 

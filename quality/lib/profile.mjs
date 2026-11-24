@@ -175,7 +175,7 @@ function aplicarPacks(base, erros) {
 export function loadProfile(opts) {
   const o = opts || {};
   const env = o.env || process.env;
-  // Dir do perfil: explícito > root informado > HARNESS_PROFILE_DIR (ex.: quality/examples/fluxo) > instalação.
+  // Dir do perfil: explícito > root informado > HARNESS_PROFILE_DIR (ex.: quality/examples/exemplo-saas) > instalação.
   const dir = o.dir
     || (o.root ? path.join(o.root, 'quality', 'profile') : undefined)
     || (env.HARNESS_PROFILE_DIR || path.join(QUALITY_DIR, 'profile'));

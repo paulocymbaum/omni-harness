@@ -15,7 +15,7 @@ export { epicDescription } from './epic-description.mjs';
 
 /** Labels de pendência dos documentos: { add, remove } conforme BRD e fluxo estejam prontos. */
 export function pendingLabelsFor(docs) {
-  const pairs = [['brd', docs.brd], ['fluxo', docs.fluxo]];
+  const pairs = [['brd', docs.brd], ['exemplo-saas', docs.fluxo]];
   return {
     add: pairs.filter(([, d]) => d.state !== 'ready').map(([k]) => PENDING_LABELS[k]),
     remove: pairs.filter(([, d]) => d.state === 'ready').map(([k]) => PENDING_LABELS[k]),

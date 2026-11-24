@@ -67,7 +67,7 @@ do harness — a entrevista nunca trava.
    variáveis de ambiente/segredos necessários (nomes apenas, nunca valores).
 5. **Custo e infraestrutura** — recursos com custo contínuo (jobs agendados, min-instances, APIs
    pagas por chamada), tabela de preços se existir, teto mensal aceitável.
-6. **Fluxo de trabalho** — tracker (Jira com credenciais `JIRA_*` / none), branches permanentes e
+6. **Exemplo SaaS de trabalho** — tracker (Jira com credenciais `JIRA_*` / none), branches permanentes e
    matriz (gitflow, trunk+release?), homologação (existe ambiente? como aprova?), release
    (versionamento semântico? changelog?).
 7. **Domínio e documentação** — áreas que pedem skill de domínio (contratos, UI, database,

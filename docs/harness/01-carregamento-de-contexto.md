@@ -26,7 +26,7 @@ Abertura da sessão pelo host: Claude Code lê `CLAUDE.md` (que importa `@AGENTS
 | `.claude/agents/*.md` (8) | Papéis delegáveis com `tools:` restritas (doc 11) | Invocação por subagente |
 | Prompt da tarefa | Escopo atual, arquivos-alvo, aceites | A cada pedido |
 
-## Fluxo passo a passo (espelho das regras)
+## Exemplo SaaS passo a passo (espelho das regras)
 
 ```mermaid
 flowchart TD
@@ -43,7 +43,7 @@ Regra de ouro: **editar só a fonte** em `.claude/rules/` (o topo do espelho diz
 
 O **dado que varia por projeto** (camadas/stacks, globs de gerados e testes, enums canônicos de domínio, política PII via packs, locale, matchers de docs e de features) vive no **perfil**: `quality/profile/<nome>.json`, schema v1 validado por `quality/lib/profile.mjs`; gate: `quality/test/profile.test.mjs`. Packs de política ficam no core (`quality/packs/`, p.ex. `pii-br`) e são ativados pelo campo `packs` do perfil. Descoberta: env `HARNESS_PROFILE` (alias `FLUXO_PROFILE`) → único perfil no diretório → defaults genéricos vazios. Erro de schema **nunca derruba hooks** (falha aberta); o gate é quem reprova. Visão completa: [docs/parking-lot/harness-agnostico.md](../parking-lot/harness-agnostico.md).
 
-**Overlay de prompts (R2):** o perfil do hospedeiro declara `prompt.overlay` — a **fonte viva do produto do host** (exemplo completo: [quality/examples/fluxo/](../../quality/examples/fluxo/README.md), com missão/estado/restrições do Fluxo) — e `prompt.domainSkills`/`prompt.domainRules` (skills e regras de domínio que pertencem ao projeto, não ao núcleo). O `sync-clinerules.mjs` espelha o overlay para `.clinerules/85-projeto.md` **só quando o perfil declara overlay** (o núcleo deste repo não declara nenhum) e marca no índice (80) quais skills são de overlay.
+**Overlay de prompts (R2):** o perfil do hospedeiro declara `prompt.overlay` — a **fonte viva do produto do host** (exemplo completo: [quality/examples/exemplo-saas/](../../quality/examples/exemplo-saas/README.md), com missão/estado/restrições do Exemplo SaaS) — e `prompt.domainSkills`/`prompt.domainRules` (skills e regras de domínio que pertencem ao projeto, não ao núcleo). O `sync-clinerules.mjs` espelha o overlay para `.clinerules/85-projeto.md` **só quando o perfil declara overlay** (o núcleo deste repo não declara nenhum) e marca no índice (80) quais skills são de overlay.
 
 **Hosts de agente (R-distribuição):** o registro em [quality/lib/hosts.mjs](../../quality/lib/hosts.mjs) define a integração por host — hooks nativos (claude-code: `.claude/`; cline: `.clinerules/hooks/`) ou **carriers de instruções** (vscode/copilot: `.github/copilot-instructions.md`; antigravity: `.antigravity/rules/`; kiro: `.kiro/steering/`) e leitura de `AGENTS.md` (codex). Instalador: `harness-init --hosts a,b,all`; `omni-harness doctor` lista o instalado. **Paths são sobrescritáveis pelo hospedeiro** em `quality/hosts.json` (estruturas proprietárias mudam sem tocar a lib) — resolver: `omni-harness hosts [destino] --json`.
 

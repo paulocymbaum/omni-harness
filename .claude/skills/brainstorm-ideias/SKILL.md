@@ -26,7 +26,7 @@ Modelo: [`fluxo-onibus-desenho-funcionalidade.md`](../../../docs/parking-lot/flu
 
 - Fontes externas marcadas como **verificadas / parciais / a validar**, com data de acesso.
 - Não invente endpoints, números de mercado ou promessas de cobertura.
-- Fluxo de tela ou entre camadas ganha diagrama Mermaid (`.claude/rules/fluxogramas.md`).
+- Exemplo SaaS de tela ou entre camadas ganha diagrama Mermaid (`.claude/rules/fluxogramas.md`).
 - Sem dado sensível (CPF/CNPJ, tokens) em exemplos.
 
 ## Promoção

@@ -52,7 +52,7 @@ before(async () => {
   for (const need of ['Blocked', 'Homologation']) assert.ok(have.has(need), `o projeto não tem o status ${need}: rode node scripts/tracker/ensure-statuses.mjs`);
   fs.mkdirSync(path.join(dir, 'diagramas'), { recursive: true });
   fs.writeFileSync(path.join(dir, 'brd.md'), '# BRD — teste\nStatus: ready\n\n## Regras de negócio\n- RN-01 regra de teste\n\n## Cenários\n### Cenário: caminho feliz\n- Dado um negócio\n- Quando gera um post\n- Então o post aparece\n');
-  fs.writeFileSync(path.join(dir, 'fluxo-usuario.md'), '# Fluxo — teste\nStatus: ready\n\n1. Abrir a área\n\n```mermaid\nflowchart TD\n  A --> B\n```\n');
+  fs.writeFileSync(path.join(dir, 'fluxo-usuario.md'), '# Exemplo SaaS — teste\nStatus: ready\n\n1. Abrir a área\n\n```mermaid\nflowchart TD\n  A --> B\n```\n');
   fs.writeFileSync(path.join(dir, 'diagramas', 'fluxo-usuario.png'), PNG);
   save(backlog([['IT-001', 'done'], ['IT-002', 'blocked', { motivo: 'aguarda decisão de teste' }], ['IT-003', 'pending', { depends_on: ['IT-001'] }]], HOM('pendente')));
 });
@@ -79,7 +79,7 @@ test('épico: tipo Epic, título pela regra, labels, anexo do fluxo e seções n
   for (const l of [`feature-${SLUG}`, SANDBOX_LABEL]) assert.ok(epic.fields.labels.includes(l), l);
   assert.ok(!epic.fields.labels.includes('brd-pendente') && !epic.fields.labels.includes('fluxo-pendente'));
   const body = text(epic);
-  const order = ['Visão geral', 'Atenção: precisa de ação', 'BRD — requisitos e regras de negócio', 'Fluxo do usuário', 'Como testar (homologação)', 'Tarefas', 'Referência técnica'].map((t) => body.indexOf(t));
+  const order = ['Visão geral', 'Atenção: precisa de ação', 'BRD — requisitos e regras de negócio', 'Exemplo SaaS do usuário', 'Como testar (homologação)', 'Tarefas', 'Referência técnica'].map((t) => body.indexOf(t));
   assert.ok(order.every((p) => p >= 0) && order.every((p, i) => !i || p > order[i - 1]), `ordem das seções: ${order}`);
   for (const t of ['RN-01 regra de teste', 'Dado um negócio', 'flowchart TD', 'Rodada automática de teste', 'aguarda decisão de teste', 'Progresso: ']) assert.ok(body.includes(t), t);
   assert.deepEqual(epic.fields.attachment.map((a) => a.filename), ['fluxo-usuario.png']);

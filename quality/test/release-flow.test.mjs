@@ -1,4 +1,4 @@
-// Fluxo local de release: nome da branch, tags novas, ref a validar e destinos pendentes.
+// Exemplo SaaS local de release: nome da branch, tags novas, ref a validar e destinos pendentes.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { PROPAGATE_TO, isLatestLayerTag, latestReleaseBranch, newTags, newestReleaseBranch, pendingTargets, refsToCheck, releaseBranchFor, uniqueReleaseBranch, tagRefs } from '../lib/release-flow.mjs';

@@ -1,6 +1,6 @@
-// Gate R-PERFIL — dois mundos desde que o harness foi APARTADO do Fluxo:
+// Gate R-PERFIL — dois mundos desde que o harness foi APARTADO do Exemplo SaaS:
 //   1) perfil ATIVO deste repositório = o genérico do núcleo (sem host, sem produto);
-//   2) perfil de EXEMPLO `quality/examples/fluxo/profile` = um host multi-stack completo, fora do
+//   2) perfil de EXEMPLO `quality/examples/exemplo-saas/profile` = um host multi-stack completo, fora do
 //      discovery (`HARNESS_PROFILE_DIR` aponta para ele nos testes de motor). Regra-mãe:
 //      docs/parking-lot/harness-agnostico.md (R0: modelo híbrido; apartamento em 2026-11-22).
 import { test } from 'node:test';
@@ -17,12 +17,12 @@ import { PERMANENT } from '../lib/gitflow.mjs';
 import { envOff, harnessEnv } from '../lib/env.mjs';
 
 const ROOT = repoRoot();
-const EXAMPLE_ROOT = path.join(ROOT, 'quality', 'examples', 'fluxo');
+const EXAMPLE_ROOT = path.join(ROOT, 'quality', 'examples', 'exemplo-saas');
 const EXAMPLE_DIR = path.join(EXAMPLE_ROOT, 'profile');
-// No pacote npm (pnpx/npm) o exemplo do Fluxo não viaja: os testes de exemplo são pulados
+// No pacote npm (pnpx/npm) o exemplo do Exemplo SaaS não viaja: os testes de exemplo são pulados
 // com motivo (skip condicional — nunca skip incondicional, regra anti-force-pass).
 const TEM_EXEMPLO = fs.existsSync(path.join(EXAMPLE_DIR, 'profile.json'));
-const SEM_EXEMPLO = TEM_EXEMPLO ? false : 'quality/examples/fluxo não incluído no pacote npm';
+const SEM_EXEMPLO = TEM_EXEMPLO ? false : 'quality/examples/exemplo-saas não incluído no pacote npm';
 const exemplo = loadProfile({ dir: EXAMPLE_DIR, env: {} });
 
 test('perfil ATIVO é o genérico do núcleo: sem host, sem produto, sem erro', () => {
@@ -39,7 +39,7 @@ test('perfil ATIVO é o genérico do núcleo: sem host, sem produto, sem erro', 
 
 test('perfil de EXEMPLO (fluxo) valida contra o schema v1 — nenhum erro', { skip: SEM_EXEMPLO }, () => {
   assert.deepEqual(exemplo.errors, []);
-  assert.equal(exemplo.profile.name, 'fluxo');
+  assert.equal(exemplo.profile.name, 'exemplo-saas');
   assert.equal(exemplo.profile.schemaVersion, 1);
   assert.ok(exemplo.file.endsWith('profile.json'));
   assert.ok(exemplo.profile.layers.length >= 10);
@@ -93,7 +93,7 @@ test('gitflow: exemplo traz RELEASE permanente; núcleo cai no fallback legado',
 
 test('overlay: exemplo tem fonte viva, pack e skills; núcleo não espelha overlay nenhum', { skip: SEM_EXEMPLO }, () => {
   assert.ok(fs.existsSync(path.join(EXAMPLE_ROOT, 'PROJETO.md')), 'overlay do exemplo existe');
-  assert.ok(fs.existsSync(path.join(EXAMPLE_ROOT, 'pack-fluxo-domain.json')), 'manifest do pack de domínio no exemplo');
+  assert.ok(fs.existsSync(path.join(EXAMPLE_ROOT, 'pack-exemplo-saas-domain.json')), 'manifest do pack de domínio no exemplo');
   for (const tema of exemplo.profile.prompt.domainSkills) {
     assert.ok(fs.existsSync(path.join(EXAMPLE_ROOT, 'skills', tema, 'SKILL.md')), `skill do exemplo: ${tema}`);
   }

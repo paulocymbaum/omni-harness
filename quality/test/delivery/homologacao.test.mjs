@@ -36,7 +36,7 @@ function entrega({ status = ['done', 'done'], homologacao = true, docs = true } 
   fs.writeFileSync(up, '#!/bin/sh\n');
   if (docs) {
     fs.writeFileSync(path.join(dir, 'brd.md'), '# BRD\nStatus: ready\n\n## Regras\n- RN-01 só business cria post\n');
-    fs.writeFileSync(path.join(dir, 'fluxo-usuario.md'), '# Fluxo\nStatus: ready\n\n1. Abrir a área business\n');
+    fs.writeFileSync(path.join(dir, 'fluxo-usuario.md'), '# Exemplo SaaS\nStatus: ready\n\n1. Abrir a área business\n');
   }
   const backlog = {
     id: 'feat', title: 'Feature', created: '2026-11-14',
@@ -200,7 +200,7 @@ test('sem BRD ou fluxo do usuário prontos NÃO homologa, e diz qual está ausen
   assert.match(ausentes.err, /BRD ausente: brd\.md/);
   assert.match(ausentes.err, /fluxo do usuário ausente: fluxo-usuario\.md/);
   fs.writeFileSync(path.join(e.dir, 'brd.md'), '# BRD\nStatus: draft\n\nrascunho\n');
-  fs.writeFileSync(path.join(e.dir, 'fluxo-usuario.md'), '# Fluxo\nStatus: ready\n\nfalar com maria.silva@empresa.com.br\n');
+  fs.writeFileSync(path.join(e.dir, 'fluxo-usuario.md'), '# Exemplo SaaS\nStatus: ready\n\nfalar com maria.silva@empresa.com.br\n');
   const mistos = run(['homologar', e.dir]);
   assert.match(mistos.err, /BRD em rascunho \(falta `Status: ready`\): brd\.md/);
   assert.match(mistos.err, /fluxo do usuário com dados pessoais \(e-mail \(ma\*\*\*br, linha 4\)\): fluxo-usuario\.md/);

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// CLI de versionamento por camada do Fluxo: bump determinístico (commits convencionais
-// desde a última tag da camada) salvo como tag `<camada>@vX.Y.Z`. Fluxo: rodar na branch
+// CLI de versionamento por camada do Exemplo SaaS: bump determinístico (commits convencionais
+// desde a última tag da camada) salvo como tag `<camada>@vX.Y.Z`. Exemplo SaaS: rodar na branch
 // release, que depois é mergeada em main e backmergada em develop — as tags ficam
 // alcançáveis nas três (validado por --check).
 //   node quality/version/bump.mjs              plano (dry run, pt-BR)

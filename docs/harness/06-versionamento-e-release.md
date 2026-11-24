@@ -30,7 +30,7 @@ Cada camada (`quality/config/layers.json`) tem versão própria, com **bump dete
 | `scripts/deploy/local/deploy-{api,web,worker}.sh` | Réplicas locais dos workflows de deploy (backend, web, Cloud Run Job do Creator) |
 | `ofluxo_site/public/versions.json` | Regenerado a cada apply (`--versions`), por ambiente (prod ← main, hml ← RELEASE, dev ← develop) |
 
-## Fluxo passo a passo (caminho local)
+## Exemplo SaaS passo a passo (caminho local)
 
 ```mermaid
 flowchart TD

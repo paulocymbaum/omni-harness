@@ -41,7 +41,7 @@ O motor (`quality/run.mjs`) mede o diff com **gates determinísticos** (tamanho,
 | `quality/config/autofix.json` | Escopo da autocorreção (só código de gate/teste) |
 | `quality/hooks/git-pre-commit.mjs` + `install.mjs` | Gates no `git commit` (substitui o CI `quality.yml`, desativado em 2026-10-31) |
 
-## Fluxo passo a passo
+## Exemplo SaaS passo a passo
 
 ```mermaid
 flowchart TD
@@ -110,7 +110,7 @@ O motor é host-agnostic (um CLI). Muda só quem o chama e como o bloqueio chega
 
 ## Fontes
 
-- [quality/run.mjs](../../quality/run.mjs) · [QUALITY.md](../../quality/examples/fluxo/docs/QUALITY.md)
+- [quality/run.mjs](../../quality/run.mjs) · [QUALITY.md](../../quality/examples/exemplo-saas/docs/QUALITY.md)
 - [risk-matrix.json](../../quality/config/risk-matrix.json) · [thresholds.json](../../quality/config/thresholds.json) · [resources.json](../../quality/config/resources.json)
 - [git-pre-commit.mjs](../../quality/hooks/git-pre-commit.mjs)
 

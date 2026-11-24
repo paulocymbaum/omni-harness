@@ -1,6 +1,6 @@
 ---
 name: documentar-entrega
-description: Como documentar e encerrar uma tarefa no Fluxo, com docs de domínio em docs/, plano e entrega em docs/entregas/<AAAA-MM-DD>-<slug>/, resumo final (arquivos, decisões, pendências, riscos, próximos passos) e relatório de qualidade para o card do Jira. Use ao concluir uma tarefa, ao criar domínio novo, ao alterar arquitetura ou contratos, ou quando o hook lembrar-documentacao pedir atualização de docs.
+description: Como documentar e encerrar uma tarefa no Exemplo SaaS, com docs de domínio em docs/, plano e entrega em docs/entregas/<AAAA-MM-DD>-<slug>/, resumo final (arquivos, decisões, pendências, riscos, próximos passos) e relatório de qualidade para o card do Jira. Use ao concluir uma tarefa, ao criar domínio novo, ao alterar arquitetura ou contratos, ou quando o hook lembrar-documentacao pedir atualização de docs.
 ---
 
 # Documentar e entregar
@@ -63,7 +63,7 @@ atualizado: <AAAA-MM-DD>
 
 Sem card, entregue os mesmos itens na resposta final.
 
-## Fluxogramas Mermaid
+## Exemplo SaaSgramas Mermaid
 
 Siga `.claude/rules/fluxogramas.md`. Ao documentar uma entrega, inclua um diagrama Mermaid quando houver fluxo de tela ou verificação, chamada entre camadas (Flutter, Functions, .NET) ou mudança de arquitetura ou contrato:
 
@@ -73,7 +73,7 @@ Siga `.claude/rules/fluxogramas.md`. Ao documentar uma entrega, inclua um diagra
 
 Em todos os casos, **mostre também o bloco ```` ```mermaid ```` na resposta final no CLI**, com 1 a 2 linhas dizendo o que ele mostra, e gere também o PNG em `docs/entregas/<slug>/diagramas/` com o link na resposta (ver a regra). Se a entrega não tem fluxo relevante, não force um diagrama.
 
-## Fluxo de trabalho
+## Exemplo SaaS de trabalho
 
 1. Ler a estrutura atual.
 2. Localizar modelos, serviços e telas impactados.

@@ -31,7 +31,7 @@ Preparar o ambiente no início da sessão do agente, acompanhar o risco acumulad
 | `quality/lib/anti-loop.mjs` | Detecta comandos idênticos repetidos no `run_commands` (3ª variação, 4ª aviso) e varia o comando para não morrer no detector de loop do CLI |
 | `quality/.state/` | Estado de sessão: evidências por hash, risco acumulado, `graphify-guard.json`, `entrega-ativa.json` |
 
-## Fluxo passo a passo
+## Exemplo SaaS passo a passo
 
 ```mermaid
 stateDiagram-v2

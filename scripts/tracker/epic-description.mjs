@@ -129,7 +129,7 @@ export function epicDescription(backlog, dir = null, docs) {
   return [
     ...overview(withDir, tasks), ...attention(backlog),
     ...document('BRD — requisitos e regras de negócio', docs.brd),
-    ...document('Fluxo do usuário', docs.fluxo, docs.images.length ? [`Diagrama(s) anexado(s) ao épico: ${docs.images.map((f) => path.basename(f)).join(', ')}`] : []),
+    ...document('Exemplo SaaS do usuário', docs.fluxo, docs.images.length ? [`Diagrama(s) anexado(s) ao épico: ${docs.images.map((f) => path.basename(f)).join(', ')}`] : []),
     ...homologationSection(backlog.homologacao), ...tasksSection(tasks), ...technical(withDir, tasks),
   ].join('\n');
 }

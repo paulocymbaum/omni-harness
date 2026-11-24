@@ -33,7 +33,7 @@ Toda implementação busca tipagem forte, organização por domínio, baixo acop
 
 A qualidade é medida por gates determinísticos: rode `node quality/run.mjs --tier rapido` a cada edição e `--tier rotina` ao concluir. Nunca afirme que um gate passou se ele não rodou.
 
-## 5. Fluxo de trabalho
+## 5. Exemplo SaaS de trabalho
 
 1. Leia o perfil do hospedeiro (`quality/profile/prompt.md`) e o índice do workflow (`docs/harness/INDEX.md`).
 2. Descubra o código com o grafo quando disponível (`graphify query "<Identificador>"`); leia só o trecho apontado.

@@ -1,13 +1,13 @@
 # Contribuir para o Omni Harness
 
-Obrigado por considerar contribuir! Este repo é o **núcleo agnóstico** do harness — ele não conhece produto nenhum (isso vive no perfil de cada projeto hospedeiro; exemplo: [`quality/examples/fluxo/`](quality/examples/fluxo/README.md)).
+Obrigado por considerar contribuir! Este repo é o **núcleo agnóstico** do harness — ele não conhece produto nenhum (isso vive no perfil de cada projeto hospedeiro; exemplo: [`quality/examples/exemplo-saas/`](quality/examples/exemplo-saas/README.md)).
 
 ## Requisitos
 
 - Node **>= 22** · git
 - Opcional (lint do autofix): `cd quality/tools && npm ci`
 
-## Fluxo de trabalho
+## Exemplo SaaS de trabalho
 
 1. `fork`/`branch` a partir de `main` — `feat/<slug>`, `fix/<slug>`, `docs/<slug>`.
 2. **Conventional Commits** (`feat:`, `fix:`, `docs:`, `chore:` …).
@@ -16,7 +16,7 @@ Obrigado por considerar contribuir! Este repo é o **núcleo agnóstico** do har
 ```bash
 node --test quality/test/profile.test.mjs quality/test/hosts.test.mjs quality/test/package.test.mjs quality/test/attach.test.mjs
 node --test quality/test/gates.test.mjs quality/test/gates-novos.test.mjs quality/test/hooks.test.mjs quality/test/risk.test.mjs
-HARNESS_PROFILE_DIR="$PWD/quality/examples/fluxo/profile" node --test quality/test/gates.test.mjs quality/test/risk.test.mjs .claude/hooks/test/regras.test.mjs quality/test/jira-spec-sync.test.mjs
+HARNESS_PROFILE_DIR="$PWD/quality/examples/exemplo-saas/profile" node --test quality/test/gates.test.mjs quality/test/risk.test.mjs .claude/hooks/test/regras.test.mjs quality/test/jira-spec-sync.test.mjs
 node quality/agents/sync-clinerules.mjs --check
 ```
 

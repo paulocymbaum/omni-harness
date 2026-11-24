@@ -30,7 +30,7 @@ Skill [`entrega-em-ciclo`](../../.claude/skills/entrega-em-ciclo/SKILL.md), exec
 | `overflow-roadmap.mjs`, `feature-docs.mjs`, `test-hygiene.mjs`, `lib.mjs`, `jira-mirror.mjs` | Roadmap vivo, docs de feature, higiene de testes, biblioteca comum e espelho Jira |
 | `docs/entregas/<slug>/` | `backlog.json`, `specs/<ID>.md` (Status: ready), `eval-gates.json`, `evidencias/`, `eval-report.json/md`, `handoffs/`, `brd.md`, `fluxo-usuario.md`, `homologacao.md`, `entrega.md`, `SUMMARY.md` |
 
-## Fluxo passo a passo (fases)
+## Exemplo SaaS passo a passo (fases)
 
 ```mermaid
 flowchart TD
@@ -115,6 +115,6 @@ Os hooks do ciclo (`guarda-backlog`, `guarda-entrega`) rodam nos dois hosts pela
 
 - [SKILL entrega-em-ciclo](../../.claude/skills/entrega-em-ciclo/SKILL.md) · [backlog-e-gates.md](../../.claude/rules/backlog-e-gates.md)
 - [quality/delivery/](../../quality/delivery) · entrega de referência (15/15 done): [2026-10-01-harness-entrega-em-ciclo](../entregas/2026-10-01-harness-entrega-em-ciclo/SUMMARY.md)
-- Desenho histórico e comparação com o `.cursor/` do game_concept: [README_AGENT_WORKFLOW.md §15](../../quality/examples/fluxo/docs/README_AGENT_WORKFLOW.md)
+- Desenho histórico e comparação com o `.cursor/` do game_concept: [README_AGENT_WORKFLOW.md §15](../../quality/examples/exemplo-saas/docs/README_AGENT_WORKFLOW.md)
 
 

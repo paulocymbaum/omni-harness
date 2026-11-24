@@ -17,7 +17,7 @@ Esta skill detalha os passos para implementar **uma tarefa por vez** do backlog.
 3. Leia o spec: `<dir>/specs/<ID>.md` — deve ter `Status: ready`.
 4. Se o spec estiver `draft`, chame o agente `investigador-de-spec` primeiro.
 
-## Fluxo de implementação
+## Exemplo SaaS de implementação
 
 ### 1. Provar falha (baseline)
 

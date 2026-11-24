@@ -184,7 +184,7 @@
   "error.usage": "Uso: node quality/run.mjs [--risk] [--tier rapido|rotina|completo] [--relatorio] [--base <ref>] [--files a,b] [--session <id>] [--json]",
 
   "gitflow.taxonomy": "Branch fora da taxonomia do projeto: {branch}. Use: feat/<slug>, fix/<slug> ou chore/<slug> (nascem de develop), hotfix/<slug> (nasce de main) e release/x.y.z[-sufixo] (nasce de develop).",
-  "gitflow.create.wrongParent": "{kind}/ nasce de {parent}, não de {current}. Fluxo correto:\ngit switch {parent} && git pull --ff-only && git switch -c {branch}",
+  "gitflow.create.wrongParent": "{kind}/ nasce de {parent}, não de {current}. Exemplo SaaS correto:\ngit switch {parent} && git pull --ff-only && git switch -c {branch}",
   "gitflow.create.releaseVersion": "release/ exige versão semântica com sufixo opcional (ex.: release/1.4.0, release/1.4.0-beta.1). Recebido: {branch}.",
   "gitflow.create.parentBehind": "{parent} está {count} commit(s) atrás de origin/{parent}. Atualize antes de criar {branch}:\n{cmd}",
   "gitflow.commit.main": "Commit direto em main é proibido: main recebe apenas release/x.y.z (pipeline) e hotfix/ via merge. Crie uma branch de trabalho e siga o fluxo.",

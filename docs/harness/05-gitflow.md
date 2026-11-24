@@ -24,7 +24,7 @@ O repositório é compartilhado: todo push é observado por pessoas e pela estei
 | `quality/lib/gitstate.mjs` | Branch atual, estado de conflito, sync com origin |
 | `quality/messages.pt-BR.json` | Mensagens (`gitflow.*`) |
 
-## Fluxo canônico e matriz
+## Exemplo SaaS canônico e matriz
 
 ```text
 MAIN → DEVELOP → FEAT ⇄ DEVELOP (versão) → RELEASE (PIPELINE ou LOCAL) → MAIN
@@ -40,7 +40,7 @@ MAIN → DEVELOP → FEAT ⇄ DEVELOP (versão) → RELEASE (PIPELINE ou LOCAL) 
 
 Bloqueios de merge: main ← feat/fix/chore/develop; develop ← main ou branch fora da taxonomia; trabalho ← trabalho/main; hotfix ← develop; release ← develop/feat/main. **Publicar main é papel da esteira da release — ou do gêmeo local (doc 06) quando a esteira está sem minutos.**
 
-## Fluxo passo a passo (receitas resumidas)
+## Exemplo SaaS passo a passo (receitas resumidas)
 
 ```bash
 # Feature (FEAT ⇄ DEVELOP)

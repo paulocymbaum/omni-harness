@@ -70,7 +70,7 @@ test('ciclo completo: do init à homologação aprovada, com bloqueio no meio', 
 
     // 6. BRD e fluxo prontos: homologar inicia, gera o roteiro e muda o estado
     fs.writeFileSync(path.join(dir, 'brd.md'), '# BRD\nStatus: ready\n\n## Regras\n- RN-01 regra\n');
-    fs.writeFileSync(path.join(dir, 'fluxo-usuario.md'), '# Fluxo\nStatus: ready\n\n1. passo\n');
+    fs.writeFileSync(path.join(dir, 'fluxo-usuario.md'), '# Exemplo SaaS\nStatus: ready\n\n1. passo\n');
     const hom = cli(bin, ['homologar', dir]);
     assert.equal(hom.code, 0, hom.err);
     assert.equal(read().homologacao.estado, 'em_homologacao');

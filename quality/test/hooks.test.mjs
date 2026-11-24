@@ -22,7 +22,7 @@ const FILES = {
   'lib/features/feed/presentation/feed_page.dart': 'class FeedPage {}\n',
   'functions/src/index.ts': "export * from './features/posts';\nexport const b = 1;\n",
   'functions/src/features/posts.ts': 'export const posts = 1;\n',
-  'backend/src/Fluxo.Api/Infrastructure/Idempotency/Filter.cs': 'namespace X;\npublic class Filter {}\n',
+  'backend/src/Exemplo SaaS.Api/Infrastructure/Idempotency/Filter.cs': 'namespace X;\npublic class Filter {}\n',
 };
 
 const edit = (repo, rel, session = 's1') => runScript(repo, 'hooks/post-edit.mjs', {
@@ -75,12 +75,12 @@ test('post-edit: arquivo fora do repo, arquivo gerado e Markdown não geram ruí
 test('post-edit: avisa quando o risco da sessão sobe', () => {
   const repo = tempRepo(FILES);
   try {
-    repo.write('backend/src/Fluxo.Api/Infrastructure/Idempotency/Filter.cs', 'namespace X;\npublic class Filter { }\n');
-    const r = edit(repo, 'backend/src/Fluxo.Api/Infrastructure/Idempotency/Filter.cs');
+    repo.write('backend/src/Exemplo SaaS.Api/Infrastructure/Idempotency/Filter.cs', 'namespace X;\npublic class Filter { }\n');
+    const r = edit(repo, 'backend/src/Exemplo SaaS.Api/Infrastructure/Idempotency/Filter.cs');
     assert.equal(r.code, 0, r.stderr);
     assert.match(r.json.hookSpecificOutput.additionalContext, /Risco da alteração subiu para CRÍTICO/);
     // Segunda edição no mesmo nível não repete o aviso.
-    const again = edit(repo, 'backend/src/Fluxo.Api/Infrastructure/Idempotency/Filter.cs');
+    const again = edit(repo, 'backend/src/Exemplo SaaS.Api/Infrastructure/Idempotency/Filter.cs');
     assert.doesNotMatch(again.stdout, /subiu para/);
   } finally { repo.cleanup(); }
 });
@@ -142,7 +142,7 @@ test('pre-bash: execução reprovada do nível mantém o bloqueio com mensagem e
 test('pre-bash: risco crítico com evidência completa pede confirmação (ask); deploy com flag de custo também', { skip: SKIP_BACKEND }, () => {
   const repo = tempRepo(FILES);
   try {
-    repo.write('backend/src/Fluxo.Api/Infrastructure/Idempotency/Filter.cs', 'namespace X;\npublic class Filter { }\n');
+    repo.write('backend/src/Exemplo SaaS.Api/Infrastructure/Idempotency/Filter.cs', 'namespace X;\npublic class Filter { }\n');
     assert.equal(decisionOf(bash(repo, 'git commit -am x')), 'deny');
     const run = runScript(repo, 'run.mjs', null, ['--tier', 'completo']);
     assert.equal(run.code, 0, run.stdout);
@@ -190,8 +190,8 @@ test('stop: reprovação bloqueia no máximo 2 vezes por estado e depois libera 
 test('stop: risco crítico exige o nível completo antes de encerrar; com evidência, libera', { skip: SKIP_BACKEND }, () => {
   const repo = tempRepo(FILES);
   try {
-    repo.write('backend/src/Fluxo.Api/Infrastructure/Idempotency/Filter.cs', 'namespace X;\npublic class Filter { }\n');
-    edit(repo, 'backend/src/Fluxo.Api/Infrastructure/Idempotency/Filter.cs');
+    repo.write('backend/src/Exemplo SaaS.Api/Infrastructure/Idempotency/Filter.cs', 'namespace X;\npublic class Filter { }\n');
+    edit(repo, 'backend/src/Exemplo SaaS.Api/Infrastructure/Idempotency/Filter.cs');
     const blocked = stop(repo);
     assert.equal(blocked.json.decision, 'block');
     assert.match(blocked.json.reason, /Risco CRÍTICO: rode o nível completo/);

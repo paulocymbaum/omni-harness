@@ -35,7 +35,7 @@ Cada entrega gerenciada pelo `backlog.json` tem cards no projeto **`OFLUXO`**, e
 | `scripts/tracker/test-funcional.mjs` / `test-integracao.mjs` | Testes offline e real (com sandbox que se apaga) |
 | `.claude/rules/backlog-e-gates.md` + `docs/jira/regras-de-epicos-e-cards.md` | Regras de naming, épico/BRD/fluxo e status |
 
-## Fluxo passo a passo
+## Exemplo SaaS passo a passo
 
 ```mermaid
 sequenceDiagram

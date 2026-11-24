@@ -34,7 +34,7 @@ Os wrappers em `.clinerules/hooks/` são CommonJS finos (não dependem do `type`
 
 Por isso a negação no Cline é **suave sempre que possível**: comando de shell bloqueável vira `echo <motivo>; exit 1` via `overrideInput` (o agente lê o motivo e segue); sem `overrideInput` disponível (extensão VS Code, edição de arquivo), nega com `cancel: true` — raro e explícito. No PostToolUse, o cancelamento é impossível: o mesmo texto do `exit 2` do Claude chega como `contextModification`, e o agente deve tratá-lo igual (editar o arquivo).
 
-## Fluxo passo a passo
+## Exemplo SaaS passo a passo
 
 ```mermaid
 sequenceDiagram

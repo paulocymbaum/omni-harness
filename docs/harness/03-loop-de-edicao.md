@@ -31,7 +31,7 @@ Evento `PostToolUse` registrado em `.claude/settings.json`, na ordem:
 | `quality/delivery/guarda-entrega.mjs` | Com entrega ativa (`quality/.state/entrega-ativa.json`), **avisa** quando a edição sai do escopo da tarefa (informacional; desliga apagando o arquivo de estado) |
 | `.claude/hooks/sync-spec-jira.mjs` | Ao gravar `docs/entregas/<slug>/specs/<ID>.md`, atualiza o card Jira em fundo (lógica em `quality/lib/spec-sync.mjs`; 1 sync a cada 2 min; `FLUXO_JIRA_AUTOSYNC=0` desliga) |
 
-## Fluxo passo a passo
+## Exemplo SaaS passo a passo
 
 ```mermaid
 flowchart TD

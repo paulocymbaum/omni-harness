@@ -9,7 +9,7 @@ test('bloqueia CPF literal em código', () => {
 });
 
 test('bloqueia CNPJ literal em código', () => {
-  assert.equal(checkContent('backend/src/Fluxo.Api/Modules/Businesses/X.cs', 'var c = "12.345.678/0001-95";').bloqueios.length, 1);
+  assert.equal(checkContent('backend/src/Exemplo SaaS.Api/Modules/Businesses/X.cs', 'var c = "12.345.678/0001-95";').bloqueios.length, 1);
 });
 
 test('placeholder, testes e l10n não bloqueiam', () => {
@@ -27,13 +27,13 @@ test('CPF em .md só avisa', () => {
 test('campo cpf bruto em camada pública avisa; cpfHash não', () => {
   assert.equal(checkContent('functions/src/http/profile.routes.ts', 'res.json({ cpf: user.cpf })').avisos.length, 1);
   assert.equal(checkContent('functions/src/http/profile.routes.ts', 'res.json({ cpfHash: h })').avisos.length, 0);
-  assert.equal(checkContent('backend/src/Fluxo.Api/Modules/Profiles/ProfileResponse.cs', 'public string? Cpf { get; init; }').avisos.length, 1);
+  assert.equal(checkContent('backend/src/Exemplo SaaS.Api/Modules/Profiles/ProfileResponse.cs', 'public string? Cpf { get; init; }').avisos.length, 1);
 });
 
 test('formulário em que o usuário digita o documento não avisa', () => {
   assert.equal(checkContent('lib/features/identity/presentation/front_cpf_gate.dart', 'cpf: value').avisos.length, 0);
   assert.equal(checkContent('ofluxo_site/src/platform/presentation/pages/domain-pages.tsx', "cpf: cpf.replace(/\\D/g, '')").avisos.length, 0);
-  assert.equal(checkContent('backend/src/Fluxo.Api/Modules/Identity/VerifyCpfRequest.cs', 'public string Cpf { get; init; }').avisos.length, 0);
+  assert.equal(checkContent('backend/src/Exemplo SaaS.Api/Modules/Identity/VerifyCpfRequest.cs', 'public string Cpf { get; init; }').avisos.length, 0);
 });
 
 test('enum de domínio redefinido fora do canônico avisa; em .md não', () => {
@@ -61,7 +61,7 @@ test('missingDocs: arquivo novo de domínio sem .md', () => {
 
 test('missingDocs: .md tocado, arquivo modificado ou gerado não lembram', () => {
   assert.deepEqual(missingDocs(['?? lib/features/events/domain/model/novo.dart', ' M docs/eventos/TEST_GUIDE.md']), []);
-  assert.deepEqual(missingDocs([' M backend/src/Fluxo.Api/Modules/Events/EventEndpoints.cs']), []);
+  assert.deepEqual(missingDocs([' M backend/src/Exemplo SaaS.Api/Modules/Events/EventEndpoints.cs']), []);
   assert.deepEqual(missingDocs(['?? lib/features/events/domain/model/novo.g.dart']), []);
   assert.equal(missingDocs(['A  backend/deploy/sql/novo.sql']).length, 1);
 });
@@ -70,7 +70,7 @@ test('enums do Debate ao Vivo: Verdict fora dos quatro arquivos canônicos avisa
   const fora = checkContent('ofluxo_site/src/platform/pulso/outro.ts', 'export type Verdict = "true" | "false";');
   assert.ok(fora.avisos.some((a) => a.includes('Verdict')));
   for (const arquivo of [
-    'backend/src/Fluxo.Api/Modules/Debates/DebateEnums.cs',
+    'backend/src/Exemplo SaaS.Api/Modules/Debates/DebateEnums.cs',
     'admin-web/src/modules/debates/domain/enums.ts',
     'ofluxo_site/src/platform/domain/debate-enums.ts',
     'services/debate-worker/src/domain/debate-enums.ts',

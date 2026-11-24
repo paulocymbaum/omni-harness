@@ -25,7 +25,7 @@ const task = (id, status, extra = {}) => ({ id, title: `Tarefa ${id}`, status, d
 const backlog = (tasks, extra = {}) => ({ id: 'feat', title: 'Feature Teste', created: '2026-11-14', featureSlug: 'feat', tasks, gates: [], ...extra });
 const PRONTO = (text = '# Doc\nStatus: ready\n\ncorpo') => ({ state: 'ready', file: 'doc.md', text, findings: [] });
 const FALTA = { state: 'missing', file: 'doc.md', findings: [] };
-const docs = (over = {}) => ({ brd: PRONTO('# BRD — Feature\nStatus: ready\n\n## Regras de negócio\n- RN-01 só business cria post\n\n## Cenários\n```gherkin\nDado X\nQuando Y\nEntão Z\n```'), fluxo: PRONTO('# Fluxo\nStatus: ready\n\n1. Abrir a área\n\n```mermaid\nflowchart TD\n  A --> B\n```'), images: [], ...over });
+const docs = (over = {}) => ({ brd: PRONTO('# BRD — Feature\nStatus: ready\n\n## Regras de negócio\n- RN-01 só business cria post\n\n## Cenários\n```gherkin\nDado X\nQuando Y\nEntão Z\n```'), fluxo: PRONTO('# Exemplo SaaS\nStatus: ready\n\n1. Abrir a área\n\n```mermaid\nflowchart TD\n  A --> B\n```'), images: [], ...over });
 
 function workspace(b, files = {}) {
   const base = fs.mkdtempSync(path.join(os.tmpdir(), 'regras-'));
@@ -36,14 +36,14 @@ function workspace(b, files = {}) {
   for (const [name, content] of Object.entries(files)) fs.writeFileSync(path.join(dir, name), content);
   return { dir, write, read: () => JSON.parse(fs.readFileSync(path.join(dir, 'backlog.json'), 'utf8')), cleanup: () => fs.rmSync(base, { recursive: true, force: true }) };
 }
-const READY_DOCS = { 'brd.md': '# BRD\nStatus: ready\n\n## Regras\n- RN-01 regra\n', 'fluxo-usuario.md': '# Fluxo\nStatus: ready\n\n1. passo\n' };
+const READY_DOCS = { 'brd.md': '# BRD\nStatus: ready\n\n## Regras\n- RN-01 regra\n', 'fluxo-usuario.md': '# Exemplo SaaS\nStatus: ready\n\n1. passo\n' };
 
 // ── nomenclatura ────────────────────────────────────────────────────────────
 
 test('nome do épico: título da feature, limpo; sem id de backlog, data ou prefixo', () => {
   const casos = [
-    [{ title: 'Fluxo Creator' }, 'Fluxo Creator'],
-    [{ title: 'Backlog — Fluxo Creator' }, 'Fluxo Creator'],
+    [{ title: 'Exemplo SaaS Creator' }, 'Exemplo SaaS Creator'],
+    [{ title: 'Backlog — Exemplo SaaS Creator' }, 'Exemplo SaaS Creator'],
     [{ title: 'Entrega: Pulso  Flutter\n nativo' }, 'Pulso Flutter nativo'],
     [{ title: '  ', id: '2026-11-14-feat' }, '2026-11-14-feat'],
     [{}, 'Feature sem título'],
@@ -107,7 +107,7 @@ const ordem = (text, titulos) => titulos.map((t) => text.indexOf(`## ${t}`));
 test('descrição: seções na ordem para pessoas, técnica por último; "Atenção" só quando há bloqueio', () => {
   const b = backlog([task('A', 'done'), task('B', 'blocked', { motivo: 'aguarda parecer jurídico' }), task('C', 'pending', { depends_on: ['A'] })], { objetivo: 'Permitir que businesses gerem posts.' });
   const text = epicDescription(b, null, docs());
-  const posicoes = ordem(text, ['Visão geral', 'Atenção: precisa de ação', 'BRD — requisitos e regras de negócio', 'Fluxo do usuário', 'Como testar (homologação)', 'Tarefas', 'Referência técnica (definição do backlog.json)']);
+  const posicoes = ordem(text, ['Visão geral', 'Atenção: precisa de ação', 'BRD — requisitos e regras de negócio', 'Exemplo SaaS do usuário', 'Como testar (homologação)', 'Tarefas', 'Referência técnica (definição do backlog.json)']);
   assert.ok(posicoes.every((p) => p >= 0), `seção ausente: ${posicoes}`);
   assert.deepEqual(posicoes, [...posicoes].sort((x, y) => x - y), 'ordem das seções');
   assert.ok(text.indexOf('Permitir que businesses gerem posts.') < text.indexOf('Situação:'), 'objetivo vem primeiro');

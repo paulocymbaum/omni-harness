@@ -7,11 +7,11 @@ import { entry } from './helpers.mjs';
 const risk = (...entries) => classifyRisk(entries);
 
 test('quebra: um caso por nível da matriz', () => {
-  assert.equal(risk(entry('backend/src/Fluxo.Api/Infrastructure/Idempotency/IdempotencyFilter.cs', 'a\n', 'b\n')).breakage.level, 'critico');
-  assert.equal(risk(entry('backend/src/Fluxo.Api/Infrastructure/Persistence/Migrations/2026_X.cs', null, 'x\n')).breakage.level, 'critico');
+  assert.equal(risk(entry('backend/src/Exemplo SaaS.Api/Infrastructure/Idempotency/IdempotencyFilter.cs', 'a\n', 'b\n')).breakage.level, 'critico');
+  assert.equal(risk(entry('backend/src/Exemplo SaaS.Api/Infrastructure/Persistence/Migrations/2026_X.cs', null, 'x\n')).breakage.level, 'critico');
   assert.equal(risk(entry('firestore.rules', 'a\n', 'b\n')).breakage.level, 'critico');
   assert.equal(risk(entry('functions/src/payments/services/payment_service.ts', 'a\n', 'b\n')).breakage.level, 'critico');
-  assert.equal(risk(entry('backend/src/Fluxo.Api/Modules/Events/EventsModule.cs', 'a\n', 'b\n')).breakage.level, 'alto');
+  assert.equal(risk(entry('backend/src/Exemplo SaaS.Api/Modules/Events/EventsModule.cs', 'a\n', 'b\n')).breakage.level, 'alto');
   assert.equal(risk(entry('lib/core/network/fluxo_api_client.dart', 'a\n', 'b\n')).breakage.level, 'alto');
   assert.equal(risk(entry('OCR_webscraper_crawler/packages/scraper/src/fetch.ts', 'a\n', 'b\n')).breakage.level, 'alto');
   assert.equal(risk(entry('functions/src/features/posts.ts', 'a\n', 'b\n')).breakage.level, 'medio');

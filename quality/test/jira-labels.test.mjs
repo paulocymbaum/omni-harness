@@ -30,7 +30,7 @@ function tmpDir() {
 
 test('sanitizeJiraLabel: acentos, espaços e símbolos viram alfabeto Jira', () => {
   assert.equal(sanitizeJiraLabel('São Paulo'), 'sao-paulo');
-  assert.equal(sanitizeJiraLabel('Fluxo Ônibus (MVP!)'), 'fluxo-onibus-mvp');
+  assert.equal(sanitizeJiraLabel('Exemplo SaaS Ônibus (MVP!)'), 'fluxo-onibus-mvp');
   assert.equal(sanitizeJiraLabel('  --x--  '), 'x');
   assert.equal(sanitizeJiraLabel(''), null);
   assert.equal(sanitizeJiraLabel(null), null);
@@ -40,19 +40,19 @@ test('sanitizeJiraLabel: acentos, espaços e símbolos viram alfabeto Jira', () 
 test('featureSlugFromDir: remove prefixo de data do diretório da entrega', () => {
   assert.equal(featureSlugFromDir('/tmp/2026-10-27-fluxo-onibus-pesquisa-apis'), 'fluxo-onibus-pesquisa-apis');
   assert.equal(featureSlugFromDir('/tmp/harness'), 'harness');
-  assert.equal(featureSlugFromDir('/tmp/2026-10-27 Fluxo Ônibus'), '2026-10-27-fluxo-onibus');
+  assert.equal(featureSlugFromDir('/tmp/2026-10-27 Exemplo SaaS Ônibus'), '2026-10-27-fluxo-onibus');
   assert.equal(featureSlugFromDir(null), null);
 });
 
 test('resolveFeatureSlug: featureSlug explícito vence o derivado do diretório', () => {
-  assert.equal(resolveFeatureSlug({ featureSlug: 'Fluxo Ônibus' }, '/x/2026-01-01-outra'), 'fluxo-onibus');
+  assert.equal(resolveFeatureSlug({ featureSlug: 'Exemplo SaaS Ônibus' }, '/x/2026-01-01-outra'), 'fluxo-onibus');
   assert.equal(resolveFeatureSlug({}, '/x/2026-01-01-outra'), 'outra');
   assert.equal(resolveFeatureSlug(null, '/x/2026-01-01-outra'), 'outra');
 });
 
 test('cardLabels: feature-<slug> sempre presente, categorias mescladas e dedup', () => {
   const labels = cardLabels(
-    { featureSlug: 'Fluxo Ônibus', categories: ['Parking Lot'] },
+    { featureSlug: 'Exemplo SaaS Ônibus', categories: ['Parking Lot'] },
     '/x/2026-01-01-outra',
   );
   assert.deepEqual(labels, ['feature-fluxo-onibus', 'parking-lot']);
@@ -122,7 +122,7 @@ test('parseSyncFlags: sem --status, flag alheia não vira status (regressão)', 
 
 test('backlog init: grava featureSlug e categories sanitizados; status exibe', () => {
   const dir = tmpDir();
-  const r = runBacklog(['init', dir, '--feature', 'Fluxo Ônibus', '--versao', 'V1.0', '--categoria', 'Parking Lot', '--categoria', 'mobilidade']);
+  const r = runBacklog(['init', dir, '--feature', 'Exemplo SaaS Ônibus', '--versao', 'V1.0', '--categoria', 'Parking Lot', '--categoria', 'mobilidade']);
   assert.equal(r.code, 0, r.stderr);
   const data = JSON.parse(fs.readFileSync(path.join(dir, 'backlog.json'), 'utf8'));
   assert.equal(data.featureSlug, 'fluxo-onibus');

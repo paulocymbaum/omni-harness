@@ -1,0 +1,14 @@
+{
+  "id": "fluxo-domain",
+  "description": "Conteúdo de domínio do projeto Exemplo SaaS: skills temáticas e regra de layering. No modelo híbrido (R0), estes arquivos PERTENCEM ao hospedeiro e ficam instalados em .claude/skills e .claude/rules; este manifest declara o que o pacote cobre para o gate de consistência perfil-pacote-disco (quality/test/profile.test.mjs).",
+  "skills": [
+    "modelo-de-contas",
+    "identidade-e-privacidade",
+    "eventos",
+    "mapa-multimodal",
+    "ui-fluxo",
+    "contratos-backend",
+    "analytics-negocios"
+  ],
+  "rules": ["layering.md"]
+}

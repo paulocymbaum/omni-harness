@@ -1,14 +1,14 @@
 ---
 titulo: Harness / Agent Loop — documentação operacional completa
 atualizado: 2026-11-21
-fontes: [AGENTS.md], exemplo de host: quality/examples/fluxo/docs
+fontes: [AGENTS.md], exemplo de host: quality/examples/exemplo-saas/docs
 ---
 
 # Omni Harness — agent loop determinístico para agentes de código
 
-> Este projeto foi **apartado do monorepo Fluxo** (2026-11-22). O Fluxo hoje é apenas o **exemplo de hospedeiro** em [quality/examples/fluxo/](../examples/fluxo/README.md); o núcleo não conhece produto nenhum.
+> Este projeto foi **apartado do monorepo Exemplo SaaS** (2026-11-22). O Exemplo SaaS hoje é apenas o **exemplo de hospedeiro** em [quality/examples/exemplo-saas/](../examples/exemplo-saas/README.md); o núcleo não conhece produto nenhum.
 
-Este diretório documenta, por workflow, **como o sistema de agentes de código funciona de verdade**: os hooks que executam as regras, os gates que aprovam o que o agente entrega, o ciclo que gerencia entregas multi-tarefa, o espelho Jira, a ponte entre hosts e o versionamento/release. Cada doc traz peças com caminhos exatos, fluxo Mermaid, comandos reais, variáveis de ambiente, modos de falha e os testes que provam o comportamento. Arquitetura agnóstica e decisões: [docs/parking-lot/harness-agnostico.md](../parking-lot/harness-agnostico.md); limites dos gates: `QUALITY.md` quando o projeto o mantém (no exemplo: [quality/examples/fluxo/docs/QUALITY.md](../examples/fluxo/docs/QUALITY.md)); núcleo permanente: [AGENTS.md](../../AGENTS.md).
+Este diretório documenta, por workflow, **como o sistema de agentes de código funciona de verdade**: os hooks que executam as regras, os gates que aprovam o que o agente entrega, o ciclo que gerencia entregas multi-tarefa, o espelho Jira, a ponte entre hosts e o versionamento/release. Cada doc traz peças com caminhos exatos, fluxo Mermaid, comandos reais, variáveis de ambiente, modos de falha e os testes que provam o comportamento. Arquitetura agnóstica e decisões: [docs/parking-lot/harness-agnostico.md](../parking-lot/harness-agnostico.md); limites dos gates: `QUALITY.md` quando o projeto o mantém (no exemplo: [quality/examples/exemplo-saas/docs/QUALITY.md](../examples/exemplo-saas/docs/QUALITY.md)); núcleo permanente: [AGENTS.md](../../AGENTS.md).
 
 ## Mapa macro
 

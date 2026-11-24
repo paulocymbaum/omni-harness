@@ -1,7 +1,7 @@
 // Política Gitflow do projeto hospedeiro na camada do agente (harness); permanentes e matriz vêm
 // do perfil (R3). Funções puras: recebem nomes/flags parseadas e devolvem { decision, key, params }
 // (violação) ou { ok: true }. O parser reusa os utilitários de shell.mjs e não executa nada.
-// Fluxo: main ← release/x.y.z (pipeline) ← develop ⇄ feat|fix|chore ; hotfix nasce de main
+// Exemplo SaaS: main ← release/x.y.z (pipeline) ← develop ⇄ feat|fix|chore ; hotfix nasce de main
 // e volta para main + develop (backmerge).
 import { splitCommands, stripHeredocs, words } from './shell.mjs';
 import { PROFILE } from './profile.mjs';

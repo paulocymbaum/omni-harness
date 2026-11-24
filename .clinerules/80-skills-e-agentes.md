@@ -9,12 +9,12 @@ LEIA o arquivo indicado antes de editar o domínio correspondente (AGENTS.md §7
 
 | Tema | Quando ler |
 |---|---|
-| avaliar-qualidade | Avalia a qualidade do código afetado no monorepo Fluxo com gates determinísticos (tamanho, complexidade ciclo… |
+| avaliar-qualidade | Avalia a qualidade do código afetado no monorepo Exemplo SaaS com gates determinísticos (tamanho, complexidad… |
 | brainstorm-ideias | Brainstorm de ideias novas com documentação viva no parking lot. |
 | busca-de-codigo | Busca de código com o grafo do graphify (graphify query, path, explain, affected) em vez de Grep, Glob, grep … |
-| documentar-entrega | Como documentar e encerrar uma tarefa no Fluxo, com docs de domínio em docs/, plano e entrega em docs/entrega… |
+| documentar-entrega | Como documentar e encerrar uma tarefa no Exemplo SaaS, com docs de domínio em docs/, plano e entrega em docs/… |
 | entrega-em-ciclo | Orquestra o ciclo completo de uma entrega: investigação → gates → implementação → avaliação → compactação. |
-| gitflow | Gitflow determinístico do Fluxo na camada do agente (harness). |
+| gitflow | Gitflow determinístico do Exemplo SaaS na camada do agente (harness). |
 | implementar-tarefa | Como implementar uma tarefa do backlog de entrega em ciclo. |
 | liberar-portas | Encerra os processos que escutam uma ou várias portas TCP locais (emuladores, servidores de teste, API .NET, … |
 | modo-conciso | Respostas curtas no estilo "caveman" para gastar menos tokens de saída, sem perder precisão técnica. |
@@ -27,9 +27,9 @@ LEIA o arquivo indicado antes de editar o domínio correspondente (AGENTS.md §7
 | Papel | Quando usar |
 |---|---|
 | avaliador-de-entrega | Fase E do ciclo de entrega (avaliação final). |
-| documentador | Atualiza a documentação do Fluxo depois de uma implementação. |
+| documentador | Atualiza a documentação do Exemplo SaaS depois de uma implementação. |
 | eval-gate-author | Fase B do ciclo de entrega. |
 | eval-gate-fixer | Fase D do ciclo de entrega. |
 | implementador | Fase C do ciclo de entrega. |
 | investigador-de-spec | Fase A do ciclo de entrega. |
-| planejador | Rodada A de tarefas grandes no Fluxo. |
+| planejador | Rodada A de tarefas grandes no Exemplo SaaS. |

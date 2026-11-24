@@ -5,7 +5,7 @@ description: Orquestra o ciclo completo de uma entrega: investigação → gates
 
 # Entrega em ciclo
 
-O ciclo de entrega do Fluxo gerencia tarefas por meio do `backlog.json` em `docs/entregas/<slug>/`.
+O ciclo de entrega do Exemplo SaaS gerencia tarefas por meio do `backlog.json` em `docs/entregas/<slug>/`.
 
 ## Ponto de entrada — leia antes de qualquer ação
 

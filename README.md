@@ -2,7 +2,7 @@
 
 > **Infraestrutura neutra de qualidade e workflow para agentes de código**: o mesmo motor de gates determinísticos, os mesmos hooks e o mesmo contexto de sessão em qualquer IDE ou CLI — e o conhecimento do projeto num **perfil** que o time edita sem tocar em código. Stack e arquitetura do hospedeiro são **dado de configuração**, não acoplamento. **Node 22, zero dependências.**
 >
-> Nasceu dentro do monorepo Fluxo e foi apartado (2026-11-22) — o Fluxo hoje é apenas o exemplo de hospedeiro em [`quality/examples/fluxo/`](quality/examples/fluxo/README.md).
+> Nasceu dentro do monorepo Exemplo SaaS e foi apartado (2026-11-22) — o Exemplo SaaS hoje é apenas o exemplo de hospedeiro em [`quality/examples/exemplo-saas/`](quality/examples/exemplo-saas/README.md).
 
 ## Como funciona (a ideia em 4 pilares)
 
@@ -67,7 +67,7 @@ Hooks do RunStart listam ✔/✘ o que o hospedeiro tem (lizard, dart, flutter, 
 | `quality/` | Motor de qualidade (gates, risco, níveis), hooks dos dois hosts, ciclo de entrega em backlog, perfil do hospedeiro (`quality/profile/`), packs de política (`quality/packs/`), self-tests (`quality/test/`) |
 | `.claude/`, `.clinerules/` | Hooks e regras dos hosts Claude Code e Cline (mesma política, dois transportes) |
 | `scripts/harness-init.mjs` | Instalador: semeia o núcleo num repo hospedeiro novo |
-| `quality/examples/fluxo/` | **Exemplo completo** de um host multi-stack (perfil, overlay, skills, gates) — fora da suíte e do discovery |
+| `quality/examples/exemplo-saas/` | **Exemplo completo** de um host multi-stack (perfil, overlay, skills, gates) — fora da suíte e do discovery |
 | `docs/harness/` | Documentação operacional, um doc por workflow |
 | `docs/parking-lot/` | Desenho da arquitetura agnóstica (R0–R5) e do suporte Go/Rust/C++/Java |
 
@@ -86,7 +86,7 @@ Hooks do RunStart listam ✔/✘ o que o hospedeiro tem (lizard, dart, flutter, 
 
 Seleção no instalador: `--hosts claude-code,cline` (default) · `--hosts all` · `--hosts vscode,kiro`. `omni-harness doctor` mostra o que está instalado.
 
-**Paths sobrescritáveis:** estruturas proprietárias mudam rápido — os paths são **dado do hospedeiro**, não código: `quality/hosts.json` (formato: `{"hosts": {"<id>": {"carrier": "...", "integration": [...]}}}`) sobrescreve o registro default sem tocar a lib. Exemplo real no Fluxo: [`quality/examples/fluxo/hosts.json`](quality/examples/fluxo/hosts.json). Listar resolvidos: `omni-harness hosts [destino] [--json]`.
+**Paths sobrescritáveis:** estruturas proprietárias mudam rápido — os paths são **dado do hospedeiro**, não código: `quality/hosts.json` (formato: `{"hosts": {"<id>": {"carrier": "...", "integration": [...]}}}`) sobrescreve o registro default sem tocar a lib. Exemplo real no Exemplo SaaS: [`quality/examples/exemplo-saas/hosts.json`](quality/examples/exemplo-saas/hosts.json). Listar resolvidos: `omni-harness hosts [destino] [--json]`.
 
 ## Instalação e distribuição
 
@@ -112,12 +112,12 @@ node quality/run.mjs --tier rapido                         # motor de qualidade
 
 ## Perfis
 
-O perfil declara **tudo que varia por projeto**: camadas/stacks, fronteiras de arquitetura, métricas do ratchet, runners por stack (`runnerDotnet`, `runnerTs`, Flutter/Python; `runnerGo`/`runnerRust`/`runnerCpp`/`runnerJava` no desenho F1–F6), tracker (`jira`/`none`), gitflow (permanentes e matriz), política PII via packs, locale e overlay de prompts. Schema v1 validado por `quality/lib/profile.mjs`; gate em `quality/test/profile.test.mjs`. Exemplo completo de um host real em `quality/examples/fluxo/`.
+O perfil declara **tudo que varia por projeto**: camadas/stacks, fronteiras de arquitetura, métricas do ratchet, runners por stack (`runnerDotnet`, `runnerTs`, Flutter/Python; `runnerGo`/`runnerRust`/`runnerCpp`/`runnerJava` no desenho F1–F6), tracker (`jira`/`none`), gitflow (permanentes e matriz), política PII via packs, locale e overlay de prompts. Schema v1 validado por `quality/lib/profile.mjs`; gate em `quality/test/profile.test.mjs`. Exemplo completo de um host real em `quality/examples/exemplo-saas/`.
 
 Testes do motor que exercitam o exemplo (gates, risco, hooks, tracker):
 
 ```bash
-HARNESS_PROFILE_DIR="$PWD/quality/examples/fluxo/profile" node --test quality/test/gates.test.mjs quality/test/risk.test.mjs
+HARNESS_PROFILE_DIR="$PWD/quality/examples/exemplo-saas/profile" node --test quality/test/gates.test.mjs quality/test/risk.test.mjs
 ```
 
 ## Documentação

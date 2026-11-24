@@ -10,7 +10,7 @@ fontes: [.claude/skills/onboarding-assessment/SKILL.md, scripts/harness-init.mjs
 > entrevista o dono, pede os documentos mínimos e gera o plano que adapta perfil, camadas,
 > runners, fronteiras e skills de domínio ao projeto. O harness se adapta ao projeto — nunca o contrário.
 
-## Fluxo
+## Exemplo SaaS
 
 ```mermaid
 flowchart LR
