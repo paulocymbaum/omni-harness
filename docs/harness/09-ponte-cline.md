@@ -76,6 +76,10 @@ echo '{"tool_name":"Bash","tool_input":{"command":"git status"}}' | node quality
 
 `node --test quality/test/cline-bridge.test.mjs` (tradução e adaptação de respostas) e `node --test quality/test/hooks.test.mjs` (scripts comuns).
 
+## Limpeza de terminais antigos (rodando em todo hook)
+
+Todo evento do Cline (PreToolUse, PostToolUse, TaskStart/Resume/Complete) executa antes da delegação o [cline-terminal-cleanup.mjs](../../quality/hooks/cline-terminal-cleanup.mjs): encerra shells integrados filhos de `--type=ptyhost` com **mais de 1 h** e **sem processo filho vivo** (terminal em uso nunca morre). Silencioso e melhor-esforço; auditoria em `quality/.state/terminal-cleanup.log`. Variáveis: `CLINE_TERMINAL_CLEANUP=0` desliga · `CLINE_TERMINAL_MAX_AGE_SEC` muda o limite · `CLINE_KEEP_TERMINAL_PIDS` preserva PIDs.
+
 ## Fontes
 
 - [cline-bridge.mjs](../../quality/lib/cline-bridge.mjs) · [cline-pre-tool-use.mjs](../../quality/hooks/cline-pre-tool-use.mjs) · [cline-post-tool-use.mjs](../../quality/hooks/cline-post-tool-use.mjs) · [cline-lifecycle.mjs](../../quality/hooks/cline-lifecycle.mjs)

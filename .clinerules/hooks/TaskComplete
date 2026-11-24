@@ -4,6 +4,8 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
+// Limpeza de terminais > 1 h: roda em todo evento do Cline, silenciosa e melhor-esforço.
+try { spawnSync(process.execPath, [path.join(__dirname, '..', '..', 'quality', 'hooks', 'cline-terminal-cleanup.mjs')], { timeout: 15000 }); } catch { /* melhor-esforço */ }
 
 let out = '{}';
 try {

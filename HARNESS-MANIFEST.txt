@@ -1177,6 +1177,7 @@ quality/examples/exemplo-saas/skills/ui-fluxo/SKILL.md
 quality/hooks/cline-lifecycle.mjs
 quality/hooks/cline-post-tool-use.mjs
 quality/hooks/cline-pre-tool-use.mjs
+quality/hooks/cline-terminal-cleanup.mjs
 quality/hooks/git-pre-commit.mjs
 quality/hooks/install.mjs
 quality/hooks/post-bash-gitflow.mjs
