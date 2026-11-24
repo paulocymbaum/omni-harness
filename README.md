@@ -83,6 +83,8 @@ Hooks do RunStart listam ✔/✘ o que o hospedeiro tem (lizard, dart, flutter, 
 | **VS Code (Copilot)** | `.github/copilot-instructions.md` | instruções apontando AGENTS.md + gates via CLI |
 | **Antigravity (Google)** | `.antigravity/rules/omni-harness.md` + `AGENTS.md` | carrier de regras do workspace |
 | **Kiro (AWS)** | `.kiro/steering/omni-harness.md` + `AGENTS.md` | steering sempre-on |
+| **OpenCode** | `.opencode/plugin/omni-harness.js` + `AGENTS.md` | lê AGENTS.md nativamente; plugin bloqueia bash pelo pre-bash e pontua edições pelo post-edit |
+| **Kimi Code CLI (Moonshot)** | `AGENTS.md` | lê AGENTS.md nativamente; lifecycle hooks nativos ainda sem formato público — gates via CLI |
 
 Seleção no instalador: `--hosts claude-code,cline` (default) · `--hosts all` · `--hosts vscode,kiro`. `omni-harness doctor` mostra o que está instalado.
 

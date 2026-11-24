@@ -42,6 +42,10 @@ test('registro de provedores: hooks nativos × carriers × AGENTS.md', () => {
   assert.equal(by.vscode.carrier?.path, '.github/copilot-instructions.md');
   assert.equal(by.antigravity.carrier?.path, '.antigravity/rules/omni-harness.md');
   assert.equal(by.kiro.carrier?.path, '.kiro/steering/omni-harness.md');
+  assert.ok(by.opencode.integration.includes('.opencode/plugin/omni-harness.js'), 'opencode recebe o plugin de hooks');
+  assert.equal(by.opencode.carrier, undefined, 'opencode lê AGENTS.md da raiz');
+  assert.equal(by.kimicode.integration.length, 0, 'kimicode usa AGENTS.md da raiz (hooks nativos ainda sem formato público)');
+  assert.equal(by.kimicode.carrier, undefined, 'kimicode lê AGENTS.md nativo');
 });
 
 // ── Provedor: Claude Code ──────────────────────────────────────────────────────
@@ -142,4 +146,87 @@ for (const host of HOSTS) {
   }, { timeout: 90_000 });
 }
 
-// PARTE-2
+// ── Provedor: OpenCode ────────────────────────────────────────────────────────
+// O plugin é carregado PELO OpenCode (descoberto em .opencode/plugins); aqui validamos que o
+// módulo carrega em Node e que os hooks bash passam pelo pre-bash do harness (negação real).
+test('provedor opencode: plugin instalado, carregável, e bash passa pelo pre-bash', async () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'prov-opencode-'));
+  try {
+    initHost(tmp, 'opencode');
+    const pluginRel = path.join('.opencode', 'plugin', 'omni-harness.js');
+    assert.ok(fs.existsSync(path.join(tmp, pluginRel)), 'plugin instalado');
+    assert.match(fs.readFileSync(path.join(tmp, pluginRel), 'utf8'), /pre-bash\.mjs/, 'plugin fala com o pre-bash');
+    assert.match(fs.readFileSync(path.join(tmp, 'AGENTS.md'), 'utf8'), /quality\/profile/, 'AGENTS.md aponta o perfil');
+    // OpenCode carrega .js como ESM com seu loader; para o Node puro do teste, o tmp vira ESM.
+    fs.writeFileSync(path.join(tmp, 'package.json'), JSON.stringify({ type: 'module' }));
+    const mod = await import(path.join(tmp, pluginRel));
+    assert.equal(typeof mod.OmniHarness, 'function', 'plugin exporta a factory OmniHarness');
+    const hooks = await mod.OmniHarness({ directory: tmp });
+    assert.equal(typeof hooks['tool.execute.before'], 'function');
+    assert.equal(typeof hooks['tool.execute.after'], 'function');
+    assert.match(fs.readFileSync(path.join(tmp, 'AGENTS.md'), 'utf8'), /quality\/profile/, 'AGENTS.md aponta o perfil');
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+}, { timeout: 120_000 });
+
+test('opencode: before(bash) roda pre-bash e propaga negação; after(edit) roda post-edit e anexa veredito', async () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'prov-opencode-'));
+  try {
+    initHost(tmp, 'opencode');
+    fs.writeFileSync(path.join(tmp, 'package.json'), JSON.stringify({ type: 'module' }));
+    const chamadas = [];
+    // cópia em .mjs garante ESM no Node puro (o OpenCode usa o próprio loader para .js)
+    const copia = path.join(tmp, 'plugin-under-test.mjs');
+    fs.copyFileSync(path.join(tmp, '.opencode', 'plugin', 'omni-harness.js'), copia);
+    const mod = await import(copia);
+    const hooks = await mod.OmniHarness({
+      directory: tmp,
+      deps: {
+        rodar: (script, payload) => {
+          chamadas.push({ script, payload });
+          return script.endsWith('pre-bash.mjs')
+            ? { code: 2, stderr: 'REPROVADO: commit exige evidência', json: null }
+            : { code: 0, stdout: JSON.stringify({ systemMessage: 'tier rápido ok' }), json: { systemMessage: 'tier rápido ok' } };
+        },
+      },
+    });
+    // before(bash): pre-bash nega → a tool FALHA com o motivo (throw).
+    let falhou = null;
+    try {
+      await hooks['tool.execute.before']({ tool: 'bash' }, { args: { command: 'git commit -m x' } });
+    } catch (erro) {
+      falhou = erro.message;
+    }
+    assert.match(falhou ?? '', /REPROVADO: commit exige evidência/);
+    assert.ok(chamadas[0].script.endsWith('pre-bash.mjs'));
+    assert.equal(chamadas[0].payload.tool_name, 'Bash');
+    // after(edit): post-edit roda e o veredito vai para o metadata da tool.
+    const output = { args: { filePath: 'src/x.ts' }, metadata: {} };
+    await hooks['tool.execute.after']({ tool: 'edit' }, output);
+    assert.ok(chamadas.some((c) => c.script.endsWith('post-edit.mjs')));
+    assert.match(output.metadata.harness, /tier rápido ok/);
+    // fora das stacks do harness: nada roda.
+    chamadas.length = 0;
+    await hooks['tool.execute.before']({ tool: 'read' }, { args: {} });
+    assert.equal(chamadas.length, 0, 'read não passa pelo harness');
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+}, { timeout: 120_000 });
+
+// ── Provedor: Kimi Code CLI ───────────────────────────────────────────────────
+test('provedor kimicode: AGENTS.md da raiz é o transporte (sem hooks nativos instalados)', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'prov-kimicode-'));
+  try {
+    initHost(tmp, 'kimicode');
+    const agents = fs.readFileSync(path.join(tmp, 'AGENTS.md'), 'utf8');
+    assert.match(agents, /quality\/profile/, 'AGENTS.md aponta o perfil do hospedeiro');
+    assert.match(agents, /node quality\/run\.mjs/, 'AGENTS.md ensina rodar o motor');
+    assert.equal(fs.existsSync(path.join(tmp, '.kimi')), false, 'nada instalado em .kimi enquanto o formato de hooks não é público');
+    const motor = spawnSync(process.execPath, [path.join(tmp, 'quality', 'run.mjs'), '--tier', 'rapido'], { cwd: tmp, encoding: 'utf8', timeout: 120_000 });
+    assert.ok(motor.status === 0 || motor.status === 2, `motor no hospedeiro kimicode falhou inesperadamente: ${motor.stdout}\n${motor.stderr}`);
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+}, { timeout: 150_000 });

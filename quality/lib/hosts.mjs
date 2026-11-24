@@ -57,6 +57,18 @@ export const HOSTS = [
     integration: [],
     nota: 'steering sempre-on; specs do Kiro continuam no fluxo do hospedeiro',
   },
+  {
+    id: 'opencode',
+    nome: 'OpenCode',
+    integration: ['.opencode/plugin/omni-harness.js'],
+    nota: 'lê AGENTS.md nativamente; plugin descoberto em .opencode/plugins bloqueia bash via pre-bash e pontua edições com o post-edit',
+  },
+  {
+    id: 'kimicode',
+    nome: 'Kimi Code CLI (Moonshot)',
+    integration: [],
+    nota: 'lê AGENTS.md da raiz; lifecycle hooks nativos existem, mas o formato público ainda não está estável — gates via CLI',
+  },
 ];
 
 export const DEFAULT_HOSTS = ['claude-code', 'cline'];

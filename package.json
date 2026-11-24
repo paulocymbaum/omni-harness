@@ -32,6 +32,8 @@
     ".claude/agents/**",
     ".claude/rules/**",
     ".claude/skills/**",
+    ".opencode/**",
+    ".claude/skills/**",
     ".clinerules/hooks/**",
     "docs/harness/**",
     ".gitignore"

@@ -777,6 +777,7 @@ Excluido: .state/ (runtime), reports/, node_modules, .git, TODO conteúdo do hos
 .git/refs/remotes/origin/main
 
 .gitignore
+.opencode/plugin/omni-harness.js
 AGENTS.md
 CLAUDE.md
 CODE_OF_CONDUCT.md

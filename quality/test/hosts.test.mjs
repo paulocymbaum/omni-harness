@@ -21,8 +21,8 @@ function init(dest, hostsSpec) {
   assert.equal(r.status, 0, `init --hosts ${hostsSpec ?? '(default)'} falhou: ${r.stderr}`);
 }
 
-test('registro: 6 hosts com ids únicos; default = claude-code + cline', () => {
-  assert.deepEqual(ALL_IDS.sort(), ['antigravity', 'claude-code', 'cline', 'codex', 'kiro', 'vscode'].sort());
+test('registro: 8 hosts com ids únicos; default = claude-code + cline', () => {
+  assert.deepEqual(ALL_IDS.sort(), ['antigravity', 'claude-code', 'cline', 'codex', 'kimicode', 'kiro', 'opencode', 'vscode'].sort());
   assert.deepEqual(DEFAULT_HOSTS, ['claude-code', 'cline']);
   for (const h of HOSTS) assert.ok(h.nome && h.nota, `host ${h.id} sem nome/nota`);
 });
