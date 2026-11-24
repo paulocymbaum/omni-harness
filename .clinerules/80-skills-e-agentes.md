@@ -18,6 +18,7 @@ LEIA o arquivo indicado antes de editar o domínio correspondente (AGENTS.md §7
 | implementar-tarefa | Como implementar uma tarefa do backlog de entrega em ciclo. |
 | liberar-portas | Encerra os processos que escutam uma ou várias portas TCP locais (emuladores, servidores de teste, API .NET, … |
 | modo-conciso | Respostas curtas no estilo "caveman" para gastar menos tokens de saída, sem perder precisão técnica. |
+| onboarding-assessment | >- |
 | product-owner | Triage e gestão do backlog de entrega. |
 | revisar-entrega | Revisão técnica ao final do loop de backlog. |
 

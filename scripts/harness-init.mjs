@@ -44,8 +44,8 @@ console.log(`hosts: ${hostParsed.ids.join(', ')}`);
 const BASE_DIRS = [
   'quality/lib', 'quality/hooks', 'quality/agents', 'quality/delivery', 'quality/packs',
   'quality/test', 'quality/version', 'quality/tools', 'quality/config',
-  'scripts/tracker',
-  '.claude/rules', '.claude/agents', 'docs/harness',
+  'scripts/tracker', 'scripts/dev',
+  '.claude/rules', '.claude/agents', '.claude/skills', 'docs/harness',
 ];
 const BASE_FILES = [
   'quality/run.mjs', 'quality/baseline.mjs', 'quality/messages.pt-BR.json',
@@ -115,5 +115,6 @@ console.log(`✓ sync-clinerules: ${sync.status === 0 ? 'em sincronia' : `falhou
 console.log('Próximos passos:');
 console.log('  1. cd ' + DST + ' && (git init, se ainda não for um repo)');
 console.log('  2. cd quality/tools && npm ci        # Biome para o lint do autofix');
-console.log('  3. Edite quality/profile/' + nome + '.json (camadas, fronteiras, tracker) e .claude/PROJETO.md (overlay)');
-console.log('  4. node quality/agents/sync-clinerules.mjs && node --test quality/test/profile.test.mjs');
+console.log('  3. SKILL onboarding-assessment: leitura do repo + entrevista + documentos → gera o PLANO-ADAPTACAO (adaptar o harness ao projeto)');
+console.log('  4. Execute o plano aprovado: perfil (camadas, runners, fronteiras), skills de domínio, tracker/gitflow');
+console.log('  5. Edite quality/profile/' + nome + '.json e .claude/PROJETO.md conforme o plano; sync + testes');

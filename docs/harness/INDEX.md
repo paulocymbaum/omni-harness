@@ -48,6 +48,7 @@ flowchart LR
 | [10-motor-de-qualidade](10-motor-de-qualidade.md) | CLI do motor, matriz de risco, níveis, evidência e pre-commit |
 | [11-agentes-e-skills](11-agentes-e-skills.md) | Os 8 papéis, o contrato de delegação e o handoff |
 | [12-referencia-rapida](12-referencia-rapida.md) | Comandos, variáveis de ambiente, arquivos de estado e índice por sintoma |
+| [13-onboarding](13-onboarding.md) | Como o harness aprende o projeto: recon, entrevista, documentos e o plano de adaptação |
 
 ## Glossário curto
 
