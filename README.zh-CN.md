@@ -17,6 +17,37 @@
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="MIT License">
 </p>
 
+> **🤖 智能体 PROMPT — 将以下内容复制粘贴到任何编程智能体（Claude Code、Cline、OpenCode、Kimi Code、Codex…）中，以安装并将 harness 适配到本项目（说明为英文，通用格式）：**
+
+```text
+GOAL: set up the Omni Harness in a coding-agent host and adapt it to this project.
+
+1. INSTALL
+   git clone https://github.com/paulocymbaum/omni-harness.git /tmp/omni-harness
+   node /tmp/omni-harness/scripts/harness-init.mjs <PROJECT_PATH> --nome <PROJECT_NAME> --hosts <THIS_AGENT>
+   # <PROJECT_PATH> = my current project repo; <THIS_AGENT> = the agent you are running in
+   # (claude-code | cline | codex | opencode | kimicode | vscode | antigravity | kiro | all)
+   cd <PROJECT_PATH>/quality/tools && npm ci
+
+2. VALIDATE
+   node quality/agents/sync-clinerules.mjs
+   node --test quality/test/profile.test.mjs
+   node quality/run.mjs --tier rapido
+
+3. ONBOARDING (adapt the harness to this project)
+   Run the skill "onboarding-assessment": read this repository, interview me in short blocks,
+   collect the minimum product documents, and produce quality/onboarding/PLANO-ADAPTACAO.md
+   (target profile: layers, runners per stack, boundaries-as-gates, domain skills, tracker/gitflow).
+   Present the plan and WAIT for my approval before changing any file.
+
+4. EXECUTE
+   After my approval, execute the plan one step at a time (one artifact per step), keeping
+   "node quality/run.mjs --tier rapido" green between steps, until the plan is fully consumed.
+
+RULES: fail open (missing tool = warn, never crash); no secrets or PII in any file or commit;
+ask me before anything destructive; do not edit files outside the plan without asking.
+```
+
 > **LANGUAGE / IDIOMA / 语言:** [English](README.md) · [Português (BR)](README.pt-BR.md) · [Español](README.es.md) · [简体中文](README.zh-CN.md) — **以英文版为准。**
 
 > **面向编程智能体的中立质量与工作流基础设施**：在任何 IDE 或 CLI 上，使用相同的确定性 gate 引擎、相同的 hooks 和相同的会话上下文——而项目知识保存在团队无需改代码即可编辑的**配置档案（profile）**中。宿主项目的栈与架构是**配置数据**，不是耦合。**Node 22，零依赖。**

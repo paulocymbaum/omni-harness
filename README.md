@@ -17,6 +17,37 @@
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="MIT License">
 </p>
 
+> **🤖 AGENT PROMPT — copy & paste this into any coding agent (Claude Code, Cline, OpenCode, Kimi Code, Codex…) to install and adapt the harness to this project:**
+
+```text
+GOAL: set up the Omni Harness in a coding-agent host and adapt it to this project.
+
+1. INSTALL
+   git clone https://github.com/paulocymbaum/omni-harness.git /tmp/omni-harness
+   node /tmp/omni-harness/scripts/harness-init.mjs <PROJECT_PATH> --nome <PROJECT_NAME> --hosts <THIS_AGENT>
+   # <PROJECT_PATH> = my current project repo; <THIS_AGENT> = the agent you are running in
+   # (claude-code | cline | codex | opencode | kimicode | vscode | antigravity | kiro | all)
+   cd <PROJECT_PATH>/quality/tools && npm ci
+
+2. VALIDATE
+   node quality/agents/sync-clinerules.mjs
+   node --test quality/test/profile.test.mjs
+   node quality/run.mjs --tier rapido
+
+3. ONBOARDING (adapt the harness to this project)
+   Run the skill "onboarding-assessment": read this repository, interview me in short blocks,
+   collect the minimum product documents, and produce quality/onboarding/PLANO-ADAPTACAO.md
+   (target profile: layers, runners per stack, boundaries-as-gates, domain skills, tracker/gitflow).
+   Present the plan and WAIT for my approval before changing any file.
+
+4. EXECUTE
+   After my approval, execute the plan one step at a time (one artifact per step), keeping
+   "node quality/run.mjs --tier rapido" green between steps, until the plan is fully consumed.
+
+RULES: fail open (missing tool = warn, never crash); no secrets or PII in any file or commit;
+ask me before anything destructive; do not edit files outside the plan without asking.
+```
+
 > **LANGUAGE / IDIOMA / 语言:** [English](README.md) · [Português (BR)](README.pt-BR.md) · [Español](README.es.md) · [简体中文](README.zh-CN.md) — **English is the reference version.**
 
 > **Neutral quality and workflow infrastructure for coding agents**: the same deterministic gate engine, the same hooks and the same session context on any IDE or CLI — and the project knowledge in a **profile** the team edits without touching code. The host's stack and architecture are **configuration data**, not coupling. **Node 22, zero dependencies.**

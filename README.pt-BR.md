@@ -17,6 +17,37 @@
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="MIT License">
 </p>
 
+> **🤖 PROMPT PARA AGENTE — copie e cole em qualquer agente (Claude Code, Cline, OpenCode, Kimi Code, Codex…) para instalar e adaptar o harness a este projeto (instruções em inglês, formato universal para agentes):**
+
+```text
+GOAL: set up the Omni Harness in a coding-agent host and adapt it to this project.
+
+1. INSTALL
+   git clone https://github.com/paulocymbaum/omni-harness.git /tmp/omni-harness
+   node /tmp/omni-harness/scripts/harness-init.mjs <PROJECT_PATH> --nome <PROJECT_NAME> --hosts <THIS_AGENT>
+   # <PROJECT_PATH> = my current project repo; <THIS_AGENT> = the agent you are running in
+   # (claude-code | cline | codex | opencode | kimicode | vscode | antigravity | kiro | all)
+   cd <PROJECT_PATH>/quality/tools && npm ci
+
+2. VALIDATE
+   node quality/agents/sync-clinerules.mjs
+   node --test quality/test/profile.test.mjs
+   node quality/run.mjs --tier rapido
+
+3. ONBOARDING (adapt the harness to this project)
+   Run the skill "onboarding-assessment": read this repository, interview me in short blocks,
+   collect the minimum product documents, and produce quality/onboarding/PLANO-ADAPTACAO.md
+   (target profile: layers, runners per stack, boundaries-as-gates, domain skills, tracker/gitflow).
+   Present the plan and WAIT for my approval before changing any file.
+
+4. EXECUTE
+   After my approval, execute the plan one step at a time (one artifact per step), keeping
+   "node quality/run.mjs --tier rapido" green between steps, until the plan is fully consumed.
+
+RULES: fail open (missing tool = warn, never crash); no secrets or PII in any file or commit;
+ask me before anything destructive; do not edit files outside the plan without asking.
+```
+
 > **LANGUAGE / IDIOMA / 语言:** [English](README.md) · [Português (BR)](README.pt-BR.md) · [Español](README.es.md) · [简体中文](README.zh-CN.md) — **a versão em inglês é a referência.**
 
 > **Infraestrutura neutra de qualidade e workflow para agentes de código**: o mesmo motor de gates determinísticos, os mesmos hooks e o mesmo contexto de sessão em qualquer IDE ou CLI — e o conhecimento do projeto num **perfil** que o time edita sem tocar em código. Stack e arquitetura do hospedeiro são **dado de configuração**, não acoplamento. **Node 22, zero dependências.**
