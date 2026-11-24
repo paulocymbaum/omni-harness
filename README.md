@@ -1,137 +1,137 @@
-# Omni Harness — núcleo agnóstico de agentes de código
+# Omni Harness — stack-agnostic harness for coding agents
 
-> **Infraestrutura neutra de qualidade e workflow para agentes de código**: o mesmo motor de gates determinísticos, os mesmos hooks e o mesmo contexto de sessão em qualquer IDE ou CLI — e o conhecimento do projeto num **perfil** que o time edita sem tocar em código. Stack e arquitetura do hospedeiro são **dado de configuração**, não acoplamento. **Node 22, zero dependências.**
+> **LANGUAGE / IDIOMA / 语言:** [English](README.md) · [Português (BR)](README.pt-BR.md) · [Español](README.es.md) · [简体中文](README.zh-CN.md) — **English is the reference version.**
+
+> **Neutral quality and workflow infrastructure for coding agents**: the same deterministic gate engine, the same hooks and the same session context on any IDE or CLI — and the project knowledge in a **profile** the team edits without touching code. The host's stack and architecture are **configuration data**, not coupling. **Node 22, zero dependencies.**
 >
-> Nasceu dentro do monorepo Exemplo SaaS e foi apartado (2026-11-22) — o Exemplo SaaS hoje é apenas o exemplo de hospedeiro em [`quality/examples/exemplo-saas/`](quality/examples/exemplo-saas/README.md).
+> It was born inside the Exemplo SaaS monorepo and split out (2026-11-22) — Exemplo SaaS is now just the sample host in [`quality/examples/exemplo-saas/`](quality/examples/exemplo-saas/README.md).
 
-## Como funciona (a ideia em 4 pilares)
+## How it works (the idea in 4 pillars)
 
-1. **Motor determinístico** — `node quality/run.mjs` roda gates testáveis (`quality/gates/`) em três níveis: **rápido** (a cada edição), **rotina** (ao concluir) e **completo** (risco alto). Ferramenta ausente no hospedeiro = aviso aberto com impacto e ação; nunca silêncio, nunca crash.
-2. **Perfil do hospedeiro** (`quality/profile/`) — tudo que varia por projeto: camadas/stacks, fronteiras de arquitetura, runners, thresholds, tracker, gitflow, política PII (packs), locale e overlay de prompts. Schema v1 validado (`quality/lib/profile.mjs`).
-3. **Multi-host** — `harness-init` instala a integração certa para cada agente: hooks nativos (Claude Code, Cline) ou carriers de instruções (Codex, Copilot, Antigravity, Kiro). Mesma política, dois transportes.
-4. **Ciclo de entrega** — investigação → gates que provam a falha → implementação → avaliação, com backlog versionado e espelho em tracker (Jira ou `none`).
+1. **Deterministic engine** — `node quality/run.mjs` runs testable gates (`quality/gates/`) in three tiers: **fast** (every edit), **routine** (on delivery) and **full** (high risk). Missing tool on the host = open warning with impact and action; never silence, never crash.
+2. **Host profile** (`quality/profile/`) — everything that varies per project: layers/stacks, architecture boundaries, runners, thresholds, tracker, gitflow, PII policy (packs), locale and prompt overlay. Schema v1 validated (`quality/lib/profile.mjs`).
+3. **Multi-host** — `harness-init` installs the right integration per agent: native hooks (Claude Code, Cline) or instruction carriers (Codex, Copilot, Antigravity, Kiro, OpenCode, Kimi Code). Same policy, two transports.
+4. **Delivery cycle** — investigation → gates that prove the failure → implementation → evaluation, with a versioned backlog mirrored to a tracker (Jira or `none`).
 
-4. **Ciclo de entrega** — investigação → gates que provam a falha → implementação → avaliação, com backlog versionado e espelho em tracker (Jira ou `none`).
+## Upstream and Downstream
 
-## Upstream e Downstream
-
-O harness atua nos dois lados do agente: **injeta contexto estruturado antes** (o conhecimento do produto mora no perfil, não na memória do agente) e **valida/executa depois** (gates com veredito e evidência por hash). Falha aberta nos dois lados: problema do harness volta como aviso com caminho e ação — nunca derruba o trabalho em silêncio.
+The harness works on both sides of the agent: it **injects structured context before** (product knowledge lives in the profile, not in the agent's memory) and **validates/executes after** (gates with verdicts and hash-based evidence). Fail-open on both sides: a harness problem comes back as a warning with path and action — it never kills your work silently.
 
 ```mermaid
 flowchart LR
-  subgraph UP["UPSTREAM — o que chega ao agente antes de escrever"]
-    ONB["onboarding-assessment<br/>recon + entrevista + documentos<br/>→ plano de adaptação"] --> PERF
-    PERF["perfil do projeto (schema v1)<br/>camadas · runners · boundaries<br/>tracker · gitflow · packs PII"] --> CTX["session-start<br/>injeção de contexto"]
-    SK["skills de domínio<br/>+ overlay PROJETO.md"] --> CTX
-    BL["spec/plano da entrega<br/>(backlog da entrega corrente)"] --> CTX
+  subgraph UP["UPSTREAM — what reaches the agent before it writes"]
+    ONB["onboarding-assessment<br/>repo recon + interview + documents<br/>→ adaptation plan"] --> PERF
+    PERF["project profile (schema v1)<br/>layers · runners · boundaries<br/>tracker · gitflow · PII packs"] --> CTX["session-start<br/>context injection"]
+    SK["domain skills<br/>+ PROJETO.md overlay"] --> CTX
+    BL["delivery spec/plan<br/>(current delivery backlog)"] --> CTX
   end
-  CTX --> AGT["agente edita"]
+  CTX --> AGT["agent edits"]
   AGT --> DOWN
-  subgraph DOWN["DOWNSTREAM — o que o harness executa e valida depois"]
-    ED["post-edit: tier rápido em lote<br/>(lizard/dart format agregados) + autofix<br/>+ guardas: segredos · supressões · fronteiras"] --> EV["evidência por hash<br/>código mudou = evidência invalida"]
-    EV --> CIC["entrega em ciclo<br/>gates antes do código · eval · homologação"] --> TRK["tracker espelhado<br/>(Jira ou none)"]
-    CIC --> REL["release local<br/>bump por camada · billing probe"]
+  subgraph DOWN["DOWNSTREAM — what the harness runs and validates after"]
+    ED["post-edit: fast tier in batches<br/>(aggregated lizard/dart format) + autofix<br/>+ guards: secrets · suppressions · boundaries"] --> EV["hash-based evidence<br/>code changed = evidence void"]
+    EV --> CIC["delivery cycle<br/>gates before code · eval · release acceptance"] --> TRK["mirrored tracker<br/>(Jira or none)"]
+    CIC --> REL["local release<br/>per-layer bump · billing probe"]
   end
 ```
 
 | | Upstream | Downstream |
 |---|---|---|
-| **Pergunta que responde** | "O agente sabe o que o projeto espera?" | "O que o agente entregou passa nos gates?" |
-| **Fonte da verdade** | perfil + overlay + skills de domínio + spec da entrega | gates determinísticos + evidência por hash |
-| **Quem roda** | `harness-init` → `onboarding-assessment` → session-start | `post-edit` → `quality/run.mjs` por tier → ciclo de entrega → release |
-| **Se algo falta** | onboarding gera plano (`a definir` com default) | aviso aberto (`tool.missing`/`tool.delegated`) ou reprovação com tail |
+| **Question it answers** | "Does the agent know what the project expects?" | "Does what the agent delivered pass the gates?" |
+| **Source of truth** | profile + overlay + domain skills + delivery spec | deterministic gates + hash-based evidence |
+| **Who runs it** | `harness-init` → `onboarding-assessment` → session-start | `post-edit` → `quality/run.mjs` per tier → delivery cycle → release |
+| **If something is missing** | onboarding produces a plan (`to define` with harness default) | open warning (`tool.missing`/`tool.delegated`) or rejection with tail |
 
 ## Stacks
 
-O motor é agnóstico: **runner é mecanismo no núcleo; qual stack, onde ela vive e como o projeto a invoca é dado do perfil.** Runner sem config no perfil fica inerte — repo sem a stack não paga nada.
+The engine is agnostic: **the runner is core mechanism; which stack, where it lives and how the project invokes it is profile data.** A runner without profile config stays inert — a repo without the stack pays nothing.
 
-| Stack | Runner | Gates hoje |
+| Stack | Runner | Gates today |
 |---|---|---|
-| **Dart / Flutter** | `runners/flutter.mjs` | `dart analyze` arquivo a arquivo (foco em linhas adicionadas), testes relacionados por feature, suíte completa no nível completo |
-| **TypeScript / Node** | `runners/typescript.mjs` (pnpm) | lint/tsc, testes relacionados, supply chain |
-| **C# / .NET** | `runners/backend.mjs` (`runnerDotnet`) | `dotnet build -warnaserror` + `dotnet test --filter` + ambiente dedicado; `dotnet format` e `list package --vulnerable` opt-in |
-| **Python** | via uv | toolchain detectada (`uv`), falha aberta |
-| **Go** | `runners/go.mjs` | `gofmt -l` + `go vet` (foco em linhas adicionadas) + testes por pacote alterado; suíte `-race` no completo; golangci-lint opt-in |
-| **Rust** | `runners/rust.mjs` | `cargo fmt --check` + `clippy --all-targets` + teste por manifest do workspace; `--all-features` e `cargo audit` no completo |
-| **C++** | `runners/cpp.mjs` | clang-format dry-run + configure/build CMake + CTest; clang-tidy arquivo a arquivo (opt-in); sanitizers ASan/UBSan via preset no completo |
-| **Java** | `runners/java.mjs` | wrapper primeiro (`./mvnw`/`./gradlew`), build/test; plugins opt-in (spotless/checkstyle/pmd/spotbugs); módulos Maven via `-pl` |
+| **Dart / Flutter** | `runners/flutter.mjs` | per-file `dart analyze` (focus on added lines), feature-related tests, full suite at full tier |
+| **TypeScript / Node** | `runners/typescript.mjs` (pnpm) | lint/tsc, related tests, supply chain |
+| **C# / .NET** | `runners/backend.mjs` (`runnerDotnet`) | `dotnet build -warnaserror` + `dotnet test --filter` + dedicated environment; opt-in `dotnet format` and `list package --vulnerable` |
+| **Python** | via uv | toolchain detected (`uv`), fail-open |
+| **Go** | `runners/go.mjs` | `gofmt -l` + `go vet` (focus on added lines) + tests per changed package; `-race` suite at full tier; opt-in golangci-lint |
+| **Rust** | `runners/rust.mjs` | `cargo fmt --check` + `clippy --all-targets` + tests per workspace manifest; `--all-features` and `cargo audit` at full tier |
+| **C++** | `runners/cpp.mjs` | clang-format dry-run + CMake configure/build + CTest; per-file clang-tidy (opt-in); ASan/UBSan sanitizers via preset at full tier |
+| **Java** | `runners/java.mjs` | wrapper first (`./mvnw`/`./gradlew`), build/test; opt-in plugins (spotless/checkstyle/pmd/spotbugs); Maven modules via `-pl` |
 
-Camadas novas ligam o runner: o perfil do hospedeiro declara `{ id: 'go', globs: ['**/*.go'] }` (idem `rust`/`cpp`/`java`) e o config `runnerGo`/`runnerRust`/`runnerCpp`/`runnerJava` (`root`, `packages`, `race`, `golangci`, `clippyArgs`, `audit`, `presets`, `tidy`, `tools`, `modules`, `workflow`). Parsers e montagens de comando são funções puras com self-tests (`quality/test/runners-stacks.test.mjs`) — smoke real só quando `which()` acha a tool; desenho e libs de teste recomendadas em [`docs/parking-lot/runners-go-rust-cpp-csharp-java.md`](docs/parking-lot/runners-go-rust-cpp-csharp-java.md).
+New layers bind the runner: the host profile declares `{ id: 'go', globs: ['**/*.go'] }` (same for `rust`/`cpp`/`java`) and config `runnerGo`/`runnerRust`/`runnerCpp`/`runnerJava` (`root`, `packages`, `race`, `golangci`, `clippyArgs`, `audit`, `presets`, `tidy`, `tools`, `modules`, `workflow`). Parsers and command builders are pure functions with self-tests (`quality/test/runners-stacks.test.mjs`) — real smoke only when `which()` finds the tool; design and recommended test libraries in [`docs/parking-lot/runners-go-rust-cpp-csharp-java.md`](docs/parking-lot/runners-go-rust-cpp-csharp-java.md).
 
-Hooks do RunStart listam ✔/✘ o que o hospedeiro tem (lizard, dart, flutter, dotnet, pnpm, uv, docker, firebase, osv-scanner…) — **IGNORADO não é aprovação**: o gate correspondente fica "não medido" com aviso.
+RunStart hooks list ✔/✘ what the host has (lizard, dart, flutter, dotnet, pnpm, uv, docker, firebase, osv-scanner…) — **IGNORED is not approval**: the corresponding gate stays "unmeasured" with a warning.
 
-## O que há aqui
+## What is in here
 
-| Caminho | Conteúdo |
+| Path | Contents |
 |---|---|
-| `quality/` | Motor de qualidade (gates, risco, níveis), hooks dos dois hosts, ciclo de entrega em backlog, perfil do hospedeiro (`quality/profile/`), packs de política (`quality/packs/`), self-tests (`quality/test/`) |
-| `.claude/`, `.clinerules/` | Hooks e regras dos hosts Claude Code e Cline (mesma política, dois transportes) |
-| `scripts/harness-init.mjs` | Instalador: semeia o núcleo num repo hospedeiro novo |
-| `quality/examples/exemplo-saas/` | **Exemplo completo** de um host multi-stack (perfil, overlay, skills, gates) — fora da suíte e do discovery |
-| `docs/harness/` | Documentação operacional, um doc por workflow |
-| `docs/parking-lot/` | Desenho da arquitetura agnóstica (R0–R5) e do suporte Go/Rust/C++/Java |
+| `quality/` | Quality engine (gates, risk, tiers), hooks of both hosts, delivery cycle in backlog, host profile (`quality/profile/`), policy packs (`quality/packs/`), self-tests (`quality/test/`) |
+| `.claude/`, `.clinerules/` | Hooks and rules of the Claude Code and Cline hosts (same policy, two transports) |
+| `scripts/harness-init.mjs` | Installer: seeds the core into a new host repo |
+| `quality/examples/exemplo-saas/` | **Full sample** of a multi-stack host (profile, overlay, skills, gates) — outside the suite and discovery |
+| `docs/harness/` | Operational docs, one per workflow |
+| `docs/parking-lot/` | Agnostic architecture design (R0–R5) and the Go/Rust/C++/Java support plan |
 
-## Hosts de agente suportados
+## Supported agent hosts
 
-`harness-init` instala a integração certa para cada host — hooks nativos onde existem, carrier de instruções onde o host só lê prompt:
+`harness-init` installs the right integration per host — native hooks where they exist, instruction carriers where the host only reads a prompt:
 
-| Host | Estrutura instalada | Como o harness roda |
+| Host | Installed structure | How the harness runs |
 |---|---|---|
-| **Claude Code** | `.claude/settings.json` + `.claude/hooks/` + regras/agents | hooks nativos (SessionStart/Pre/Post/Stop/SubagentStop) |
-| **Cline** | `.clinerules/hooks/` + regras espelhadas `.clinerules/*.md` | hooks finos delegando ao `cline-bridge` |
-| **Codex CLI** | `AGENTS.md` da raiz | padrão cross-tool; gates via CLI (`node quality/run.mjs`) |
-| **VS Code (Copilot)** | `.github/copilot-instructions.md` | instruções apontando AGENTS.md + gates via CLI |
-| **Antigravity (Google)** | `.antigravity/rules/omni-harness.md` + `AGENTS.md` | carrier de regras do workspace |
-| **Kiro (AWS)** | `.kiro/steering/omni-harness.md` + `AGENTS.md` | steering sempre-on |
-| **OpenCode** | `.opencode/plugin/omni-harness.js` + `AGENTS.md` | lê AGENTS.md nativamente; plugin bloqueia bash pelo pre-bash e pontua edições pelo post-edit |
-| **Kimi Code CLI (Moonshot)** | `AGENTS.md` | lê AGENTS.md nativamente; lifecycle hooks nativos ainda sem formato público — gates via CLI |
+| **Claude Code** | `.claude/settings.json` + `.claude/hooks/` + rules/agents | native hooks (SessionStart/Pre/Post/Stop/SubagentStop) |
+| **Cline** | `.clinerules/hooks/` + mirrored rules `.clinerules/*.md` | thin hooks delegating to `cline-bridge` |
+| **Codex CLI** | root `AGENTS.md` | cross-tool standard; gates via CLI (`node quality/run.mjs`) |
+| **VS Code (Copilot)** | `.github/copilot-instructions.md` | instructions pointing to AGENTS.md + gates via CLI |
+| **Antigravity (Google)** | `.antigravity/rules/omni-harness.md` + `AGENTS.md` | workspace rules carrier |
+| **Kiro (AWS)** | `.kiro/steering/omni-harness.md` + `AGENTS.md` | always-on steering |
+| **OpenCode** | `.opencode/plugin/omni-harness.js` + `AGENTS.md` | reads AGENTS.md natively; plugin blocks bash via pre-bash and scores edits via post-edit |
+| **Kimi Code CLI (Moonshot)** | `AGENTS.md` | reads AGENTS.md natively; native lifecycle hooks still without public format — gates via CLI |
 
-Seleção no instalador: `--hosts claude-code,cline` (default) · `--hosts all` · `--hosts vscode,kiro`. `omni-harness doctor` mostra o que está instalado.
+Installer selection: `--hosts claude-code,cline` (default) · `--hosts all` · `--hosts vscode,kiro`. `omni-harness doctor` shows what is installed.
 
-**Paths sobrescritáveis:** estruturas proprietárias mudam rápido — os paths são **dado do hospedeiro**, não código: `quality/hosts.json` (formato: `{"hosts": {"<id>": {"carrier": "...", "integration": [...]}}}`) sobrescreve o registro default sem tocar a lib. Exemplo real no Exemplo SaaS: [`quality/examples/exemplo-saas/hosts.json`](quality/examples/exemplo-saas/hosts.json). Listar resolvidos: `omni-harness hosts [destino] [--json]`.
+**Overridable paths:** vendor structures change fast — paths are **host data**, not code: `quality/hosts.json` (format: `{"hosts": {"<id>": {"carrier": "...", "integration": [...]}}}`) overrides the default registry without touching the lib. Live example in Exemplo SaaS: [`quality/examples/exemplo-saas/hosts.json`](quality/examples/exemplo-saas/hosts.json). List resolved: `omni-harness hosts [destino] [--json]`.
 
-## Instalação e distribuição
+## Installation and distribution
 
-O harness é **Node 22, zero dependências** — o canal natural é npm/pnpx. `pip`/`uv` não se aplicam (não é Python).
+The harness is **Node 22, zero dependencies** — the natural channel is npm/pnpx. `pip`/`uv` do not apply (not Python).
 
-| Canal | Comando | Estado |
+| Channel | Command | Status |
 |---|---|---|
-| **npm / pnpm dlx** (primário) | `pnpm dlx omni-harness init <destino> --nome <projeto>` | requer `npm publish` (package.json pronto na raiz; `files` já permite exemplo fora e núcleo dentro) |
-| **git / curl** (sem registry, hoje) | `bash install.sh <destino> --nome <projeto>` a partir de uma cópia; com GitHub Releases: `RELEASE_URL=<tarball> curl -fsSL <url>/install.sh \| bash -s -- <destino>` | `install.sh` pronto |
-| **brew** (secundário, macOS/Linux) | `brew tap <ORG>/tap && brew install omni-harness` | fórmula template em `Formula/omni-harness.rb` (preenche `<ORG>`, `sha256` e publica o tap após a primeira release no GitHub) |
+| **npm / pnpm dlx** (primary) | `pnpm dlx omni-harness init <dest> --nome <project>` | requires `npm publish` (package.json ready at root; `files` already allows sample outside and core inside) |
+| **git / curl** (no registry, today) | `bash install.sh <dest> --nome <project>` from a copy; with GitHub Releases: `RELEASE_URL=<tarball> curl -fsSL <url>/install.sh \| bash -s -- <dest>` | `install.sh` ready |
+| **brew** (secondary, macOS/Linux) | `brew tap <ORG>/tap && brew install omni-harness` | formula template in `Formula/omni-harness.rb` (fill `<ORG>`, `sha256` and publish the tap after the first GitHub release) |
 
-CLI instalado: `omni-harness init|sync|doctor|--version`. `doctor` checa node >= 22, ferramentas externas (git, rtk, graphify, pnpm, dotnet, flutter, uv, biome) e o perfil do hospedeiro.
+Installed CLI: `omni-harness init|sync|doctor|--version`. `doctor` checks node >= 22, external tools (git, rtk, graphify, pnpm, dotnet, flutter, uv, biome) and the host profile.
 
-## Início rápido
+## Quick start
 
 ```bash
-node scripts/harness-init.mjs <destino> --nome <projeto>   # semeia o núcleo num repo hospedeiro
-cd <destino> && (git init) && cd quality/tools && npm ci   # Biome do autofix
-node quality/agents/sync-clinerules.mjs                    # espelha regras para o Cline
-node --test quality/test/profile.test.mjs                  # perfil valida contra o schema
-node quality/run.mjs --tier rapido                         # motor de qualidade
+node scripts/harness-init.mjs <dest> --nome <project>   # seeds the core into a host repo
+cd <dest> && (git init) && cd quality/tools && npm ci   # Biome for autofix
+node quality/agents/sync-clinerules.mjs                 # mirrors rules to Cline
+node --test quality/test/profile.test.mjs               # profile validates against the schema
+node quality/run.mjs --tier rapido                      # quality engine
 ```
 
-## Perfis
+## Profiles
 
-O perfil declara **tudo que varia por projeto**: camadas/stacks, fronteiras de arquitetura, métricas do ratchet, runners por stack (`runnerDotnet`, `runnerTs`, Flutter/Python; `runnerGo`/`runnerRust`/`runnerCpp`/`runnerJava` no desenho F1–F6), tracker (`jira`/`none`), gitflow (permanentes e matriz), política PII via packs, locale e overlay de prompts. Schema v1 validado por `quality/lib/profile.mjs`; gate em `quality/test/profile.test.mjs`. Exemplo completo de um host real em `quality/examples/exemplo-saas/`.
+The profile declares **everything that varies per project**: layers/stacks, architecture boundaries, ratchet metrics, runners per stack (`runnerDotnet`, `runnerTs`, Flutter/Python; `runnerGo`/`runnerRust`/`runnerCpp`/`runnerJava` in plan F1–F6), tracker (`jira`/`none`), gitflow (permanent branches and matrix), PII policy via packs, locale and prompt overlay. Schema v1 validated by `quality/lib/profile.mjs`; gate at `quality/test/profile.test.mjs`. Full example of a real host in `quality/examples/exemplo-saas/`.
 
-Testes do motor que exercitam o exemplo (gates, risco, hooks, tracker):
+Engine tests that exercise the sample (gates, risk, hooks, tracker):
 
 ```bash
 HARNESS_PROFILE_DIR="$PWD/quality/examples/exemplo-saas/profile" node --test quality/test/gates.test.mjs quality/test/risk.test.mjs
 ```
 
-## Documentação
+## Documentation
 
-- Operacional, por workflow: [`docs/harness/INDEX.md`](docs/harness/INDEX.md)
-- Arquitetura agnóstica e decisões (R0–R5): [`docs/parking-lot/harness-agnostico.md`](docs/parking-lot/harness-agnostico.md)
-- Runners por linguagem (Go, Rust, C++, C#, Java — desenho F1–F6): [`docs/parking-lot/runners-go-rust-cpp-csharp-java.md`](docs/parking-lot/runners-go-rust-cpp-csharp-java.md)
-- Inventário do bundle: [`HARNESS-MANIFEST.txt`](HARNESS-MANIFEST.txt)
+- Operational, per workflow: [`docs/harness/INDEX.md`](docs/harness/INDEX.md) (pt-BR)
+- Agnostic architecture and decisions (R0–R5): [`docs/parking-lot/harness-agnostico.md`](docs/parking-lot/harness-agnostico.md) (pt-BR)
+- Runners per language (Go, Rust, C++, C#, Java — plan F1–F6): [`docs/parking-lot/runners-go-rust-cpp-csharp-java.md`](docs/parking-lot/runners-go-rust-cpp-csharp-java.md) (pt-BR)
+- Bundle inventory: [`HARNESS-MANIFEST.txt`](HARNESS-MANIFEST.txt)
 
-## Comunidade
+## Community
 
-- **Contribuir:** [CONTRIBUTING.md](CONTRIBUTING.md) — branches `feat/*`, Conventional Commits. **Projeto local, sem CI/Actions**: a bateria local é a validação; o mantenedor committa direto em `main` com ela verde. Contribuição externa entra por PR de fork, revisada e mergeada manualmente após a mesma bateria.
-- **Segurança:** [SECURITY.md](SECURITY.md) — reporte por advisory privado, nunca em issue pública.
-- **Conduta:** [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) (Contributor Covenant 2.1).
-- **Licença:** [MIT](LICENSE).
+- **Contributing:** [CONTRIBUTING.md](CONTRIBUTING.md) — `feat/*` branches, Conventional Commits. **Local project, no CI/Actions**: the local battery is the validation; the maintainer commits straight to `main` with it green. External contributions come as fork PRs, reviewed and manually merged after the same battery.
+- **Security:** [SECURITY.md](SECURITY.md) — report via private advisory, never in a public issue.
+- **Conduct:** [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) (Contributor Covenant 2.1).
+- **License:** [MIT](LICENSE).

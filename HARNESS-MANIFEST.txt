@@ -785,6 +785,9 @@ CONTRIBUTING.md
 Formula/omni-harness.rb
 LICENSE
 README.md
+README.pt-BR.md
+README.es.md
+README.zh-CN.md
 SECURITY.md
 bin/omni-harness.mjs
 docs/entregas/2026-10-01-harness-entrega-em-ciclo/SUMMARY.md
