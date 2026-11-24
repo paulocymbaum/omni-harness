@@ -11,6 +11,36 @@
 3. **Multi-host** — `harness-init` instala a integração certa para cada agente: hooks nativos (Claude Code, Cline) ou carriers de instruções (Codex, Copilot, Antigravity, Kiro). Mesma política, dois transportes.
 4. **Ciclo de entrega** — investigação → gates que provam a falha → implementação → avaliação, com backlog versionado e espelho em tracker (Jira ou `none`).
 
+4. **Ciclo de entrega** — investigação → gates que provam a falha → implementação → avaliação, com backlog versionado e espelho em tracker (Jira ou `none`).
+
+## Upstream e Downstream
+
+O harness atua nos dois lados do agente: **injeta contexto estruturado antes** (o conhecimento do produto mora no perfil, não na memória do agente) e **valida/executa depois** (gates com veredito e evidência por hash). Falha aberta nos dois lados: problema do harness volta como aviso com caminho e ação — nunca derruba o trabalho em silêncio.
+
+```mermaid
+flowchart LR
+  subgraph UP["UPSTREAM — o que chega ao agente antes de escrever"]
+    ONB["onboarding-assessment<br/>recon + entrevista + documentos<br/>→ plano de adaptação"] --> PERF
+    PERF["perfil do projeto (schema v1)<br/>camadas · runners · boundaries<br/>tracker · gitflow · packs PII"] --> CTX["session-start<br/>injeção de contexto"]
+    SK["skills de domínio<br/>+ overlay PROJETO.md"] --> CTX
+    BL["spec/plano da entrega<br/>(backlog da entrega corrente)"] --> CTX
+  end
+  CTX --> AGT["agente edita"]
+  AGT --> DOWN
+  subgraph DOWN["DOWNSTREAM — o que o harness executa e valida depois"]
+    ED["post-edit: tier rápido em lote<br/>(lizard/dart format agregados) + autofix<br/>+ guardas: segredos · supressões · fronteiras"] --> EV["evidência por hash<br/>código mudou = evidência invalida"]
+    EV --> CIC["entrega em ciclo<br/>gates antes do código · eval · homologação"] --> TRK["tracker espelhado<br/>(Jira ou none)"]
+    CIC --> REL["release local<br/>bump por camada · billing probe"]
+  end
+```
+
+| | Upstream | Downstream |
+|---|---|---|
+| **Pergunta que responde** | "O agente sabe o que o projeto espera?" | "O que o agente entregou passa nos gates?" |
+| **Fonte da verdade** | perfil + overlay + skills de domínio + spec da entrega | gates determinísticos + evidência por hash |
+| **Quem roda** | `harness-init` → `onboarding-assessment` → session-start | `post-edit` → `quality/run.mjs` por tier → ciclo de entrega → release |
+| **Se algo falta** | onboarding gera plano (`a definir` com default) | aviso aberto (`tool.missing`/`tool.delegated`) ou reprovação com tail |
+
 ## Stacks
 
 O motor é agnóstico: **runner é mecanismo no núcleo; qual stack, onde ela vive e como o projeto a invoca é dado do perfil.** Runner sem config no perfil fica inerte — repo sem a stack não paga nada.
@@ -19,13 +49,12 @@ O motor é agnóstico: **runner é mecanismo no núcleo; qual stack, onde ela vi
 |---|---|---|
 | **Dart / Flutter** | `runners/flutter.mjs` | `dart analyze` arquivo a arquivo (foco em linhas adicionadas), testes relacionados por feature, suíte completa no nível completo |
 | **TypeScript / Node** | `runners/typescript.mjs` (pnpm) | lint/tsc, testes relacionados, supply chain |
-| **C# / .NET** | `runners/backend.mjs` (`runnerDotnet`) | `dotnet build -warnaserror` + `dotnet test --filter` + ambiente dedicado |
+| **C# / .NET** | `runners/backend.mjs` (`runnerDotnet`) | `dotnet build -warnaserror` + `dotnet test --filter` + ambiente dedicado; `dotnet format` e `list package --vulnerable` opt-in |
 | **Python** | via uv | toolchain detectada (`uv`), falha aberta |
 | **Go** | `runners/go.mjs` | `gofmt -l` + `go vet` (foco em linhas adicionadas) + testes por pacote alterado; suíte `-race` no completo; golangci-lint opt-in |
 | **Rust** | `runners/rust.mjs` | `cargo fmt --check` + `clippy --all-targets` + teste por manifest do workspace; `--all-features` e `cargo audit` no completo |
 | **C++** | `runners/cpp.mjs` | clang-format dry-run + configure/build CMake + CTest; clang-tidy arquivo a arquivo (opt-in); sanitizers ASan/UBSan via preset no completo |
 | **Java** | `runners/java.mjs` | wrapper primeiro (`./mvnw`/`./gradlew`), build/test; plugins opt-in (spotless/checkstyle/pmd/spotbugs); módulos Maven via `-pl` |
-| **C# / .NET** | `runners/backend.mjs` (`runnerDotnet`) | `dotnet build -warnaserror` + `dotnet test --filter` + ambiente dedicado; `dotnet format` e `list package --vulnerable` opt-in |
 
 Camadas novas ligam o runner: o perfil do hospedeiro declara `{ id: 'go', globs: ['**/*.go'] }` (idem `rust`/`cpp`/`java`) e o config `runnerGo`/`runnerRust`/`runnerCpp`/`runnerJava` (`root`, `packages`, `race`, `golangci`, `clippyArgs`, `audit`, `presets`, `tidy`, `tools`, `modules`, `workflow`). Parsers e montagens de comando são funções puras com self-tests (`quality/test/runners-stacks.test.mjs`) — smoke real só quando `which()` acha a tool; desenho e libs de teste recomendadas em [`docs/parking-lot/runners-go-rust-cpp-csharp-java.md`](docs/parking-lot/runners-go-rust-cpp-csharp-java.md).
 
