@@ -25,9 +25,10 @@ export function selecionarAlvos(linhas, { agora = Date.now(), manter = [] } = {}
     filhosDe.get(Number(ppid)).push(Number(pid));
   }
   const temFilho = (pid) => (filhosDe.get(pid) ?? []).some((f) => porPid.has(f));
+  const ehTerminalIntegrado = (proc) => proc.args.includes('shellIntegration') || ptyhosts.has(proc.ppid);
   const alvos = [];
   for (const [pid, proc] of porPid) {
-    if (!proc.shell || !ptyhosts.has(proc.ppid)) continue;
+    if (!proc.shell || !ehTerminalIntegrado(proc)) continue;
     if (proc.etimes <= 3600) continue;
     if (temFilho(pid)) continue;
     if (manterSet.has(pid)) continue;
@@ -48,7 +49,8 @@ export function limpar({ root, logPath } = {}) {
   const alvos = selecionarAlvos(linhas, { manter });
   const encerrados = [];
   for (const pid of alvos) {
-    const k = spawnSync('kill', ['-TERM', String(pid)], { timeout: 5_000 });
+    // SIGKILL direto: shells interativos (bash/zsh) IGNORAM SIGTERM.
+    const k = spawnSync('kill', ['-KILL', String(pid)], { timeout: 5_000 });
     if (k.status === 0) encerrados.push(pid);
   }
   if (encerrados.length && logPath) {
