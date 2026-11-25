@@ -3,13 +3,15 @@ import os from 'node:os';
 import path from 'node:path';
 import { run, repoRoot, loadConfig, countNonBlank, countMatches } from './util.mjs';
 import { matchAny } from './glob.mjs';
-import { LAYERS, isGenerated, isTest, isSource, languageOf } from './layers.mjs';
+import { LAYERS, isTest, isSource, languageOf } from './layers.mjs';
+import { PROFILE } from './profile.mjs';
 import { lizardOnFiles, lizardCommand, which } from './tools.mjs';
 import { stripLiterals } from './sanitize.mjs';
 import { headSha, isGitRepo } from './git.mjs';
 import { result, counts, renderResults } from './report.mjs';
 import { t, fmtPercent, fmtNumber } from './messages.mjs';
 import { ocrRouterScan } from './tiers.mjs';
+import { flutterFronteiras, flutterFeaturesSemTestes } from './runners/flutter.mjs';
 
 const TH = loadConfig('thresholds');
 
@@ -89,50 +91,6 @@ function staticMetrics(layer, files, root, out) {
   return m;
 }
 
-// ------------------------------------------------------------------ fronteiras (varredura completa)
-function flutterBoundaries(files, root, out, m) {
-  const violations = [];
-  const imp = /^\s*(?:import|export)\s+['"]([^'"]+)['"]/gm;
-  for (const f of files) {
-    if (!f.endsWith('.dart') || isGenerated(f)) continue;
-    const domain = /^lib\/features\/[^/]+\/domain\//.test(f);
-    const data = /^lib\/features\/[^/]+\/data\//.test(f);
-    const shared = /^lib\/(shared|core)\//.test(f);
-    if (!domain && !data && !shared) continue;
-    const text = fs.readFileSync(path.join(root, f), 'utf8');
-    for (const mm of text.matchAll(imp)) {
-      const u = mm[1];
-      const internal = u.startsWith('package:fluxo/') || !u.includes(':');
-      const p = u.replace(/^package:fluxo\//, '');
-      const bad = (domain && (/^package:(cloud_firestore|firebase_[a-z_]+)\//.test(u) || (/^package:flutter\//.test(u) && u !== 'package:flutter/foundation.dart') || (internal && /(^|\/)(data|presentation)\//.test(p))))
-        || (data && internal && /(^|\/)presentation\//.test(p))
-        || (shared && internal && /(^|\/)features\//.test(p));
-      if (bad) violations.push(`${f} → ${u}`);
-    }
-  }
-  m.boundaries = violations.length;
-  out.push(violations.length
-    ? result('fronteiras', 'fail', 'report.boundaries', { value: violations.length, top: violations.slice(0, 3).join('; ') })
-    : result('fronteiras', 'pass', 'report.boundariesNone', {}));
-
-  let fallbacks = 0;
-  for (const f of files) if (/^lib\/.*\.dart$/.test(f)) fallbacks += countMatches(fs.readFileSync(path.join(root, f), 'utf8'), /API fallback to Firestore/g);
-  out.push(result('fallback-api', fallbacks ? 'fail' : 'pass', 'report.fallbacks', { value: fallbacks }));
-
-  featuresSemTestes(files, root, out, m);
-}
-
-/** Features Flutter sem nenhum teste — só quando há projeto Flutter na árvore (readdirSync seguro). */
-function featuresSemTestes(files, root, out, m) {
-  const featuresDir = path.join(root, 'lib/features');
-  if (!fs.existsSync(featuresDir)) return;
-  const features = fs.readdirSync(featuresDir, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name);
-  const untested = features.filter((f) => !files.some((x) => x.startsWith(`test/features/${f}/`) && x.endsWith('_test.dart')));
-  m.untested = untested.length;
-  out.push(untested.length
-    ? result('testes', 'fail', 'report.featuresNoTests', { value: untested.length, total: features.length, list: untested.join(', ') })
-    : result('testes', 'pass', 'report.featuresAllTested', { total: features.length }));
-}
 
 // ------------------------------------------------------------------ execução por camada
 function lcovTotal(file) {
@@ -365,7 +323,7 @@ export function selecionarCamadas(all, layers, camadasPedidas) {
 
 // Runner por camada; 'repo' (fallback de camada única) roda a suíte do harness quando existir.
 const RUNNERS_CAMADA = {
-  flutter: (ctx) => { flutterBoundaries(ctx.files, ctx.root, ctx.out, ctx.m); runFlutter(ctx.root, ctx.out, ctx.m); },
+  flutter: (ctx) => { flutterFronteiras(ctx.files, ctx.root, ctx.out, ctx.m); flutterFeaturesSemTestes(ctx.files, ctx.root, ctx.out, ctx.m); runFlutter(ctx.root, ctx.out, ctx.m); },
   functions: (ctx) => runFunctions(ctx.root, ctx.out, ctx.m),
   ocr: (ctx) => runOcr(ctx.root, ctx.out, ctx.m),
   'admin-web': (ctx) => runWeb('admin-web', ctx.root, ctx.out, ctx.m),
