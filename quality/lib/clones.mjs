@@ -39,7 +39,7 @@ function corpoEsvaziado(texto, abertura) {
 }
 
 /** Esvazia strings (preservando \n) para linguagens sem opção no sanitize: go, java, c, cpp. */
-export function esvaziaCFamilia(texto) {
+function esvaziaCFamilia(texto) {
   let out = '';
   for (let i = 0; i < texto.length;) {
     const c = texto[i];
@@ -156,7 +156,7 @@ function funcoesDeArquivo(a, base, cfg, vistas) {
   const defs = [];
   for (const f of a.funcoes || []) {
     const nloc = typeof f.nloc === 'number' ? f.nloc : 0;
-    const chave = `${a.path}:${f.start}:${f.name}`;
+    const chave = `${a.path}:${f.start}:${f.end}:${f.name}`;
     if (vistas.has(chave)) continue;
     vistas.add(chave);
     const canonico = normaliza(corpoDe(base, f));
@@ -165,7 +165,7 @@ function funcoesDeArquivo(a, base, cfg, vistas) {
     // Corpo curto só entra quando o vocabulário é rico (ex.: program() com 5 linhas cheias
     // de operadores — cópia literal clássica); getters e delegações triviais ficam de fora.
     if (nloc < cfg.corpoMinNloc && tokens.size < cfg.tokensMinimos) continue;
-    const def = { arquivo: a.path, funcao: f.longName || f.name, linha: f.start, hash: hashDe(canonico), tokens };
+    const def = { arquivo: a.path, funcao: f.longName || f.name, curto: f.name, linha: f.start, hash: hashDe(canonico), tokens };
     defs.push(def);
   }
   return defs;
@@ -194,6 +194,9 @@ function definicoesDe(arquivos, cfg) {
   return { funcoes, tipos };
 }
 
+/** Mesmo lugar (arquivo e linha)? Arrow aninhadas do lizard podem duplicar a entrada. */
+const mesmoLugar = (x, y) => x.arquivo === y.arquivo && x.linha === y.linha;
+
 /** Cópia literal: mesmo corpo canônico (hash) em duas definições quaisquer do lote. */
 function clonesExatos(defs, kind) {
   const porHash = new Map();
@@ -203,16 +206,22 @@ function clonesExatos(defs, kind) {
   }
   const achados = [];
   for (const grupo of porHash.values()) {
-    for (let i = 1; i < grupo.length; i += 1) achados.push({ kind, origem: grupo[0], destino: grupo[i] });
+    for (let i = 1; i < grupo.length; i += 1) {
+      if (mesmoLugar(grupo[i], grupo[0])) continue;
+      achados.push({ kind, origem: grupo[0], destino: grupo[i] });
+    }
   }
   return achados;
 }
+
+/** Definição anônima do lizard (arrow sem nome): não entra em grupos por nome. */
+const ehAnonima = (d) => d.curto == null || d.curto.includes('anonymous') || d.curto.includes('(');
 
 /** Mesmo longName em ≥ nomeMinArquivos arquivos, com corpos que NÃO são todos idênticos. */
 function nomesRepetidos(defs, cfg) {
   const grupos = new Map();
   for (const d of defs) {
-    if (NOMES_IGNORADOS.has(d.funcao)) continue;
+    if (NOMES_IGNORADOS.has(d.funcao) || ehAnonima(d)) continue;
     if (!grupos.has(d.funcao)) grupos.set(d.funcao, new Map());
     const porArquivo = grupos.get(d.funcao);
     if (!porArquivo.has(d.arquivo)) porArquivo.set(d.arquivo, d);
@@ -244,7 +253,7 @@ function paresQuaseClones(grupo, cfg) {
 function quaseClones(defs, cfg) {
   const grupos = new Map();
   for (const d of defs) {
-    if (NOMES_IGNORADOS.has(d.funcao)) continue;
+    if (NOMES_IGNORADOS.has(d.funcao) || ehAnonima(d)) continue;
     if (!grupos.has(d.funcao)) grupos.set(d.funcao, []);
     grupos.get(d.funcao).push(d);
   }
@@ -282,13 +291,16 @@ export function analisaLote(arquivos, cfg) {
     ...quaseClones(funcoes, cfg),
   ];
   ordenaAchados(achados);
-  return { achados, funcoes: funcoes.length, tipos: tipos.length };
+  return { achados, definicoes: funcoes, funcoes: funcoes.length, tipos: tipos.length };
 }
 
-/** Ordem estável: arquivo/linha do destino (ou da origem), depois a família do achado. */
+/** Ordem estável: arquivo/linha do destino (ou da origem), depois a família (críticas primeiro). */
+const RANK_KIND = { clone: '0', tipo: '0', deriva: '1', quase: '2', nome: '2', exporte: '3', comentado: '3', stub: '3', catch: '3', vago: '3' };
+const rankDe = (kind) => RANK_KIND[kind] || '4';
+
 function ordenaAchados(achados) {
   const chave = (a) => (a.destino || a.origem);
   achados.sort((x, y) => chave(x).arquivo.localeCompare(chave(y).arquivo)
     || (chave(x).linha || 0) - (chave(y).linha || 0)
-    || x.kind.localeCompare(y.kind));
+    || rankDe(x.kind).localeCompare(rankDe(y.kind)));
 }

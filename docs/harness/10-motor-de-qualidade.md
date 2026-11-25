@@ -26,7 +26,7 @@ O motor (`quality/run.mjs`) mede o diff com **gates determinísticos** (tamanho,
 | `quality/lib/tiers.mjs` | Gates por nível e orçamento de tempo (`rapido` 60 s, `rotina` 270 s, `completo` 1 800 s) |
 | `quality/lib/risk.mjs` | Classificação de risco (eixos quebra × custo) |
 | `quality/lib/gates/fast.mjs` | Gates estruturais rápidos do arquivo editado |
-| `quality/lib/gates/duplicacao.mjs` + `quality/lib/clones.mjs` | Gate de duplicação estrutural (lote): clone exato (sha1 do corpo normalizado) → REPROVADO; quase-clone (Jaccard ≥ 0,85 no grupo do longName) e nome repetido (≥ 3 arquivos) → ALERTA; tipos (class/interface/enum/struct/trait/record/protocol/extension/mixin) com corpo idêntico → REPROVADO. Reusa a medição lizard do lote (zero spawn extra); threshold em `thresholds.duplicacao` |
+| `quality/lib/gates/duplicacao.mjs` + `quality/lib/clones.mjs` + `quality/lib/residuos.mjs` | Gate de duplicação estrutural e resíduos de IA (lote): clone exato (sha1 do corpo normalizado) e tipo idêntico → REPROVADO; quase-clone (Jaccard ≥ 0,85 no grupo do longName), cópia renomeada (type-3, nome diferente), nome repetido (≥ 3 arquivos), export especulativo sem uso repo-wide, código morto comentado, stub pendente (`TODO:`/`FIXME:`), exceção engolida sem explicação e nome genérico de LLM → ALERTA. Reusa a medição lizard do lote (zero spawn extra); thresholds em `thresholds.duplicacao` |
 | `quality/lib/runners/{flutter,backend,typescript,common,backend-env}.mjs` | Execução por stack (Flutter/Dart, .NET, TS/pnpm, Python/uv) |
 | `quality/lib/scope.mjs` | Escopo do diff (`--files`, `--session`, `--base`) |
 | `quality/lib/autofix.mjs` | Autocorreção leve de gate/teste (`--fix`) — doc 03 |
