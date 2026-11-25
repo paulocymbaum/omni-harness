@@ -18,14 +18,14 @@ const step = (...a) => {
   return stepBase(a[0], a[1], a[2], a[3], a[4], { ...opts, env: { ...RUST_ENV, ...opts.env } });
 };
 
-export const rustScope = (entries) => scanScope(entries, RUST.root, /\.rs$|Cargo\.(toml|lock)$/);
+const rustScope = (entries) => scanScope(entries, RUST.root, /\.rs$|Cargo\.(toml|lock)$/);
 
 export const clippyArgs = (extra) => ['clippy', '--all-targets', ...(extra || [])];
 
 export const cargoTestArgs = (manifest) => (manifest ? ['test', '--manifest-path', manifest] : ['test']);
 
 /** Cargo.toml mais próximo do arquivo alterado (workspace com vários pacotes); null = raiz. */
-export function nearestManifest(file) {
+function nearestManifest(file) {
   let rel = path.posix.dirname(file);
   while (rel !== '.' && rel !== '/') {
     if (fs.existsSync(path.join(CWD, rel, 'Cargo.toml'))) return path.join(rel, 'Cargo.toml');

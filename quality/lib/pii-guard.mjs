@@ -31,7 +31,7 @@ const TOKEN_PATTERNS = [
 const MAX_FINDINGS = 20;
 
 /** Mostra só as pontas do valor: nunca devolve o dado bruto. */
-export const maskValue = (value) => (value.length <= 6 ? '***' : `${value.slice(0, 2)}***${value.slice(-2)}`);
+const maskValue = (value) => (value.length <= 6 ? '***' : `${value.slice(0, 2)}***${value.slice(-2)}`);
 
 const lineOf = (text, index) => text.slice(0, index).split('\n').length;
 const allSame = (value) => new Set(value.replace(/[^A-Za-z0-9]/g, '')).size <= 1;

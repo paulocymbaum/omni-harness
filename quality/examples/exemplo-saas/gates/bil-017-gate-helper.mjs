@@ -26,7 +26,7 @@ function javaMajor(home) {
 }
 
 /** JAVA_HOME se for 21+, senão /usr/libexec/java_home. O java padrão da máquina é o 17, que o firebase-tools recusa. */
-export function javaEnv() {
+function javaEnv() {
   const candidates = [process.env.JAVA_HOME];
   const finder = spawnSync('/usr/libexec/java_home', ['-v', '21+'], { encoding: 'utf8' });
   if (finder.status === 0) candidates.push(finder.stdout.trim());

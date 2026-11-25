@@ -59,7 +59,7 @@ export const DEFAULTS = {
 };
 
 /** Descobre o arquivo do perfil. Puro; não lê conteúdo. */
-export function discoverProfile(dir, env) {
+function discoverProfile(dir, env) {
   if (!fs.existsSync(dir)) return { file: null, files: [], erro: null };
   const files = fs.readdirSync(dir)
     .filter((f) => f.endsWith('.json') && !f.startsWith('schema'))

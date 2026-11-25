@@ -22,7 +22,7 @@ const NOT_IN_GRAPH = new RegExp(PROFILE.graphify.exclude || '^$');
 const lockAge = (file, now) => { try { return now - statSync(file).mtimeMs; } catch { return Infinity; } };
 
 /** Rel a ser excluído do grafo (docs/assets/… do perfil). Exportado para o gate. */
-export function notInGraph(rel) {
+function notInGraph(rel) {
   return NOT_IN_GRAPH.test(rel);
 }
 

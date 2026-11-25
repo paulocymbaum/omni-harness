@@ -10,11 +10,11 @@ import { epicSummary, PENDING_LABELS } from './naming.mjs';
 import { epicStatusFor, moveToStatus } from './status.mjs';
 import { rankToTop } from './rank.mjs';
 
-export const EPIC_ID = '_epic';
+const EPIC_ID = '_epic';
 export { epicDescription } from './epic-description.mjs';
 
 /** Labels de pendência dos documentos: { add, remove } conforme BRD e fluxo estejam prontos. */
-export function pendingLabelsFor(docs) {
+function pendingLabelsFor(docs) {
   const pairs = [['brd', docs.brd], ['fluxo', docs.fluxo]];
   return {
     add: pairs.filter(([, d]) => d.state !== 'ready').map(([k]) => PENDING_LABELS[k]),

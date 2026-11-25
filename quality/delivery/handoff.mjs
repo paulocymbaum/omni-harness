@@ -10,15 +10,15 @@ import { fileURLToPath } from 'node:url';
 import { readBacklog, readJiraKey, taskById, gatesForTask } from './lib.mjs';
 
 export const FASES = ['P', 'A', 'B', 'C', 'D', 'E', 'F', 'R'];
-export const RESULTADOS = ['done', 'failed', 'blocked', 'needs-decision'];
-export const RESULTADOS_GATE = ['pass', 'fail', 'manual-pendente', 'nao-executado'];
-export const CAMPOS = ['Fase', 'Agente', 'Entrega', 'Tarefa', 'Resultado'];
-export const SECOES = ['Arquivos', 'Gates', 'Não verificado', 'Decisões para o usuário', 'Próximo passo'];
+const RESULTADOS = ['done', 'failed', 'blocked', 'needs-decision'];
+const RESULTADOS_GATE = ['pass', 'fail', 'manual-pendente', 'nao-executado'];
+const CAMPOS = ['Fase', 'Agente', 'Entrega', 'Tarefa', 'Resultado'];
+const SECOES = ['Arquivos', 'Gates', 'Não verificado', 'Decisões para o usuário', 'Próximo passo'];
 
 const CAMPO_RE = /^- ([^:]+): (.+)$/;
 
 /** Extrai o bloco `## HANDOFF` de um texto. Retorna null se não houver. */
-export function extrairBloco(text) {
+function extrairBloco(text) {
   const i = text.search(/^## HANDOFF\s*$/m);
   return i < 0 ? null : text.slice(i).trimEnd();
 }

@@ -96,13 +96,13 @@ const COMMAND_TEXT = {
   cline: { execute_command: (p) => p.command ?? '', run_commands: (p) => commandsOf(p).join('\n') },
 };
 
-export function isGraphQueryCall(host, toolName, params = {}) {
+function isGraphQueryCall(host, toolName, params = {}) {
   const textOf = COMMAND_TEXT[host]?.[toolName];
   return textOf ? analyzeShell(textOf(params)).queries.length > 0 : false;
 }
 
 /** Saída de consulta que serve de resposta: não vazia e sem as mensagens de falha do graphify. */
-export function usefulGraphOutput(output) {
+function usefulGraphOutput(output) {
   if (output === undefined || output === null) return true; // o agente não informou a saída: benefício da dúvida
   const text = String(output).trim();
   return text.length > 0 && !FAILED_OUTPUT.test(text);
@@ -150,7 +150,7 @@ const git = (root, args) => {
 const mtimeOf = (file) => { try { return fs.statSync(file).mtimeMs; } catch { return 0; } };
 
 /** Arquivos de código alterados (na árvore ou em commits) depois da geração do grafo. */
-export function staleFiles(root) {
+function staleFiles(root) {
   const graphTime = mtimeOf(path.join(root, 'graphify-out', 'graph.json'));
   if (!graphTime) return [];
   const files = new Set();
@@ -173,11 +173,11 @@ export function graphStatus(root) {
 }
 
 /** Estado por sessão/tarefa: { [chave]: epochMs da última consulta ao grafo que deu certo }. */
-export function readState(file) {
+function readState(file) {
   try { return JSON.parse(fs.readFileSync(file, 'utf8')); } catch { return {}; }
 }
 
-export function recordQuery(file, key, now = Date.now()) {
+function recordQuery(file, key, now = Date.now()) {
   const state = readState(file);
   state[key] = now;
   const recent = Object.entries(state).sort((a, b) => b[1] - a[1]).slice(0, 20);

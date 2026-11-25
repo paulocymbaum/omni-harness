@@ -40,7 +40,7 @@ export function rapidoGates(entries) {
 // Camadas TypeScript web/worker que passam pela rotina de lint, tipos e testes do pacote.
 const WEB_LAYERS = ['admin-web', 'site', 'debate-worker', 'creator-render', 'creator-worker'];
 
-export const TIER_BUDGET_MS = { rapido: 60_000, rotina: 270_000, completo: 1_800_000 };
+const TIER_BUDGET_MS = { rapido: 60_000, rotina: 270_000, completo: 1_800_000 };
 
 // Grupos de camada (P1): cada grupo roda em um subprocesso quando há ≥2 ativos — o custo
 // total deixa de ser a soma dos runners e passa a ser o do grupo mais lento.

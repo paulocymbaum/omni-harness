@@ -99,7 +99,7 @@ export function scopeAvailable(limits, env = process.env) {
 }
 
 /** Prioridade mínima de CPU e de disco para este processo (os filhos herdam). Melhor esforço. */
-export function lowerPriority(limits = loadLimits()) {
+function lowerPriority(limits = loadLimits()) {
   if (!limits.enabled) return;
   try { os.setPriority(0, limits.nice); } catch { /* sem permissão ou plataforma sem suporte */ }
   try { spawnSync('ionice', ['-c', '3', '-p', String(process.pid)], { stdio: 'ignore', timeout: 3000 }); } catch { /* ionice ausente */ }

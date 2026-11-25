@@ -17,7 +17,7 @@ const MATRIX = PROFILE.riskMatrix || RISK_LEGACY;
 const COSTS = loadConfig('cost-table');
 
 const bump = (level) => LEVELS[Math.min(LEVELS.length - 1, LEVELS.indexOf(level) + 1)];
-export const tierForLevel = (level) => ({ baixo: 'rapido', medio: 'rotina', alto: 'completo', critico: 'completo' })[level];
+const tierForLevel = (level) => ({ baixo: 'rapido', medio: 'rotina', alto: 'completo', critico: 'completo' })[level];
 
 class Axis {
   constructor() { this.level = 'baixo'; this.reasons = new Map(); }

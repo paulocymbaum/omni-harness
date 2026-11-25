@@ -131,7 +131,7 @@ export function resolveFeatureSlug(backlog, dir) {
 }
 
 /** Tag de versão do card: versão explícita (--versao/backlog.version) > data de criação. */
-export function versionTagFor(backlog, version = null) {
+function versionTagFor(backlog, version = null) {
   return sanitizeJiraLabel(version)
     ?? sanitizeJiraLabel(backlog?.version)
     ?? sanitizeJiraLabel(backlog?.created);
@@ -157,10 +157,10 @@ export function cardLabels(backlog = null, dir = null, { featureSlug = null, cat
 
 // ── validation ────────────────────────────────────────────────────────────────
 
-export const HOMOLOGACAO_ESTADOS = ['pendente', 'em_homologacao', 'aprovada', 'reprovada'];
+const HOMOLOGACAO_ESTADOS = ['pendente', 'em_homologacao', 'aprovada', 'reprovada'];
 
 /** Forma do bloco `homologacao` (o preparo real do ambiente é verificado só ao homologar). */
-export function validateHomologacao(h, errors) {
+function validateHomologacao(h, errors) {
   if (h === undefined) return;
   if (!h || typeof h !== 'object' || Array.isArray(h)) { errors.push('homologacao deve ser objeto'); return; }
   for (const campo of ['compose', 'up', 'url', 'down']) {

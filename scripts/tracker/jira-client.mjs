@@ -91,7 +91,7 @@ const RETRYABLE = new Set([429, 502, 503, 504]);
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /** fetch com retry e backoff para 429/502/503/504 (respeita Retry-After); JIRA_RETRY_BASE_MS ajusta a base. */
-export async function fetchWithRetry(url, init, { retries = 3, baseMs = Number(process.env.JIRA_RETRY_BASE_MS) || 1000 } = {}) {
+async function fetchWithRetry(url, init, { retries = 3, baseMs = Number(process.env.JIRA_RETRY_BASE_MS) || 1000 } = {}) {
   for (let attempt = 0; ; attempt++) {
     const res = await fetch(url, init);
     if (!RETRYABLE.has(res.status) || attempt >= retries) return res;

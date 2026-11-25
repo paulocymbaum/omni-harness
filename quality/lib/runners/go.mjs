@@ -18,7 +18,7 @@ const step = (...a) => {
   return stepBase(a[0], a[1], a[2], a[3], a[4], { ...opts, env: { ...GO_ENV, ...opts.env } });
 };
 
-export const goScope = (entries) => scanScope(entries, GO.root, /\.go$|go\.mod$|go\.sum$/);
+const goScope = (entries) => scanScope(entries, GO.root, /\.go$|go\.mod$|go\.sum$/);
 
 export const vetArgs = (packages) => ['vet', ...packages];
 

@@ -16,7 +16,7 @@ const INFO_FLAGS = new Set(['--version', '--help', '-V']);
  * Comandos de informação (`--version`, `--help`) não devem ser reescritos: o rtk os troca por um
  * subcomando próprio que imprime OUTRA coisa (visto: `npx eslint --version` virou `rtk lint --version`).
  */
-export function shouldRewrite(command) {
+function shouldRewrite(command) {
   return !splitCommands(command ?? '').some((segment) => stripPrefixes(words(segment)).some((w) => INFO_FLAGS.has(w)));
 }
 

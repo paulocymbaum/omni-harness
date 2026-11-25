@@ -16,7 +16,7 @@ import { observeResult } from '../lib/search-guard.mjs';
 import { noticeOf, planSync, startSync, writtenPaths } from '../lib/spec-sync.mjs';
 
 /** Extrai { toolName, params, output, success } do JSON do Cline. */
-export function readPostCall(input) {
+function readPostCall(input) {
   const post = input.postToolUse ?? {};
   const result = input.tool_result ?? {};
   return {
@@ -34,7 +34,7 @@ function workspaceRoot(input) {
 }
 
 /** Sincroniza specs gravadas por esta chamada; devolve só os avisos que o agente precisa ver. */
-export function syncWrittenSpecs(call, root) {
+function syncWrittenSpecs(call, root) {
   if (call.success === false) return [];
   const notices = [];
   for (const file of writtenPaths(call.params)) {
@@ -56,7 +56,7 @@ const POST_STAGES = {
  * Roda os hooks do Claude e devolve só o texto que o agente precisa ver. O Cline ignora cancelamento no
  * PostToolUse, então o que no Claude é exit 2 / decision:block chega aqui como contexto, com o mesmo texto.
  */
-export function bridgeWritten(call, root, sessionKey) {
+function bridgeWritten(call, root, sessionKey) {
   if (call.success === false) return [];
   const kind = kindOf(call.toolName);
   const stages = POST_STAGES[kind];

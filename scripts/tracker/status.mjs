@@ -4,7 +4,7 @@ import { situacao } from '../../quality/delivery/lib.mjs';
 import { viaOf, canonicalStatus } from './workflow.mjs';
 
 export const HOMOLOGATION = 'Homologation';
-export const PRODUCTION = 'Production';
+const PRODUCTION = 'Production';
 
 export const STATUS_MAP = {
   pending: 'To Do',
@@ -97,7 +97,7 @@ export async function moveToStatus(jira, key, jiraStatus) {
  * compartilhado do .env o responsável não muda. FLUXO_JIRA_ASSIGN=1|0 força. Falha aqui só avisa:
  * o status já mudou e é o que importa.
  */
-export function shouldClaim(env = process.env) {
+function shouldClaim(env = process.env) {
   if (env.FLUXO_JIRA_ASSIGN === '0') return false;
   return env.FLUXO_JIRA_ASSIGN === '1' || env.FLUXO_JIRA_CRED_SOURCE === '.env.local';
 }

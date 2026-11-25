@@ -14,7 +14,7 @@ function loadCatalog(locale) {
   }
 }
 
-export const LOCALE_USED = LOCALE;
+const LOCALE_USED = LOCALE;
 export const catalog = loadCatalog(LOCALE);
 
 const nf = new Intl.NumberFormat(LOCALE_USED, { maximumFractionDigits: 1 });

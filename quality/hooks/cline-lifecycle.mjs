@@ -12,7 +12,7 @@ const EVENTS = {
   TaskComplete: { hook: 'Stop', scripts: [SCRIPTS.stop, SCRIPTS.lembrarDocs], timeoutMs: 110_000 },
 };
 
-export function runLifecycle(event, input, root) {
+function runLifecycle(event, input, root) {
   const spec = EVENTS[event];
   if (!spec) return [];
   const sessionId = `cline-${input.taskId ?? input.sessionId ?? 'sem-tarefa'}`;

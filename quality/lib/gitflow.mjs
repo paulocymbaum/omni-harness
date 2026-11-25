@@ -29,7 +29,7 @@ const MERGE_OK_LEGACY = {
   release: ['fix', 'hotfix'],
 };
 
-export const PARENT_OF = GF.parentOf && Object.keys(GF.parentOf).length ? GF.parentOf : PARENT_OF_LEGACY;
+const PARENT_OF = GF.parentOf && Object.keys(GF.parentOf).length ? GF.parentOf : PARENT_OF_LEGACY;
 export const PERMANENT = GF.permanent && GF.permanent.length ? GF.permanent : PERMANENT_LEGACY;
 const MERGE_OK = GF.mergeOk && Object.keys(GF.mergeOk).length ? GF.mergeOk : MERGE_OK_LEGACY;
 

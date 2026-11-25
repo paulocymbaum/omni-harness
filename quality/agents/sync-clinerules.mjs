@@ -39,7 +39,7 @@ const primeiraFrase = (texto, max = 110) => {
 };
 
 /** Índice gerado dos frontmatters de .claude/skills (tema)/SKILL.md e .claude/agents (papel).md. */
-export function generateIndex(root) {
+function generateIndex(root) {
   const banner = '<!-- GERADO por quality/agents/sync-clinerules.mjs. Não edite aqui. -->\n\n'
     + '# Skills e agentes do harness (Claude Code ↔ Cline)\n\n'
     + 'Um conteúdo, dois hosts: o Claude Code carrega estes arquivos automaticamente; no Cline,\n'

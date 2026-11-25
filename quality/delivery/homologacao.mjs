@@ -64,7 +64,7 @@ function ambienteProblemas(h, run) {
 }
 
 /** { ok, problemas }: BRD e fluxo do usuário prontos, tudo done/cancelled, bloco `homologacao` completo e ambiente Docker válido. No modo parcial (--parcial), tarefas pendentes/blocked não bloqueiam — homologa-se o escopo entregue — desde que haja ao menos uma done. */
-export function prontidao(backlog, { run = spawnSync, dir = null, parcial = false } = {}) {
+function prontidao(backlog, { run = spawnSync, dir = null, parcial = false } = {}) {
   const problemas = dir ? docsProblemas(featureDocs(dir)) : [];
   const sit = situacao(backlog);
   if (sit.estado !== 'concluida') {
@@ -78,7 +78,7 @@ export function prontidao(backlog, { run = spawnSync, dir = null, parcial = fals
 }
 
 /** Roteiro de teste entregue a quem vai homologar (gravado em <entrega>/homologacao.md). */
-export function renderRoteiro(backlog, dir) {
+function renderRoteiro(backlog, dir) {
   const h = backlog.homologacao;
   const tarefas = (backlog.tasks ?? []).filter((t) => t.status === 'done');
   const abertas = (backlog.tasks ?? []).filter((t) => t.status !== 'done' && t.status !== 'cancelled');

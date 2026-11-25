@@ -182,7 +182,7 @@ export function jobFlightSignals(e, addedText, cost, helpers) {
 // ---------------------------------------------------------------- orçamento agregado (QG-022/G3)
 
 /** Blocos Terraform (`resource`/`module`) de um arquivo .tf, um por entrada. */
-export function blocosTerraform(texto) {
+function blocosTerraform(texto) {
   const blocos = [];
   let atual = null;
   for (const line of String(texto ?? '').split('\n')) {

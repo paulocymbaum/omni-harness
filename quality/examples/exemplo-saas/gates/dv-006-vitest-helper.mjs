@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url';
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 export const ADMIN = path.join(ROOT, 'admin-web');
 const TEMPLATES = path.join(ROOT, 'quality/test/delivery/dv-006-vitest');
-export const GATE_DIR_PREFIX = '__dv006_gate_';
+const GATE_DIR_PREFIX = '__dv006_gate_';
 
 function runVitest(relFiles) {
   const bin = path.join(ADMIN, 'node_modules/.bin/vitest');
