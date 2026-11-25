@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { repoRoot, loadConfig } from '../util.mjs';
+import { repoRoot, loadConfig, countMatches } from '../util.mjs';
 import { PROFILE } from '../profile.mjs';
 import { isGenerated, isTest, flutterFeature } from '../layers.mjs';
 import { which } from '../tools.mjs';
@@ -151,4 +151,64 @@ export function flutterFull(entries, out, budget) {
   } finally {
     fs.rmSync(tmp, { recursive: true, force: true });
   }
+}
+
+// ── fronteiras e cobertura de features (varredura completa do relatório) ──────────────
+const RE_IMPORT_DART = /^\s*(?:import|export)\s+['"]([^'"]+)['"]/gm;
+
+/** Import proibido pela fronteira da camada (domain/data/shared do Flutter). */
+function importProibido(u, camada) {
+  const internal = u.startsWith('package:fluxo/') || !u.includes(':');
+  const p = u.replace(/^package:fluxo\//, '');
+  if (camada.domain) {
+    return /^package:(cloud_firestore|firebase_[a-z_]+)\//.test(u)
+      || (/^package:flutter\//.test(u) && u !== 'package:flutter/foundation.dart')
+      || (internal && /(^|\/)(data|presentation)\//.test(p));
+  }
+  if (camada.data) return internal && /(^|\/)presentation\//.test(p);
+  return camada.shared && internal && /(^|\/)features\//.test(p);
+}
+
+/** Violações de fronteira nos imports das camadas domain/data/shared do Flutter. */
+function violacoesDeImportacao(files, root) {
+  const violations = [];
+  for (const f of files) {
+    if (!f.endsWith('.dart') || isGenerated(f)) continue;
+    const camada = {
+      domain: /^lib\/features\/[^/]+\/domain\//.test(f),
+      data: /^lib\/features\/[^/]+\/data\//.test(f),
+      shared: /^lib\/(shared|core)\//.test(f),
+    };
+    if (!camada.domain && !camada.data && !camada.shared) continue;
+    const text = fs.readFileSync(path.join(root, f), 'utf8');
+    for (const mm of text.matchAll(RE_IMPORT_DART)) {
+      if (importProibido(mm[1], camada)) violations.push(`${f} → ${mm[1]}`);
+    }
+  }
+  return violations;
+}
+
+/** Fronteiras de arquitetura + fallbacks proibidos de API (REPROVADO se houver). */
+export function flutterFronteiras(files, root, out, m) {
+  const violations = violacoesDeImportacao(files, root);
+  m.boundaries = violations.length;
+  out.push(violations.length
+    ? result('fronteiras', 'fail', 'report.boundaries', { value: violations.length, top: violations.slice(0, 3).join('; ') })
+    : result('fronteiras', 'pass', 'report.boundariesNone', {}));
+
+  let fallbacks = 0;
+  for (const f of files) if (/^lib\/.*\.dart$/.test(f)) fallbacks += countMatches(fs.readFileSync(path.join(root, f), 'utf8'), /API fallback to Firestore/g);
+  out.push(result('fallback-api', fallbacks ? 'fail' : 'pass', 'report.fallbacks', { value: fallbacks }));
+}
+
+/** Features Flutter sem nenhum teste — só quando há projeto Flutter na árvore (readdirSync seguro). */
+export function flutterFeaturesSemTestes(files, root, out, m) {
+  const featuresDir = path.join(root, 'lib/features');
+  if (!fs.existsSync(featuresDir)) return;
+  const features = fs.readdirSync(featuresDir, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name);
+  const untested = features.filter((f) => !files.some((x) => x.startsWith(`test/features/${f}/`) && x.endsWith('_test.dart')));
+  m.untested = untested.length;
+  out.push(untested.length
+    ? result('testes', 'fail', 'report.featuresNoTests', { value: untested.length, total: features.length, list: untested.join(', ') })
+    : result('testes', 'pass', 'report.featuresAllTested', { total: features.length }));
 }

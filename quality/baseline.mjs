@@ -126,69 +126,75 @@ function sumValues(obj) {
   return Object.values(obj ?? {}).reduce((a, b) => a + b, 0);
 }
 
+/** Métricas por camada de UM arquivo: source/supressões, fronteiras e fallbacks do perfil. */
+function medeArquivo(rel, text, ctx) {
+  const layerId = layerOf(rel).id;
+  if (isSource(rel) && !isTest(rel)) {
+    const L = ctx.layers[layerId] ??= { sourceFiles: 0, maxNloc: 0, filesOverNloc: 0, suppressions: 0 };
+    L.sourceFiles++;
+    const nloc = countNonBlank(text);
+    if (nloc > L.maxNloc) L.maxNloc = nloc;
+    if (nloc > NLOC_LIMIT) L.filesOverNloc++;
+    const perKind = countSuppressions(text, languageOf(rel));
+    L.suppressions += sumValues(perKind);
+    for (const [k, n] of Object.entries(perKind)) ctx.byKind[k] = (ctx.byKind[k] ?? 0) + n;
+    if (ctx.full) {
+      if (!ctx.layerSourceFiles.has(layerId)) ctx.layerSourceFiles.set(layerId, []);
+      ctx.layerSourceFiles.get(layerId).push(rel);
+    }
+  }
+  for (const [rule, n] of Object.entries(countBoundaryViolations(rel, text))) {
+    ctx.byRule[rule] = (ctx.byRule[rule] ?? 0) + n;
+  }
+  if (ctx.afFiles && ctx.afMarker && ctx.afFiles.test(rel)) ctx.apiFallbacks += countMatches(text, ctx.afMarker);
+}
+
+/** Complexidade por camada (só full); lizard ausente → cc null, nunca aprovação parcial. */
+function medeComplexidade(root, layerSourceFiles, layers) {
+  const hasLizard = Boolean(lizardCommand());
+  for (const [layerId, list] of layerSourceFiles) {
+    const L = layers[layerId];
+    if (!hasLizard) { L.cc = null; continue; }
+    const fns = lizardOnFiles(root, list, languageOf) ?? [];
+    let maxCc = 0; let overCc = 0; let maxFnNloc = 0;
+    for (const f of fns) {
+      if (f.ccn > maxCc) maxCc = f.ccn;
+      if (f.nloc > maxFnNloc) maxFnNloc = f.nloc;
+      const ceiling = TH.functionCc.ceiling[languageOf(f.file)] ?? TH.functionCc.ceiling.default;
+      if (f.ccn > ceiling) overCc++;
+    }
+    L.cc = { maxCc, functionsOverCc: overCc, maxFnNloc };
+  }
+  for (const L of Object.values(layers)) if (!('cc' in L)) L.cc = null;
+}
+
 export function measure(root = repoRoot(), { full = false } = {}) {
   const files = walk(root, root, []);
   const layers = {};
   const layerSourceFiles = new Map();
   const byKind = {};
   const byRule = {};
-  let apiFallbacks = 0;
-  let functionsExports = null;
   // Métricas com path de projeto vêm do perfil (R1.5); keys do ratchet permanecem as mesmas.
   const M = PROFILE.metrics || {};
-  const afFiles = M.apiFallbacks ? new RegExp(M.apiFallbacks.files) : null;
-  const afMarker = M.apiFallbacks ? new RegExp(M.apiFallbacks.marker) : null;
-
+  const ctx = {
+    layers, byKind, byRule, layerSourceFiles, apiFallbacks: 0,
+    afFiles: M.apiFallbacks ? new RegExp(M.apiFallbacks.files) : null,
+    afMarker: M.apiFallbacks ? new RegExp(M.apiFallbacks.marker) : null,
+    full,
+  };
   for (const rel of files) {
     if (isGenerated(rel)) continue;
     const text = readText(root, rel);
     if (text == null) continue;
-    const layerId = layerOf(rel).id;
-
-    if (isSource(rel) && !isTest(rel)) {
-      const L = layers[layerId] ??= { sourceFiles: 0, maxNloc: 0, filesOverNloc: 0, suppressions: 0 };
-      L.sourceFiles++;
-      const nloc = countNonBlank(text);
-      if (nloc > L.maxNloc) L.maxNloc = nloc;
-      if (nloc > NLOC_LIMIT) L.filesOverNloc++;
-      const perKind = countSuppressions(text, languageOf(rel));
-      L.suppressions += sumValues(perKind);
-      for (const [k, n] of Object.entries(perKind)) byKind[k] = (byKind[k] ?? 0) + n;
-      if (full) {
-        if (!layerSourceFiles.has(layerId)) layerSourceFiles.set(layerId, []);
-        layerSourceFiles.get(layerId).push(rel);
-      }
-    }
-
-    for (const [rule, n] of Object.entries(countBoundaryViolations(rel, text))) {
-      byRule[rule] = (byRule[rule] ?? 0) + n;
-    }
-    if (afFiles && afMarker && afFiles.test(rel)) apiFallbacks += countMatches(text, afMarker);
+    medeArquivo(rel, text, ctx);
   }
-
+  let functionsExports = null;
   if (M.exportsEntry) {
     const indexText = readText(root, M.exportsEntry);
     if (indexText != null) functionsExports = exportedNames(indexText).size;
   }
   const noTest = flutterFeaturesWithoutTest(root, { features: M.featuresDir, tests: M.featuresTestDir });
-
-  if (full) {
-    const hasLizard = Boolean(lizardCommand());
-    for (const [layerId, list] of layerSourceFiles) {
-      const L = layers[layerId];
-      if (!hasLizard) { L.cc = null; continue; }
-      const fns = lizardOnFiles(root, list, languageOf) ?? [];
-      let maxCc = 0; let overCc = 0; let maxFnNloc = 0;
-      for (const f of fns) {
-        if (f.ccn > maxCc) maxCc = f.ccn;
-        if (f.nloc > maxFnNloc) maxFnNloc = f.nloc;
-        const ceiling = TH.functionCc.ceiling[languageOf(f.file)] ?? TH.functionCc.ceiling.default;
-        if (f.ccn > ceiling) overCc++;
-      }
-      L.cc = { maxCc, functionsOverCc: overCc, maxFnNloc };
-    }
-    for (const L of Object.values(layers)) if (!('cc' in L)) L.cc = null;
-  }
+  if (full) medeComplexidade(root, layerSourceFiles, layers);
 
   return {
     _comment: 'Baseline do ratchet global (QUALITY.md §3/§6). Gere com: node quality/baseline.mjs --write. Só desce; nunca altere à mão para fazer um gate passar.',
@@ -199,7 +205,7 @@ export function measure(root = repoRoot(), { full = false } = {}) {
       suppressionsByKind: byKind,
       dartBoundaries: sumValues(byRule),
       dartBoundariesByRule: byRule,
-      apiFallbacks,
+      apiFallbacks: ctx.apiFallbacks,
       functionsExports,
       flutterFeaturesNoTest: noTest.count,
       flutterFeaturesNoTestList: noTest.list,

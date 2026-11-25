@@ -275,6 +275,81 @@ function buildDescription(task, backlog, dir) {
   return lines.join('\n');
 }
 
+const RE_TITULO = /^(#{1,4})\s+(.*)$/;
+const RE_REGRA = /^(---|\*\*\*|___)\s*$/;
+const RE_LISTA = /^\s*[-*]\s+/;
+const RE_LISTA_ORD = /^\s*\d+\.\s+/;
+const RE_FENCE = /^```/;
+
+const listItemDe = (text) => ({ type: 'listItem', content: [{ type: 'paragraph', content: [{ type: 'text', text }] }] });
+
+/** Bloco de código: consome do fence de abertura ao de fechamento. */
+function consumirCodigo(lines, i, doc) {
+  const code = [];
+  i++;
+  while (i < lines.length && !lines[i].startsWith('```')) {
+    code.push(lines[i]);
+    i++;
+  }
+  i++; // fecha o fence
+  doc.content.push({
+    type: 'codeBlock',
+    attrs: { language: 'text' },
+    content: [{ type: 'text', text: code.join('\n') }],
+  });
+  return i;
+}
+
+/** Lista de marcadores (com checkboxes ☐/☑). */
+function consumirLista(lines, i, doc) {
+  const items = [];
+  while (i < lines.length && RE_LISTA.test(lines[i])) {
+    items.push(lines[i].replace(RE_LISTA, '').replace(/^\[ \]\s*/, '☐ ').replace(/^\[[xX]\]\s*/, '☑ '));
+    i++;
+  }
+  doc.content.push({ type: 'bulletList', content: items.map(listItemDe) });
+  return i;
+}
+
+/** Lista ordenada. */
+function consumirListaOrdenada(lines, i, doc) {
+  const items = [];
+  while (i < lines.length && RE_LISTA_ORD.test(lines[i])) {
+    items.push(lines[i].replace(RE_LISTA_ORD, ''));
+    i++;
+  }
+  doc.content.push({
+    type: 'orderedList',
+    attrs: { order: 1 },
+    content: items.map(listItemDe),
+  });
+  return i;
+}
+
+/** Parágrafo: linhas contíguas simples viram UM parágrafo com hardBreak. */
+function consumirParagrafo(lines, i, doc) {
+  const paragraphLines = [];
+  while (
+    i < lines.length &&
+    lines[i].trim() !== '' &&
+    !RE_FENCE.test(lines[i]) &&
+    !/^#{1,4}\s+/.test(lines[i]) &&
+    !RE_LISTA.test(lines[i]) &&
+    !RE_LISTA_ORD.test(lines[i]) &&
+    !RE_REGRA.test(lines[i])
+  ) {
+    paragraphLines.push(lines[i]);
+    i++;
+  }
+  const content = [];
+  paragraphLines.forEach((text, index) => {
+    if (index > 0) content.push({ type: 'hardBreak' });
+    content.push({ type: 'text', text });
+  });
+  if (content.length) doc.content.push({ type: 'paragraph', content });
+  return i;
+}
+
 /** Converte o markdown da description em ADF do Jira v3, preservando
  *  estrutura (títulos, listas, checkboxes, código) e respeitando o limite
  *  de 32.767 caracteres com aviso e referência à spec no repositório. */
@@ -284,26 +359,9 @@ export function markdownToAdf(markdown, task = null) {
   let i = 0;
   while (i < lines.length) {
     const line = lines[i];
-
     if (line.trim() === '') { i++; continue; }
-
-    if (line.startsWith('```')) {
-      const code = [];
-      i++;
-      while (i < lines.length && !lines[i].startsWith('```')) {
-        code.push(lines[i]);
-        i++;
-      }
-      i++; // fecha o fence
-      doc.content.push({
-        type: 'codeBlock',
-        attrs: { language: 'text' },
-        content: [{ type: 'text', text: code.join('\n') }],
-      });
-      continue;
-    }
-
-    const heading = line.match(/^(#{1,4})\s+(.*)$/);
+    if (RE_FENCE.test(line)) { i = consumirCodigo(lines, i, doc); continue; }
+    const heading = line.match(RE_TITULO);
     if (heading) {
       doc.content.push({
         type: 'heading',
@@ -312,72 +370,11 @@ export function markdownToAdf(markdown, task = null) {
       });
       i++; continue;
     }
-
-    if (/^(---|\*\*\*|___)\s*$/.test(line)) {
-      doc.content.push({ type: 'rule' });
-      i++; continue;
-    }
-
-    if (/^\s*[-*]\s+/.test(line)) {
-      const items = [];
-      while (i < lines.length && /^\s*[-*]\s+/.test(lines[i])) {
-        items.push(
-          lines[i]
-            .replace(/^\s*[-*]\s+/, '')
-            .replace(/^\[ \]\s*/, '☐ ')
-            .replace(/^\[[xX]\]\s*/, '☑ '),
-        );
-        i++;
-      }
-      doc.content.push({
-        type: 'bulletList',
-        content: items.map((text) => ({
-          type: 'listItem',
-          content: [{ type: 'paragraph', content: [{ type: 'text', text }] }],
-        })),
-      });
-      continue;
-    }
-
-    if (/^\s*\d+\.\s+/.test(line)) {
-      const items = [];
-      while (i < lines.length && /^\s*\d+\.\s+/.test(lines[i])) {
-        items.push(lines[i].replace(/^\s*\d+\.\s+/, ''));
-        i++;
-      }
-      doc.content.push({
-        type: 'orderedList',
-        attrs: { order: 1 },
-        content: items.map((text) => ({
-          type: 'listItem',
-          content: [{ type: 'paragraph', content: [{ type: 'text', text }] }],
-        })),
-      });
-      continue;
-    }
-
-    // parágrafo: linhas contíguas simples viram UM parágrafo com hardBreak
-    const paragraphLines = [];
-    while (
-      i < lines.length &&
-      lines[i].trim() !== '' &&
-      !lines[i].startsWith('```') &&
-      !/^#{1,4}\s+/.test(lines[i]) &&
-      !/^\s*[-*]\s+/.test(lines[i]) &&
-      !/^\s*\d+\.\s+/.test(lines[i]) &&
-      !/^(---|\*\*\*|___)\s*$/.test(lines[i])
-    ) {
-      paragraphLines.push(lines[i]);
-      i++;
-    }
-    const content = [];
-    paragraphLines.forEach((text, index) => {
-      if (index > 0) content.push({ type: 'hardBreak' });
-      content.push({ type: 'text', text });
-    });
-    if (content.length) doc.content.push({ type: 'paragraph', content });
+    if (RE_REGRA.test(line)) { doc.content.push({ type: 'rule' }); i++; continue; }
+    if (RE_LISTA.test(line)) { i = consumirLista(lines, i, doc); continue; }
+    if (RE_LISTA_ORD.test(line)) { i = consumirListaOrdenada(lines, i, doc); continue; }
+    i = consumirParagrafo(lines, i, doc);
   }
-
   return truncateAdf(doc, task);
 }
 

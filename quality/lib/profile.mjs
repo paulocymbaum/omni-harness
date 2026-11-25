@@ -80,36 +80,53 @@ function discoverProfile(dir, env) {
 /** Campos objeto opcionais do schema v1 — o perfil do hospedeiro pode omitir ou trazer {}. */
 const CAMPOS_OBJETO = ['metrics', 'flutter', 'runnerTs', 'tracker', 'gitflow', 'runnerDotnet', 'runnerGo', 'runnerRust', 'runnerCpp', 'runnerJava'];
 
-/** Valida o JSON bruto contra o schema v1. Devolve erros em pt-BR (lista vazia = válido). */
-export function validateProfile(raw) {
-  const erros = [];
-  if (raw == null || typeof raw !== 'object' || Array.isArray(raw)) {
-    erros.push('perfil deve ser um objeto JSON');
-    return erros;
-  }
+/** Erros base: objeto JSON e schemaVersion — sem eles, nada mais a validar. */
+function errosDeBase(raw) {
+  if (raw == null || typeof raw !== 'object' || Array.isArray(raw)) return ['perfil deve ser um objeto JSON'];
   if (raw.schemaVersion !== SCHEMA_VERSION) {
-    erros.push(`schemaVersion deve ser ${SCHEMA_VERSION}; recebi ${JSON.stringify(raw.schemaVersion)}`);
+    return [`schemaVersion deve ser ${SCHEMA_VERSION}; recebi ${JSON.stringify(raw.schemaVersion)}`];
   }
+  return [];
+}
+
+/** Identidade do perfil: name, locale e packs. */
+function errosDeIdentidade(raw) {
+  const erros = [];
   if (typeof raw.name !== 'string' || !raw.name) erros.push('name deve ser string não vazia');
   if (typeof raw.locale !== 'string' || !raw.locale) erros.push('locale deve ser string não vazia');
   if (!Array.isArray(raw.packs) || raw.packs.some((p) => typeof p !== 'string')) {
     erros.push('packs deve ser lista de strings');
   }
-  if (raw.layers != null) {
-    if (!Array.isArray(raw.layers)) erros.push('layers deve ser lista');
-    else {
-      for (const l of raw.layers) {
-        const ok = l != null && typeof l === 'object' && typeof l.id === 'string' && Array.isArray(l.globs);
-        if (!ok) { erros.push('cada layer precisa de { id, globs[] }'); break; }
-      }
-    }
+  return erros;
+}
+
+/** layers precisa de { id, globs[] } — ausente é válido (defaults genéricos do perfil). */
+function errosDeLayers(raw) {
+  if (raw.layers == null) return [];
+  const erros = [];
+  if (!Array.isArray(raw.layers)) { erros.push('layers deve ser lista'); return erros; }
+  for (const l of raw.layers) {
+    const ok = l != null && typeof l === 'object' && typeof l.id === 'string' && Array.isArray(l.globs);
+    if (!ok) { erros.push('cada layer precisa de { id, globs[] }'); break; }
   }
+  return erros;
+}
+
+/** riskMatrix e enums são objetos opcionais. */
+function errosDeRiskEEnums(raw) {
+  const erros = [];
   if (raw.riskMatrix != null && (typeof raw.riskMatrix !== 'object' || Array.isArray(raw.riskMatrix))) {
     erros.push('riskMatrix deve ser objeto');
   }
   if (raw.enums != null && (typeof raw.enums !== 'object' || Array.isArray(raw.enums))) {
     erros.push('enums deve ser objeto { nome: [arquivos] }');
   }
+  return erros;
+}
+
+/** Campos lista opcionais do schema v1 — o perfil do hospedeiro pode omitir ou trazer []. */
+function errosDeListas(raw) {
+  const erros = [];
   const listas = [
     ['autofix.include', raw.autofix && raw.autofix.include], ['featureMatchers', raw.featureMatchers],
     ['docsMatchers', raw.docsMatchers], ['l10nPatterns', raw.l10nPatterns],
@@ -118,33 +135,79 @@ export function validateProfile(raw) {
   for (const [nome, v] of listas) {
     if (v != null && !Array.isArray(v)) erros.push(`${nome} deve ser lista`);
   }
+  return erros;
+}
+
+/** Cada boundary precisa de { rule, applies, bad[], internalBad[] }. */
+function errosDeBoundaries(raw) {
+  const erros = [];
   if (raw.boundaries != null) {
     for (const b of raw.boundaries) {
       const ok = b != null && typeof b === 'object' && typeof b.rule === 'string' && typeof b.applies === 'string';
       if (!ok) { erros.push('cada boundary precisa de { rule, applies, bad[], internalBad[] }'); break; }
     }
   }
-  const objetos = CAMPOS_OBJETO;
-  for (const nome of objetos) {
+  return erros;
+}
+
+/** Campos objeto opcionais do schema v1. */
+function errosDeObjetos(raw) {
+  const erros = [];
+  for (const nome of CAMPOS_OBJETO) {
     const v = raw[nome];
     if (v != null && (typeof v !== 'object' || Array.isArray(v))) erros.push(`${nome} deve ser objeto`);
   }
+  return erros;
+}
+
+/** dartPackage é string opcional. */
+function errosDeDartPackage(raw) {
+  if (raw.dartPackage != null && typeof raw.dartPackage !== 'string') return ['dartPackage deve ser string'];
+  return [];
+}
+
+/** tracker.provider é string opcional (ex.: jira, none). */
+function errosDeTracker(raw) {
   if (raw.tracker != null && typeof raw.tracker === 'object' && raw.tracker.provider != null && typeof raw.tracker.provider !== 'string') {
-    erros.push('tracker.provider deve ser string (ex.: jira, none)');
+    return ['tracker.provider deve ser string (ex.: jira, none)'];
   }
+  return [];
+}
+
+/** gitflow.permanent é lista opcional. */
+function errosDeGitflow(raw) {
   if (raw.gitflow != null && typeof raw.gitflow === 'object' && raw.gitflow.permanent != null && !Array.isArray(raw.gitflow.permanent)) {
-    erros.push('gitflow.permanent deve ser lista de strings');
+    return ['gitflow.permanent deve ser lista de strings'];
   }
-  if (raw.dartPackage != null && typeof raw.dartPackage !== 'string') erros.push('dartPackage deve ser string');
-  if (raw.prompt != null) {
-    const p = raw.prompt;
-    if (typeof p !== 'object' || Array.isArray(p)) erros.push('prompt deve ser objeto');
-    else {
-      if (p.overlay != null && typeof p.overlay !== 'string') erros.push('prompt.overlay deve ser string (caminho relativo)');
-      if (p.domainSkills != null && !Array.isArray(p.domainSkills)) erros.push('prompt.domainSkills deve ser lista');
-      if (p.domainRules != null && !Array.isArray(p.domainRules)) erros.push('prompt.domainRules deve ser lista');
-    }
-  }
+  return [];
+}
+
+/** prompt é objeto com overlay string e listas de skills/rules. */
+function errosDePrompt(raw) {
+  if (raw.prompt == null) return [];
+  const p = raw.prompt;
+  if (typeof p !== 'object' || Array.isArray(p)) return ['prompt deve ser objeto'];
+  const erros = [];
+  if (p.overlay != null && typeof p.overlay !== 'string') erros.push('prompt.overlay deve ser string (caminho relativo)');
+  if (p.domainSkills != null && !Array.isArray(p.domainSkills)) erros.push('prompt.domainSkills deve ser lista');
+  if (p.domainRules != null && !Array.isArray(p.domainRules)) erros.push('prompt.domainRules deve ser lista');
+  return erros;
+}
+
+/** Valida o JSON bruto contra o schema v1. Devolve erros em pt-BR (lista vazia = válido). */
+export function validateProfile(raw) {
+  const erros = errosDeBase(raw);
+  if (erros.length) return erros;
+  erros.push(...errosDeIdentidade(raw));
+  erros.push(...errosDeLayers(raw));
+  erros.push(...errosDeRiskEEnums(raw));
+  erros.push(...errosDeListas(raw));
+  erros.push(...errosDeBoundaries(raw));
+  erros.push(...errosDeObjetos(raw));
+  erros.push(...errosDeTracker(raw));
+  erros.push(...errosDeGitflow(raw));
+  erros.push(...errosDeDartPackage(raw));
+  erros.push(...errosDePrompt(raw));
   return erros;
 }
 
