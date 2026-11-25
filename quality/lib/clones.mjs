@@ -221,7 +221,7 @@ const ehAnonima = (d) => d.curto == null || d.curto.includes('anonymous') || d.c
 function nomesRepetidos(defs, cfg) {
   const grupos = new Map();
   for (const d of defs) {
-    if (NOMES_IGNORADOS.has(d.funcao) || ehAnonima(d)) continue;
+    if (NOMES_IGNORADOS.has(String(d.curto || '').toLowerCase()) || ehAnonima(d)) continue;
     if (!grupos.has(d.funcao)) grupos.set(d.funcao, new Map());
     const porArquivo = grupos.get(d.funcao);
     if (!porArquivo.has(d.arquivo)) porArquivo.set(d.arquivo, d);
@@ -253,7 +253,7 @@ function paresQuaseClones(grupo, cfg) {
 function quaseClones(defs, cfg) {
   const grupos = new Map();
   for (const d of defs) {
-    if (NOMES_IGNORADOS.has(d.funcao) || ehAnonima(d)) continue;
+    if (NOMES_IGNORADOS.has(String(d.curto || '').toLowerCase()) || ehAnonima(d)) continue;
     if (!grupos.has(d.funcao)) grupos.set(d.funcao, []);
     grupos.get(d.funcao).push(d);
   }
