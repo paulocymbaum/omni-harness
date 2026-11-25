@@ -22,6 +22,8 @@ node quality/agents/sync-clinerules.mjs --check
 
 4. **Projeto local — sem CI/Actions.** A validação é a bateria local acima; rode-a antes de commitar. Mantenedor: commit direto em `main` após a bateria verde. Contribuição externa (fork): abra o PR — será revisada e mergeada manualmente após rodar a mesma bateria; não há checks automáticos.
 
+> O CI publica o check **`quality`** — é o contexto exigido pela proteção de `main`.
+
 ## Regras do núcleo
 
 - **Nada de produto no motor**: camadas, fronteiras, runners, tracker, gitflow, PII, locale e prompts de domínio são **dado do perfil** (`quality/profile/`, `quality/hosts.json`, `quality/packs/`). Mudança de estrutura de vendor (ex.: Antigravity/VS Code) = atualizar dado/registro, nunca espalhar path no código.
