@@ -8,10 +8,11 @@ import path from 'node:path';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { deployPendente, entregasComDeployPendente } from '../../../quality/lib/deploy-pendente.mjs';
+import { deployPendente, entregasComDeployPendente } from '../../../lib/deploy-pendente.mjs';
 
 const AGORA = Date.parse('2026-11-22T12:00:00Z');
-const RAIZ = resolve(fileURLToPath(new URL('../../..', import.meta.url)));
+const RAIZ = resolve(fileURLToPath(new URL('..', import.meta.url)));
+const RAIZ_HARNESS = resolve(fileURLToPath(new URL('../../../..', import.meta.url)));
 
 const backlog = (estado, aprovada_em) => ({
   homologacao: { estado, ...(aprovada_em ? { aprovada_em } : {}) },
@@ -87,8 +88,8 @@ test('varredura: só a entrega com pendência aparece', () => {
 });
 
 test('gancho no Stop: stop.mjs consulta o detector e usa a mensagem de deploy pendente', () => {
-  const stop = readFileSync(path.join(RAIZ, 'quality', 'hooks', 'stop.mjs'), 'utf8');
+  const stop = readFileSync(path.join(RAIZ_HARNESS, 'quality', 'hooks', 'stop.mjs'), 'utf8');
   assert.match(stop, /lembretesDeDeploy/);
-  const mensagens = readFileSync(path.join(RAIZ, 'quality', 'messages.pt-BR.json'), 'utf8');
+  const mensagens = readFileSync(path.join(RAIZ_HARNESS, 'quality', 'messages.pt-BR.json'), 'utf8');
   assert.match(mensagens, /hook\.stop\.deployPendente/);
 });

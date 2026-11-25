@@ -1,6 +1,8 @@
 // Gate P1 (paralelização de camadas): rodarCamadas por GRUPOS — ≥2 grupos ativos rodam em
 // subprocessos (camada-filha.mjs) com budget fatiado; <2 roda serial sem overhead; filho
 // falho/timeout = camada.unmeasured WARN (falha aberta). docs/parking-lot/performance-camadas.md.
+// Bootstrap primeiro: os grupos ativos derivam de PROFILE.layers (do exemplo: flutter, backend…).
+import './bootstrap-example-profile.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';

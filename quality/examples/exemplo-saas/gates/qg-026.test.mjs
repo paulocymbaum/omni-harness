@@ -7,7 +7,7 @@ import { resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
-const RAIZ = resolve(fileURLToPath(new URL('../../..', import.meta.url)));
+const RAIZ = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const DIR = join(RAIZ, 'scripts', 'deploy', 'local');
 const SCRIPTS = ['deploy-api.sh', 'deploy-web.sh', 'deploy-worker.sh', 'creator-worker-sob-demanda.sh', 'push-creator-llm.sh'];
 

@@ -9,7 +9,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
-const RAIZ = resolve(new URL('../../..', import.meta.url).pathname);
+const RAIZ = resolve(new URL('..', import.meta.url).pathname);
 const PASTA = mkdtempSync(join(tmpdir(), 'qg024-'));
 const SENTINELA = join(PASTA, 'gh-chamadas.log');
 const PATH_FALSO = `${join(PASTA, 'bin')}:${process.env.PATH}`;
