@@ -154,6 +154,9 @@ do harness — então a disciplina vira **contrato que VOCÊ executa via CLI**, 
    gitflow, tracker, layering do projeto). São texto — leia as citadas pela tarefa.
 5. **Perfil:** tudo que varia por projeto (camadas, fronteiras, runners, tracker, gitflow, PII,
    locale) vive em \`quality/profile/\` — nunca no motor.
+6. **Saída de comandos:** o \`rtk\` filtra a saída (log integral: \`rtk read <log>\`; saída crua:
+   \`rtk proxy <cmd>\`). Comando demorado: redirecione para arquivo (\`> /tmp/x.log 2>&1\`) e leia
+   com \`Read\` — o buffer do terminal não é confiável.
 
 Referência completa: \`docs/harness/INDEX.md\` · Instalador: \`omni-harness init <destino>\`.
 `;

@@ -11,7 +11,7 @@
 // result, success, executionTimeMs }, tool_result: { name } }. Falha aberta; responde `{}`.
 import path from 'node:path';
 import { readStdinJson, repoRoot, stateDir } from '../lib/util.mjs';
-import { SCRIPTS, claudeCalls, kindOf, readPost, runClaudeHook } from '../lib/cline-bridge.mjs';
+import { SCRIPTS, claudeCalls, comCap, kindOf, readPost, runClaudeHook } from '../lib/cline-bridge.mjs';
 import { observeResult } from '../lib/search-guard.mjs';
 import { noticeOf, planSync, startSync, writtenPaths } from '../lib/spec-sync.mjs';
 
@@ -83,7 +83,7 @@ try {
   });
   const root = workspaceRoot(input);
   const notices = [...bridgeWritten(call, root, input.taskId ?? input.sessionId ?? 'sem-tarefa'), ...syncWrittenSpecs(call, root)];
-  if (notices.length) out = { contextModification: notices.join('\n') };
+  if (notices.length) out = { contextModification: comCap(notices.join('\n')) };
 } catch { /* falha aberta */ }
 process.stdout.write(JSON.stringify(out));
 process.exit(0);

@@ -84,7 +84,8 @@ export function runClaudeHook(script, payload, { root, sessionId, timeoutMs = 60
   });
   let json = null;
   try { json = r.stdout?.trim() ? JSON.parse(r.stdout) : null; } catch { /* saída textual */ }
-  return { code: r.status, stdout: r.stdout ?? '', stderr: r.stderr ?? '', json, failed: r.error != null };
+  const timedOut = (r.error != null && r.error.code === 'ETIMEDOUT') || (r.signal === 'SIGTERM' && r.status === null);
+  return { code: r.status, stdout: r.stdout ?? '', stderr: r.stderr ?? '', json, failed: r.error != null, timedOut };
 }
 
 /** Resultado de hook PreToolUse do Claude → { deny, ask, context } (texto). */
@@ -125,3 +126,13 @@ export function softDeny({ toolName, params, sdk }, text, kind = 'BLOQUEADO') {
 const shellQuote = (s) => `'${String(s).replace(/'/g, `'\\''`)}'`;
 
 export const relPath = (file, root) => relToRoot(path.resolve(root, file), root);
+
+/** Teto defensivo do contexto injetado no Cline — hoje as notices não truncam; estourar o contexto do host é pior. */
+export const CAP_CONTEXTO = 8_000;
+
+/** Contexto com teto: acima do cap, corta com marcador e aponta o caminho integral (CLI). */
+export function comCap(texto) {
+  const t = String(texto ?? '');
+  if (t.length <= CAP_CONTEXTO) return t;
+  return `${t.slice(0, CAP_CONTEXTO)}\n…(truncado pelo harness no teto de ${CAP_CONTEXTO} caracteres — rode os gates via CLI para o texto integral)`;
+}
