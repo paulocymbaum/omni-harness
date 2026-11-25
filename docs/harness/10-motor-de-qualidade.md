@@ -1,6 +1,6 @@
 ---
 titulo: Motor de qualidade (quality/run.mjs)
-atualizado: 2026-11-24
+atualizado: 2026-11-25
 fontes: [quality/run.mjs, quality/lib/tiers.mjs, quality/config/thresholds.json, quality/config/risk-matrix.json, quality/config/resources.json, quality/hooks/git-pre-commit.mjs, QUALITY.md]
 ---
 
@@ -23,6 +23,7 @@ O motor (`quality/run.mjs`) mede o diff com **gates determinísticos** (tamanho,
 | Arquivo | Responsabilidade |
 |---|---|
 | `quality/run.mjs` | CLI: risco, níveis, relatório, evidência |
+| `quality/lib/relatorio.mjs` | `--relatorio`: avaliação completa por camada; sem camada aplicável no perfil → **fallback de camada única** (`repo`, árvore inteira + suíte do harness) |
 | `quality/lib/tiers.mjs` | Gates por nível e orçamento de tempo (`rapido` 60 s, `rotina` 270 s, `completo` 1 800 s) |
 | `quality/lib/risk.mjs` | Classificação de risco (eixos quebra × custo) |
 | `quality/lib/gates/fast.mjs` | Gates estruturais rápidos do arquivo editado |
@@ -49,7 +50,7 @@ flowchart TD
   I["node quality/run.mjs …"] --> M{"modo"}
   M -- "--risk" --> R["classifica o diff na matriz<br/>quebra × custo → nível exigido"]
   M -- "--tier N" --> T["roda os gates do nível<br/>nos arquivos do escopo"]
-  M -- "--relatorio" --> F["todas as camadas (lento,<br/>só sob pedido explícito)"]
+  M -- "--relatorio" --> F["todas as camadas (lento,<br/>só sob pedido explícito);<br/>sem camada aplicável → camada única"]
   R --> EV["grava evidência por hash<br/>quality/.state/evidence"]
   T --> EV
   EV -- "REPROVADO" --> U["agente corrige a causa<br/>(nunca afrouxa gate)"]
@@ -61,6 +62,7 @@ O risco é o **máximo por eixo**: `breakage` casa por glob de caminho (migratio
 ## Entradas, saídas e estado
 
 - **Entrada:** diff contra `--base` (padrão HEAD; `remote` = upstream de `origin/main`) ou escopo por `--files`/`--session`.
+- **Escopo vazio:** árvore limpa no `rotina`/`completo` → ALERTA explícito (`escopo`/`scope.empty`) — aprovação sem medição é sinalizada, nunca silenciosa; o nível rápido não ganha alerta (caminho por arquivo dos hooks).
 - **Saída:** relatório pt-BR no stdout (ou `--json`) com `APROVADO/REPROVADO/ALERTA/IGNORADO` por gate. `IGNORADO` = ferramenta ausente no ambiente (ex.: `osv-scanner ✘`) — **não é aprovação**.
 - **Estado:** `quality/.state/evidence/` — a evidência vale **só para o hash exato da árvore**; editar depois invalida. É o que os hooks de commit/push/deploy conferem (docs 02 e 04).
 
@@ -97,6 +99,7 @@ Limites estruturais (resumo de `thresholds.json`; catálogo completo em QUALITY.
 
 - **Gate REPROVADO no hook:** corrigir a causa apontada (`arquivo:linha:col`); nunca editar `quality/config/*`, `quality/messages.pt-BR.json` ou `quality/test/` para passar; supressão nova exige justificativa na entrega.
 - **Ferramenta ausente (`IGNORADO`):** não é aprovação; a entrega lista o que não foi medido.
+- **Relatório vazio (perfil sem camadas aplicáveis):** o `--relatorio` cai no fallback de camada única (`repo`) — nunca sai com 0 seções; `--camadas` explícito mantém as seções vazias honestas.
 - **Gate morto por memória (`tool.oom`):** subir o teto em `resources.json` — nunca reduzir o escopo do gate. Não usar `MemoryHigh`: sem swap ele estrangula em vez de encerrar.
 - **Pre-commit bloqueou:** o `--fix` pode ter normalizado arquivos (EOL, `dart format`, Biome seguro) — re-`git add` o que ele corrigiu antes de recommitar.
 - **REPROVADO por job sempre em voo (QG-022):** reduza o `task-timeout`, afrouxe o tick do Scheduler ou justifique a sobreposição na entrega (fila com claim seguro); preços de referência em `quality/config/cost-table.json`, teto de run-rate em `thresholds.costJob`.
