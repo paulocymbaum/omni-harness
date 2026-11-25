@@ -9,8 +9,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const WF = path.join(ROOT, '.github', 'workflows', 'quality.yml');
+// Exige o projeto hospedeiro real (.github/workflows): ausente no exemplo → skip com motivo.
+const SKIP_SEM_PROJETO = fs.existsSync(path.join(ROOT, '.github', 'workflows')) ? {} : { skip: 'exige .github/workflows do projeto hospedeiro (ausente no exemplo)' };
 
 function read(file) {
   const p = path.join(ROOT, file);
@@ -23,7 +25,7 @@ function readScripts(pkgRel) {
   return pkg.scripts ?? {};
 }
 
-test('qg-004: workflow de qualidade existe e é o veículo das camadas órfãs', () => {
+test('qg-004: workflow de qualidade existe e é o veículo das camadas órfãs', SKIP_SEM_PROJETO, () => {
   const yml = read('.github/workflows/quality.yml');
   assert.match(yml, /OCR_webscraper_crawler\/\*\*/, 'paths-filter da camada OCR ausente');
   for (const dir of ['admin-web/**', 'ofluxo_site/**', 'services/debate-worker/**']) {
@@ -31,7 +33,7 @@ test('qg-004: workflow de qualidade existe e é o veículo das camadas órfãs',
   }
 });
 
-test('qg-004: job OCR roda typecheck e testes', () => {
+test('qg-004: job OCR roda typecheck e testes', SKIP_SEM_PROJETO, () => {
   const yml = read('.github/workflows/quality.yml');
   const ocrIdx = yml.indexOf('\n  ocr:');
   assert.ok(ocrIdx >= 0, 'job ocr ausente');
@@ -40,7 +42,7 @@ test('qg-004: job OCR roda typecheck e testes', () => {
   assert.match(ocr, /pnpm --dir OCR_webscraper_crawler test/, 'testes do OCR ausentes no CI');
 });
 
-test('qg-004: job web cobre admin-web, ofluxo_site e debate-worker com lint, tipos e testes', () => {
+test('qg-004: job web cobre admin-web, ofluxo_site e debate-worker com lint, tipos e testes', SKIP_SEM_PROJETO, () => {
   const yml = read('.github/workflows/quality.yml');
   const webIdx = yml.indexOf('\n  web:');
   const gateIdx = yml.indexOf('\n  gate:');
@@ -54,7 +56,7 @@ test('qg-004: job web cobre admin-web, ofluxo_site e debate-worker com lint, tip
   }
 });
 
-test('qg-004: os scripts chamados com --if-present existem em cada projeto (nada é pulado)', () => {
+test('qg-004: os scripts chamados com --if-present existem em cada projeto (nada é pulado)', SKIP_SEM_PROJETO, () => {
   for (const projeto of ['admin-web', 'ofluxo_site', 'services/debate-worker']) {
     const scripts = readScripts(projeto);
     assert.ok(scripts.lint, `${projeto}: script lint ausente`);
@@ -68,7 +70,7 @@ test('qg-004: os scripts chamados com --if-present existem em cada projeto (nada
   assert.ok(ocrPkg.includes('"test"'), 'OCR: script test ausente no package.json raiz');
 });
 
-test('qg-004: o consolidador gate depende de ocr e web', () => {
+test('qg-004: o consolidador gate depende de ocr e web', SKIP_SEM_PROJETO, () => {
   const yml = read('.github/workflows/quality.yml');
   assert.match(yml, /needs: \[higiene, flutter, ocr, web\]/, 'gate precisa depender de ocr e web');
 });

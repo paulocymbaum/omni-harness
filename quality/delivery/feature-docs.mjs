@@ -26,7 +26,7 @@ const STATE_TEXT = { missing: 'ausente', draft: 'em rascunho (falta `Status: rea
 
 /** Pendências (frases pt-BR) dos documentos; vazio quando os dois estão prontos. */
 export function docsProblemas(docs) {
-  return ['brd', 'exemplo-saas'].flatMap((k) => {
+  return ['brd', 'fluxo'].flatMap((k) => {
     const d = docs[k];
     if (d.state === 'ready') return [];
     if (d.state === 'blocked') return [`${LABEL[k]} com dados pessoais (${describeFindings(d.findings)}): ${d.file}`];

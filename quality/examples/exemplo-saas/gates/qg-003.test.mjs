@@ -7,8 +7,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const WF = path.join(ROOT, '.github', 'workflows', 'quality.yml');
+// Exige o projeto hospedeiro real (.github/workflows): ausente no exemplo → skip com motivo.
+const SKIP_SEM_PROJETO = fs.existsSync(path.join(ROOT, '.github', 'workflows')) ? {} : { skip: 'exige .github/workflows do projeto hospedeiro (ausente no exemplo)' };
 // Mesma regra do qg-001: toda action pinada por SHA de commit (40 hex).
 const PINNED = /^[A-Za-z0-9.-]+\/[A-Za-z0-9._-]+@[0-9a-f]{40}(?:\s|#|$)/;
 
@@ -17,14 +19,14 @@ function readWorkflow() {
   return fs.readFileSync(WF, 'utf8');
 }
 
-test('qg-003: workflow de qualidade existe, tem nome e roda em PR e push na main', () => {
+test('qg-003: workflow de qualidade existe, tem nome e roda em PR e push na main', SKIP_SEM_PROJETO, () => {
   const yml = readWorkflow();
   assert.match(yml, /^name: Gates de Qualidade/m, 'nome do workflow deve ser "Gates de Qualidade"');
   assert.match(yml, /^\s*pull_request:/m, 'deve rodar em pull_request');
   assert.match(yml, /branches: \[main\]/, 'deve rodar em push na main');
 });
 
-test('qg-003: toda action do workflow está pinada por SHA', () => {
+test('qg-003: toda action do workflow está pinada por SHA', SKIP_SEM_PROJETO, () => {
   const yml = readWorkflow();
   const soltos = [];
   for (const m of yml.matchAll(/(?:^|\n)\s*(?:- )?uses:\s*(\S+)/g)) {
@@ -35,7 +37,7 @@ test('qg-003: toda action do workflow está pinada por SHA', () => {
   assert.deepEqual(soltos, [], `actions sem pin: ${soltos.join(', ')}`);
 });
 
-test('qg-003: filtro por camada com dorny/paths-filter e jobs por camada', () => {
+test('qg-003: filtro por camada com dorny/paths-filter e jobs por camada', SKIP_SEM_PROJETO, () => {
   const yml = readWorkflow();
   assert.match(yml, /dorny\/paths-filter@[0-9a-f]{40}/, 'faltou o paths-filter pinado');
   for (const camada of ['flutter:', 'ocr:', 'web:']) {
@@ -46,14 +48,14 @@ test('qg-003: filtro por camada com dorny/paths-filter e jobs por camada', () =>
   }
 });
 
-test('qg-003: higiene roda self-testes, ratchet global e o motor no diff', () => {
+test('qg-003: higiene roda self-testes, ratchet global e o motor no diff', SKIP_SEM_PROJETO, () => {
   const yml = readWorkflow();
   assert.match(yml, /node --test quality\/test\/\*\.test\.mjs/, 'self-testes do motor ausentes');
   assert.match(yml, /node quality\/baseline\.mjs --check/, 'ratchet global (baseline --check) ausente');
   assert.match(yml, /node quality\/run\.mjs --tier \w+ --base origin\/main/, 'motor sem comparação com origin/main');
 });
 
-test('qg-003: gate consolidador é sempre avaliado e reprova com qualquer falha', () => {
+test('qg-003: gate consolidador é sempre avaliado e reprova com qualquer falha', SKIP_SEM_PROJETO, () => {
   const yml = readWorkflow();
   const gateIdx = yml.indexOf('\n  gate:');
   assert.ok(gateIdx >= 0, 'job gate ausente');
@@ -63,7 +65,7 @@ test('qg-003: gate consolidador é sempre avaliado e reprova com qualquer falha'
   assert.match(gate, /!= "success" && "\$r" != "skipped"/, 'gate deve aceitar só success ou skipped');
 });
 
-test('qg-003: expressões não indexam named-value por variável (falha de startup no GitHub)', () => {
+test('qg-003: expressões não indexam named-value por variável (falha de startup no GitHub)', SKIP_SEM_PROJETO, () => {
   // Incidente real: ${{ needs[j].result }} dentro de loop bash — o GitHub expande
   // ${{ }} antes do shell e named-value indexado por identificador não existe lá.
   // Indexação numérica (ex.: matrix.include[0]) continua permitida.
@@ -75,7 +77,7 @@ test('qg-003: expressões não indexam named-value por variável (falha de start
   assert.deepEqual(dinamicas, [], `expressões com indexação dinâmica: ${dinamicas.join(', ')}`);
 });
 
-test('qg-003: app mobile tem cobertura do diff com mínimo de 80%', () => {
+test('qg-003: app mobile tem cobertura do diff com mínimo de 80%', SKIP_SEM_PROJETO, () => {
   const yml = readWorkflow();
   assert.match(yml, /flutter test --coverage/, 'testes sem cobertura');
   assert.match(yml, /diff-cover coverage\/lcov\.info[^\n]*--fail-under 80/, 'diff-cover ausente ou com limite errado');

@@ -8,12 +8,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const WF_DIR = path.join(ROOT, '.github', 'workflows');
+// Exige o projeto hospedeiro real (.github/workflows): ausente no exemplo → skip com motivo.
+const SKIP_SEM_PROJETO = fs.existsSync(WF_DIR) ? {} : { skip: 'exige .github/workflows do projeto hospedeiro (ausente no exemplo)' };
 // owner/repo@<40 hex> — tolera comentário de versão depois do SHA (convenção do repositório).
 const PINNED = /^[A-Za-z0-9.-]+\/[A-Za-z0-9._-]+@[0-9a-f]{40}(?:\s|#|$)/;
 
-test('qg-001: toda action de workflow está pinada por SHA de commit', () => {
+test('qg-001: toda action de workflow está pinada por SHA de commit', SKIP_SEM_PROJETO, () => {
   assert(fs.existsSync(WF_DIR), 'diretório .github/workflows não encontrado');
   const files = fs.readdirSync(WF_DIR).filter((f) => /\.ya?ml$/.test(f));
   assert(files.length > 0, 'nenhum workflow encontrado em .github/workflows');
