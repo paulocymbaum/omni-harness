@@ -53,6 +53,21 @@ ask me before anything destructive; do not edit files outside the plan without a
 > **Neutral quality and workflow infrastructure for coding agents**: the same deterministic gate engine, the same hooks and the same session context on any IDE or CLI — and the project knowledge in a **profile** the team edits without touching code. The host's stack and architecture are **configuration data**, not coupling. **Node 22, zero dependencies.**
 >
 > It was born inside the Exemplo SaaS monorepo and split out (2026-11-22) — Exemplo SaaS is now just the sample host in [`quality/examples/exemplo-saas/`](quality/examples/exemplo-saas/README.md).
+## Why this exists — Poka-yoke for AI-generated code
+
+**Poka-yoke** (ポカヨケ, "mistake-proofing") is a lean transformation concept from the Toyota Production System (Shigeo Shingo): devices that make it **impossible for a defect to move on to the next step** of the process. In lean thinking, the cost of a defect **compounds with scale** — the later (and in greater volume) it is found, the more expensive the fix, and **accumulated technical debt grows multiplicatively**.
+
+AI coding agents generate lines at a speed that **multiplies exactly this risk**: high volume, human review that cannot keep up, and errors repeated as a pattern instead of as exceptions.
+
+![Accumulated technical debt vs. AI-generated code volume — with and without Poka-yoke](docs/assets/debito-tecnico-ia.png)
+
+The Omni Harness applies this premise to AI-generated code: **deterministic gates block the defect in the step where it is born** (a poka-yoke that fails loud, never a silent warning), and **every deterministically identified error is fed back to the model** as course-correction context for the next iteration. The same class of mistake stops repeating, review effort drops, and accumulated technical debt **falls sharply instead of compounding** — that is what keeps AI-accelerated delivery safe **at scale**.
+
+- **Fail loud, fail early** — a gate verdict is a stop sign, not a warning to ignore.
+- **Feedback, not archaeology** — the error comes back to the agent as actionable context, not to a human as investigation.
+- **Deterministic, not vibes** — the same defect, the same detection, every time; that is what makes the loop trustworthy.
+
+
 
 ## How it works (the idea in 4 pillars)
 

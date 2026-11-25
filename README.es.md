@@ -53,6 +53,21 @@ ask me before anything destructive; do not edit files outside the plan without a
 > **Infraestructura neutral de calidad y workflow para agentes de código**: el mismo motor de gates determinísticos, los mismos hooks y el mismo contexto de sesión en cualquier IDE o CLI — y el conocimiento del proyecto en un **perfil** que el equipo edita sin tocar código. El stack y la arquitectura del hospedero son **dato de configuración**, no acoplamiento. **Node 22, cero dependencias.**
 >
 > Nació dentro del monorepo Exemplo SaaS y fue separado (2026-11-22) — Exemplo SaaS hoy es solo el ejemplo de hospedero en [`quality/examples/exemplo-saas/`](quality/examples/exemplo-saas/README.md).
+## Por qué existe — Poka-yoke para código generado por IA
+
+**Poka-yoke** (ポカヨケ, "a prueba de errores") es un concepto de la transformación lean, originado en el Sistema de Producción Toyota (Shigeo Shingo): dispositivos que **impiden que un defecto avance al siguiente paso** del proceso. En el pensamiento lean, el costo de un defecto **se compone con la escala** — cuanto más tarde (y en mayor volumen) se descubre, más cara es la corrección, y la **deuda técnica acumulada crece de forma multiplicativa**.
+
+Los agentes de código generan líneas a una velocidad que **multiplica exactamente ese riesgo**: volumen alto, revisión humana que no acompaña y errores repetidos en patrón, no por excepción.
+
+![Deuda técnica acumulada vs. volumen de código generado por IA — con y sin Poka-yoke](docs/assets/debito-tecnico-ia.png)
+
+Omni Harness aplica esa premisa al código generado por IA: **gates determinísticos bloquean el defecto en el paso donde nace** (poka-yoke que falla alto, nunca un aviso silencioso), y **cada error identificado de forma determinística se realimenta al modelo** como contexto de corrección de rumo en la siguiente iteración. La misma clase de error deja de repetirse, el esfuerzo de revisión baja y la deuda técnica acumulada **cae de forma drástica en lugar de componerse** — eso mantiene segura la entrega acelerada por IA **a escala**.
+
+- **Falla alto, falla temprano** — el veredicto de un gate es una señal de alto, no un aviso para ignorar.
+- **Realimentación, no arqueología** — el error vuelve al agente como contexto accionable, no al humano como investigación.
+- **Determinístico, no impresiones** — el mismo defecto, la misma detección, siempre; eso hace confiable el ciclo.
+
+
 
 ## Cómo funciona (la idea en 4 pilares)
 
