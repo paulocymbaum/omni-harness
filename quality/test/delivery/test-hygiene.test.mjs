@@ -1,4 +1,6 @@
 // Gate EG-TEST-HYGIENE — testa test-hygiene.mjs (falsos positivos + dependências)
+// Bootstrap primeiro: os stack roots vêm do perfil do exemplo (functions, quality, scripts…).
+import '../bootstrap-example-profile.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

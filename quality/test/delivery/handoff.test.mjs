@@ -61,10 +61,22 @@ test('nome do arquivo é derivado de fase, tarefa e agente sem caracteres insegu
 });
 
 test('fatos vêm do backlog.json real, não do texto do agente', () => {
-  const fatos = renderFatos(process.cwd(), 'docs/entregas/2026-10-02-cnpj-alfanumerico-correcoes', 'CNPJ-002');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'handoff-fatos-'));
+  const done = (id) => ({ id, title: `Tarefa ${id}`, status: 'done', depends_on: [], ...(id === 'CNPJ-002' ? { jira_key: 'OFLUXO-5' } : {}) });
+  const backlog = {
+    id: 'cnpj-alfanumerico', title: 'CNPJ alfanumérico', created: '2026-10-02',
+    tasks: ['CNPJ-001', 'CNPJ-002', 'CNPJ-003', 'CNPJ-004', 'CNPJ-005', 'CNPJ-006', 'CNPJ-007'].map(done),
+    gates: [
+      { id: 'CNPJ-G002-STATIC', task: 'CNPJ-002', type: 'command', command: ['node', '--version'] },
+      { id: 'CNPJ-G002-FLUTTER', task: 'CNPJ-002', type: 'command', command: ['node', '--version'] },
+    ],
+  };
+  fs.writeFileSync(path.join(dir, 'backlog.json'), JSON.stringify(backlog, null, 2));
+  const fatos = renderFatos(dir, '.', 'CNPJ-002');
   assert.match(fatos, /### Fatos do harness/);
   assert.match(fatos, /- CNPJ-002: done · OFLUXO-5 · gates: CNPJ-G002-STATIC\(command\), CNPJ-G002-FLUTTER\(command\)/);
   assert.match(fatos, /Backlog: 7 done/);
+  fs.rmSync(dir, { recursive: true, force: true });
 });
 
 // ── hook SubagentStop ────────────────────────────────────────────────────────

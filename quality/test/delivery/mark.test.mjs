@@ -14,10 +14,21 @@ const FAKE_JIRA = {
   JIRA_BASE_URL: 'http://127.0.0.1:1', JIRA_EMAIL: 'teste@example.com', JIRA_API_TOKEN: 'falso', JIRA_PROJECT_KEY: 'TST',
 };
 
+// Perfil de fixture com tracker jira: o perfil deste hospedeiro é tracker none (nada espelha);
+// o teste do espelhamento precisa do provider jira ligado para exercitar o caminho de falha.
+function perfilJira() {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'eg-mark-perfil-'));
+  fs.writeFileSync(path.join(dir, 'profile.json'), JSON.stringify({ name: 'eg-mark', locale: 'pt-BR', tracker: { provider: 'jira' } }));
+  return dir;
+}
+
 function run(args) {
+  const perfil = perfilJira();
   const r = spawnSync(process.execPath, [BACKLOG_MJS, ...args], {
-    encoding: 'utf8', timeout: 60_000, env: { ...process.env, ...FAKE_JIRA },
+    encoding: 'utf8', timeout: 60_000,
+    env: { ...process.env, ...FAKE_JIRA, HARNESS_PROFILE_DIR: perfil },
   });
+  fs.rmSync(perfil, { recursive: true, force: true });
   return { code: r.status, stdout: r.stdout, stderr: r.stderr };
 }
 
@@ -161,6 +172,6 @@ test('mark com Jira inalcançável: grava o backlog, sai 1 e diz como reparar (a
     assert.equal(r.code, 1);
     assert.equal(readBacklog(dir).tasks[1].status, 'in_progress', 'o backlog já foi gravado');
     assert.match(r.stderr, /Jira NÃO atualizado \(T-002/);
-    assert.match(r.stderr, /Repare com: node scripts\/jira\/sync-context\.mjs .* T-002/);
+    assert.match(r.stderr, /Repare com: node scripts\/tracker\/sync-context\.mjs .* T-002/);
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
