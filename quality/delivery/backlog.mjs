@@ -35,7 +35,8 @@ if (!COMMANDS[cmd]) {
 try {
   await COMMANDS[cmd](path.resolve(dir), args);
 } catch (err) {
-  console.error(err.message);
+  // QUALITY_STACK=1 imprime o stack completo (diagnóstico de crashes como este).
+  console.error(process.env.QUALITY_STACK === '1' ? err.stack || err : err.message);
   process.exit(1);
 }
 
