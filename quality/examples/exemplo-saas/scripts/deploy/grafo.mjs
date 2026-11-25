@@ -192,15 +192,6 @@ export function topoOrdem(steps = STEPS) {
   return ordem;
 }
 
-/** Depois de quais passos o passo `id` pode rodar (deps já na ordem). */
-export function podeRodar(id, steps = STEPS) {
-  const ordem = topoOrdem(steps);
-  const alvo = ordem.find((s) => s.id === id);
-  if (!alvo) return { ok: false, motivo: `passo desconhecido: ${id}` };
-  const faltando = alvo.deps.filter((d) => !ordem.slice(0, ordem.indexOf(alvo)).some((s) => s.id === d));
-  return { ok: true, alvo, depsNaOrdem: alvo.deps };
-}
-
 /** Diagrama Mermaid do deploy (colar em docs/README para ver tudo que roda). */
 export function mermaid(steps = STEPS, feito = FEITOS) {
   const aspas = (t) => t.replace(/"/g, "'");

@@ -27,7 +27,7 @@ def main():
             try:
                 text.append(urllib.request.urlopen(BASE + name, timeout=20).read().decode('utf8', 'ignore'))
             except Exception:
-                pass
+                pass  # crawl tolerante: índice parcial é aceitável, nomes voltam na próxima rodada
         queue = list(dict.fromkeys(re.findall(r'[A-Za-z0-9_-]+-[A-Za-z0-9_-]{8}\.js', ''.join(text))))
     blob = ''.join(text)
     fields = {
