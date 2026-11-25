@@ -7,7 +7,7 @@ import { readStdinJson, stateDir } from '../lib/util.mjs';
 import { observeResult } from '../lib/search-guard.mjs';
 
 /** Saída textual do Bash em tool_response (objeto com stdout ou texto direto). */
-export function outputOf(toolResponse) {
+function outputOf(toolResponse) {
   if (typeof toolResponse === 'string') return toolResponse;
   if (!toolResponse || typeof toolResponse !== 'object') return undefined;
   return toolResponse.stdout ?? toolResponse.output ?? toolResponse.content;

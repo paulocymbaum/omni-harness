@@ -72,7 +72,7 @@ function parseLizardEntry(f, halstead) {
 /** Timeout de uma medição por texto; QUALITY_LIZARD_TIMEOUT_MS ajusta (máquina lenta ou teste). Escala com os limites. */
 const textTimeoutMs = () => (Number(process.env.QUALITY_LIZARD_TIMEOUT_MS) || 30_000) * timeFactor();
 
-export function lizardFunctions(files, { cwd, timeoutMs = 120_000 * timeFactor(), halstead = false } = {}) {
+function lizardFunctions(files, { cwd, timeoutMs = 120_000 * timeFactor(), halstead = false } = {}) {
   const cmd = lizardCommand();
   if (!cmd) return null;
   const extraArgs = halstead ? ['-Ehalstead'] : [];

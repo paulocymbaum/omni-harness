@@ -8,7 +8,7 @@
 // dessincroniza em `?.` e funde as funções seguintes num único blob de complexidade.
 export const GH_ACTIONS_ENABLED = process.env.GH_ACTIONS === 'true';
 
-export const VEREDITO_DESLIGADO =
+const VEREDITO_DESLIGADO =
   'Actions DESLIGADO (GH_ACTIONS=false) — deploy por script local SEMPRE: node scripts/deploy/release.mjs --run <id> --local';
 
 /** Mensagem de recusa quando o passo precisa de Actions e a chave está desligada; null quando pode seguir. */

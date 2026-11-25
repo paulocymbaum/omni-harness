@@ -23,7 +23,7 @@ import { SCRIPTS, claudeCalls, kindOf, readPre, runClaudeHook, softDeny } from '
 const firstDefined = (...values) => values.find((v) => v !== undefined && v !== null);
 
 /** Extrai { toolName, params, sdk } do JSON do Cline, tolerando as variações de versão. */
-export function readCall(input) {
+function readCall(input) {
   const pre = input.preToolUse ?? input.pre_tool_use ?? {};
   const call = input.tool_call ?? {};
   return {

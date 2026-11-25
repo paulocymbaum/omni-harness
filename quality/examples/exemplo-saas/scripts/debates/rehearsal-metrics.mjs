@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-export const CLIENT_POLL_ALLOWANCE_S = 2.5;
+const CLIENT_POLL_ALLOWANCE_S = 2.5;
 const PREFIX = 'debate.timeline.';
 const fail = (message) => { throw new Error(message); };
 const integer = (value, field) => {

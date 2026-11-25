@@ -23,7 +23,7 @@ export function autofixApplies(rel) {
   return matchAny(rel, CFG.include) && !matchAny(rel, CFG.exclude);
 }
 
-export const maxFailures = () => CFG.maxConsecutiveFailures ?? 3;
+const maxFailures = () => CFG.maxConsecutiveFailures ?? 3;
 
 const head = (s) => s.split('\n').filter((l) => l.trim()).slice(0, MAX_LINES).join('\n');
 

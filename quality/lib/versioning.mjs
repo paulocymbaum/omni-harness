@@ -8,14 +8,14 @@
 import { LAYERS, layerOf } from './layers.mjs';
 
 export const BASELINE = '0.1.0';
-export const VERSION_TAG_RE = /^([A-Za-z][\w-]*)@v(\d+)\.(\d+)\.(\d+)(?:\+(\d+))?$/;
+const VERSION_TAG_RE = /^([A-Za-z][\w-]*)@v(\d+)\.(\d+)\.(\d+)(?:\+(\d+))?$/;
 
 /** Ambientes do projeto hospedeiro → ref git que alimenta o deploy do ambiente (fonte das versões). */
 export const ENVIRONMENT_REFS = { prod: 'origin/main', hml: 'origin/RELEASE', dev: 'origin/develop' };
 /** Front por plataforma: web = camada site; ios/android = camada flutter. */
-export const PLATFORM_FRONTS = { web: 'site', ios: 'flutter', android: 'flutter' };
+const PLATFORM_FRONTS = { web: 'site', ios: 'flutter', android: 'flutter' };
 /** Subcamadas de backend exibidas no rodapé do menu. */
-export const BACKEND_PARTS = { api: 'backend', funcoes: 'functions', dados: 'rules' };
+const BACKEND_PARTS = { api: 'backend', funcoes: 'functions', dados: 'rules' };
 /** Artefato derivado (gerado pelo bump): nunca entra no range de bump de nenhuma camada. */
 export const VERSIONS_JSON_PATH = 'ofluxo_site/public/versions.json';
 const DERIVED_FILES = new Set([VERSIONS_JSON_PATH]);

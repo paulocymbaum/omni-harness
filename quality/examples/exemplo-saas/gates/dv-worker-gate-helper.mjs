@@ -23,7 +23,7 @@ export function requireWorkerDeps() {
 const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 /** Título do teste começa com o marcador e o marcador não continua (JOINER-GAP não casa JOINER-GAP-X). */
-export function matchesMarker(title, marker) {
+function matchesMarker(title, marker) {
   return new RegExp(`^${escapeRe(marker)}(?![\\w-])`).test(title);
 }
 

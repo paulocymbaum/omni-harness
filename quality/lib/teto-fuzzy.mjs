@@ -10,11 +10,11 @@
 // que queiram calcular o teto antes de montar o comando.
 
 /** Observação do harness: aborta por perto de 90 s (regra comandos-curtos usa o mesmo teto). */
-export const TETO_FERRAMENTA_MS = 90_000;
+const TETO_FERRAMENTA_MS = 90_000;
 
 /** Margem contra o jitter do shell + hooks de Pre/PostToolUse (~4 s observados). */
-export const MARGEM = 0.95;
-export const OVERHEAD_MS = 4_000;
+const MARGEM = 0.95;
+const OVERHEAD_MS = 4_000;
 
 /** Piso do poll: abaixo disso o teto devolve o valor desejado sem tocar. */
 export const PISO_MS = 15_000;

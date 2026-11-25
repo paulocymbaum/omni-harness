@@ -24,7 +24,7 @@ export function resolveRef(ref, root = repoRoot()) {
   return r.code === 0 ? r.stdout.trim() : null;
 }
 
-export function mergeBase(ref, root = repoRoot()) {
+function mergeBase(ref, root = repoRoot()) {
   const r = git(['merge-base', 'HEAD', ref], root);
   return r.code === 0 ? r.stdout.trim() : null;
 }
@@ -39,7 +39,7 @@ export function remoteBase(root = repoRoot()) {
   return headSha(root);
 }
 
-export function untrackedFiles(root = repoRoot()) {
+function untrackedFiles(root = repoRoot()) {
   const r = git(['ls-files', '--others', '--exclude-standard', '-z'], root);
   return r.stdout.split('\0').filter(Boolean);
 }

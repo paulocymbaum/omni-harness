@@ -5,7 +5,7 @@ import path from 'node:path';
 
 export const ENV_FILES = ['.env.local', '.env'];
 
-export function parseEnv(text) {
+function parseEnv(text) {
   const out = {};
   for (const line of text.split('\n')) {
     const m = line.match(/^([A-Z_][A-Z0-9_]*)=(.*)$/);

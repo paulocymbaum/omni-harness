@@ -22,7 +22,7 @@ const step = (...a) => {
 const RE_FONTE = /\.(cc|cpp|cxx|c)$/;
 const RE_QUALQUER = /\.(cc|cpp|cxx|c|h|hpp)$|CMakeLists\.txt$/;
 
-export const cppScope = (entries) => scanScope(entries, CPP.root, RE_QUALQUER);
+const cppScope = (entries) => scanScope(entries, CPP.root, RE_QUALQUER);
 
 export const ctestArgs = (buildDir, regex) => ['--test-dir', buildDir, '--output-on-failure', ...(regex ? ['-R', regex] : [])];
 

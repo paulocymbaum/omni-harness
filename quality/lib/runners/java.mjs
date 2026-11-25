@@ -19,7 +19,7 @@ const step = (...a) => {
   return stepBase(a[0], a[1], a[2], a[3], a[4], { ...opts, env: { ...JAVA_ENV, ...opts.env } });
 };
 
-export const javaScope = (entries) => scanScope(entries, JAVA.root, /\.java$|pom\.xml$|build\.gradle(\.kts)?$|gradle\.lockfile$/);
+const javaScope = (entries) => scanScope(entries, JAVA.root, /\.java$|pom\.xml$|build\.gradle(\.kts)?$|gradle\.lockfile$/);
 
 const MVN_GOALS = { spotless: 'spotless:check', checkstyle: 'checkstyle:check', pmd: 'pmd:check', spotbugs: 'spotbugs:check' };
 const GRADLE_TASKS = { spotless: 'spotlessCheck', checkstyle: 'checkstyleMain', pmd: 'pmdMain', spotbugs: 'spotbugsMain' };
@@ -37,10 +37,10 @@ export function detectBuildTool(exists, globalHas) {
   return null;
 }
 
-export const mavenBuildArgs = () => ['-q', '-DskipTests', 'package'];
+const mavenBuildArgs = () => ['-q', '-DskipTests', 'package'];
 
 /** Módulos Maven (runnerJava.modules: prefixo de path → módulo) tocados pelos arquivos alterados. */
-export function touchedModules(files) {
+function touchedModules(files) {
   const mapa = JAVA.modules || {};
   const mods = new Set();
   for (const f of files) {
@@ -53,7 +53,7 @@ export function touchedModules(files) {
 
 export const mavenTestArgs = (modules) => (modules.length ? ['-pl', modules.join(','), '-am', 'test'] : ['test']);
 
-export const gradleTestArgs = () => ['test', '--console=plain', '-q'];
+const gradleTestArgs = () => ['test', '--console=plain', '-q'];
 
 export function javaRoutine(entries, out, budget, full) {
   const scope = javaScope(entries);

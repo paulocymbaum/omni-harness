@@ -8,8 +8,8 @@ import path from 'node:path';
 import { inspectSpec } from '../lib/spec-sync.mjs';
 import { describeFindings } from '../lib/pii-guard.mjs';
 
-export const BRD_FILE = 'brd.md';
-export const FLOW_FILE = 'fluxo-usuario.md';
+const BRD_FILE = 'brd.md';
+const FLOW_FILE = 'fluxo-usuario.md';
 const FLOW_IMAGE = /^fluxo-usuario.*\.png$/i;
 
 const read = (dir, file) => ({ file, ...inspectSpec(path.join(dir, file)) });
