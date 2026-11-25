@@ -8,5 +8,6 @@
   "halsteadDifficulty": { "target": 30, "ceiling": 60, "legacyTolerance": 3 },
   "diffCoverage": { "flutter": 80, "functions": 80, "ocr": 90, "backend": 85, "admin-web": 80, "site": 80, "debate-worker": 85, "creator-worker": 85 },
   "costJob": { "maxMonthlyBrl": 200 },
-  "costBudget": { "maxMonthlyBrl": 400 }
+  "costBudget": { "maxMonthlyBrl": 400 },
+  "duplicacao": { "nomeMinArquivos": 3, "corpoMinNloc": 6, "tipoMinLinhas": 10, "jaccardMinimo": 0.85, "tokensMinimos": 12, "maxGrupo": 8 }
 }
