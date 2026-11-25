@@ -234,3 +234,12 @@ test('deriva renomeada: estrutura substancial quase idêntica com nome diferente
   const divergente = residuosDe([], [def('pkg/a.mjs', 'executaGates'), def('pkg/b.mjs', 'rodaLoteBil'), simples], CFG).filter((x) => x.kind === 'deriva');
   assert.equal(divergente.length, 1);
 });
+
+test('anti-falso-positivo: prosa com todo: minúsculo, pass justificado e catch com motivo na linha → nada', () => {
+  const prosa = ['function f(itens) {', '  // passa todo: os itens da lista para o filtro', '  return itens.length;', '}'].join('\n');
+  assert.deepEqual(residuosDe([arquivo('pkg/a.mjs', prosa)], [], CFG).filter((x) => x.kind === 'stub'), []);
+  const pyJust = 'try:\n    rodar()\nexcept Exception:\n    pass  # falha esperada no crawl\n';
+  assert.deepEqual(residuosDe([arquivo('pkg/exemplo.py', pyJust)], [], CFG).filter((x) => x.kind === 'catch'), []);
+  const jsJust = ['try { z(); } catch {} // silencioso por design neste ponto', 'function f() {', '  return 1;', '}'].join('\n');
+  assert.deepEqual(residuosDe([arquivo('pkg/a.mjs', jsJust)], [], CFG).filter((x) => x.kind === 'catch'), []);
+});

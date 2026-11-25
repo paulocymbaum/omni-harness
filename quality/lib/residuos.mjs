@@ -16,6 +16,8 @@ const NOMES_VAGOS = new Set([
   'dosomething', 'handlesomething', 'processdata', 'processstuff', 'temp', 'tmp', 'dummy',
   'foo', 'bar', 'baz', 'obj', 'myfunction', 'func1', 'function1', 'method1',
 ]);
+// Marcadores são siglas em MAIÚSCULAS por convenção — sem flag `i` para não casar com
+// prosa pt-BR ("passa todo: os itens" viraria falso TODO).
 const MARCADOR_STUB = /\b(TODO|FIXME|HACK|XXX):\s/g;
 const CATCH_VAZIO = /catch\s*(?:\([^)]{0,160}\))?\s*\{\s*\}/g;
 const EXCEPT_PASS = /except[^:\n]*:[ \t]*\n?[ \t]*pass\b/g;
@@ -105,6 +107,7 @@ function catchVazioDe(texto, lang) {
   const re = lang === 'python' ? EXCEPT_PASS : CATCH_VAZIO;
   const achados = [];
   for (const m of texto.matchAll(re)) {
+    if (justificadaNaLinha(texto, m)) continue; // `pass  # motivo` / `catch {} // motivo` = explicada
     const antes = texto.slice(0, m.index);
     const inicio = antes.lastIndexOf('\n') + 1;
     const linhaTexto = texto.slice(inicio, m.index);
@@ -113,6 +116,13 @@ function catchVazioDe(texto, lang) {
     if (achados.length >= 3) break;
   }
   return achados;
+}
+
+/** Cauda da linha do match tem comentário? Engolir com motivo na mesma linha é legítimo. */
+function justificadaNaLinha(texto, m) {
+  const fimLinha = texto.indexOf('\n', m.index + m[0].length);
+  const cauda = texto.slice(m.index + m[0].length, fimLinha === -1 ? texto.length : fimLinha);
+  return cauda.includes('//') || cauda.includes('#');
 }
 
 /** Nomes genéricos de LLM na declaração (processData, helper, manager…). */
