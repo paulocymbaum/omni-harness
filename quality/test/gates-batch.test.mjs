@@ -16,6 +16,10 @@ const SEM = (oque) => `${oque} ausente neste hospedeiro — equivalência cobert
 
 const mk = (path, newText, oldText = null) => ({ path, status: 'M', newText, oldText, added: [] });
 const assinatura = (rs) => rs.map((r) => `${r.gate}|${r.status}|${r.key}|${r.file}`).sort();
+// 'duplicacao' fica FORA da equivalência: é gate de lote por natureza (clones ENTRE arquivos
+// não existem no caminho por-entry). Contrato P0 segue valendo para os gates por arquivo;
+// cobertura própria do gate de lote: quality/test/duplicacao.test.mjs.
+const assinaturaPorArquivo = (rs) => assinatura(rs).filter((s) => !s.startsWith('duplicacao|'));
 
 const dartFormatado = 'class Soma {\n  int m(int a) {\n    var t = 0;\n    for (var i = 0; i < a; i++) {\n      t += i;\n    }\n    return t;\n  }\n}\n';
 const dartComplexo = 'class Densa {\n  int m(int a) {\n    var t = 0;\n    for (var i = 0; i < a; i++) {\n      if (i % 3 == 0) {\n        t += i * 2;\n      } else if (i % 3 == 1) {\n        t -= i;\n      } else {\n        while (t > 100) {\n          t -= 7;\n        }\n      }\n    }\n    return t;\n  }\n}\n';
@@ -27,14 +31,14 @@ test('batchFastGates == fastGates: mesmos vereditos por arquivo (dart/ts/md)', {
     mk('src/app.ts', tsFonte),
     mk('docs/nota.md', '# nota\n'),
   ];
-  assert.deepEqual(assinatura(batchFastGates(entries)), assinatura(entries.flatMap((e) => fastGates(e))));
+  assert.deepEqual(assinaturaPorArquivo(batchFastGates(entries)), assinaturaPorArquivo(entries.flatMap((e) => fastGates(e))));
 });
 
 test('batchFastGates == fastGates com ratchet: suspeito de complexidade mede o oldText', { skip: !TEM_LIZARD || !TEM_DART ? SEM('lizard/dart') : false }, () => {
   const entries = [mk('lib/densa.dart', dartComplexo, dartFormatado)];
   const individual = entries.flatMap((e) => fastGates(e));
   const lote = batchFastGates(entries);
-  const status = (rs) => assinatura(rs).filter((s) => !s.endsWith('|pass'));
+  const status = (rs) => assinaturaPorArquivo(rs).filter((s) => !s.endsWith('|pass'));
   assert.deepEqual(status(lote), status(individual), 'vereditos não-pass idênticos (ratchet exato no lote)');
 });
 

@@ -8,6 +8,7 @@ import { result } from '../report.mjs';
 import { t } from '../messages.mjs';
 import { stripLiterals } from '../sanitize.mjs';
 import { secretsGate, optionalChainingGate } from './hygiene.mjs';
+import { duplicacaoGateLote } from './duplicacao.mjs';
 
 const TH = loadConfig('thresholds');
 
@@ -320,16 +321,19 @@ function suspeitoDeRatchet(fns) {
 export function batchFastGates(live) {
   const out = [];
   for (const e of live) out.push(...gatesPuros(e));
-  out.push(...lizardGates(live.filter(ehAlvoLizard)));
+  const alvo = live.filter(ehAlvoLizard);
+  const lizard = lizardGates(alvo);
+  out.push(...lizard.out);
+  out.push(...duplicacaoGateLote(alvo, lizard.nowC));
   out.push(...formatGatesBatch(live));
   return out;
 }
 
 const gatesPuros = (e) => [...sizeGate(e), ...boundaryGate(e), ...suppressionGate(e), ...fallbackGate(e), ...exportsGate(e), ...secretsGate(e), ...optionalChainingGate(e)];
 
-/** Lizard de todo o lote: 4 spawns por chunk (cc raw/san + halstead raw/san) + old só dos suspeitos. */
+/** Lizard de todo o lote: 4 spawns por chunk (cc raw/san + halstead raw/san) + old só dos suspeitos. Devolve { out, nowC } — nowC é reusado pelo gate de duplicação (sem spawn extra). */
 function lizardGates(alvo) {
-  if (!alvo.length || !lizardCommand()) return [];
+  if (!alvo.length || !lizardCommand()) return { out: [], nowC: null };
   const items = alvo.map((e) => ({ path: e.path, text: e.newText }));
   const nowC = lizardBatch(items, languageOf);
   const nowH = lizardBatch(items, languageOf, { halstead: true });
@@ -337,7 +341,7 @@ function lizardGates(alvo) {
   const olds = suspeitos.map((e) => ({ path: e.path, text: e.oldText }));
   const beforeC = suspeitos.length ? lizardBatch(olds, languageOf) ?? new Map() : new Map();
   const beforeH = suspeitos.length ? lizardBatch(olds, languageOf, { halstead: true }) ?? new Map() : new Map();
-  return julgaLoteLizard(alvo, nowC, nowH, beforeC, beforeH);
+  return { out: julgaLoteLizard(alvo, nowC, nowH, beforeC, beforeH), nowC };
 }
 
 /** Veredito por arquivo; chunk não medido vira lizard.unmeasured (nunca silêncio). */

@@ -48,3 +48,13 @@ test('limite de idade: 1 h exata não morre (etimes <= 3600)', () => {
   const limite = [...PS, '  208   100  3600 /bin/zsh'];
   assert.deepEqual(selecionarAlvos(limite), [202, 205]);
 });
+
+test('terminal do Cline (marcado) morre após idadeCline; manual do usuário mantém 1 h', () => {
+  const alvos = selecionarAlvos(PS, { marcados: new Set([201]), idadeCline: 600 });
+  assert.deepEqual(alvos, [201, 202, 205]);
+});
+
+test('marcado jovem (< idadeCline) não morre; limiar do Cline é configurável', () => {
+  assert.deepEqual(selecionarAlvos(PS, { marcados: new Set([200]), idadeCline: 600 }), [202, 205]);
+  assert.deepEqual(selecionarAlvos(PS, { marcados: new Set([200]), idadeCline: 150 }), [200, 202, 205]);
+});
