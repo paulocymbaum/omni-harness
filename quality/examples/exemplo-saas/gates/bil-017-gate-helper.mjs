@@ -7,7 +7,7 @@ import net from 'node:net';
 import os from 'node:os';
 import path from 'node:path';
 import { createRequire } from 'node:module';
-import { execFileSync, spawn, spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { ROOT } from './bil-gate-helper.mjs';
 
 export const PROJECT = 'demo-bil017';
@@ -119,10 +119,6 @@ export function loadHandlers(lib, { firestore, auth }) {
 
 /** Falha do callable vira código HttpsError, para o cenário comparar. */
 export const codeOf = (promise) => promise.then(() => 'ok', (error) => String(error?.code ?? error?.message ?? error));
-
-export function gitHead() {
-  return execFileSync('git', ['rev-parse', '--short', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim();
-}
 
 /** Reúne desvios sem parar no primeiro: o gate relata todos, e o baseline mostra o motivo real de cada falha. */
 export function collector() {
