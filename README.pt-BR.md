@@ -53,6 +53,21 @@ ask me before anything destructive; do not edit files outside the plan without a
 > **Infraestrutura neutra de qualidade e workflow para agentes de código**: o mesmo motor de gates determinísticos, os mesmos hooks e o mesmo contexto de sessão em qualquer IDE ou CLI — e o conhecimento do projeto num **perfil** que o time edita sem tocar em código. Stack e arquitetura do hospedeiro são **dado de configuração**, não acoplamento. **Node 22, zero dependências.**
 >
 > Nasceu dentro do monorepo Exemplo SaaS e foi apartado (2026-11-22) — o Exemplo SaaS hoje é apenas o exemplo de hospedeiro em [`quality/examples/exemplo-saas/`](quality/examples/exemplo-saas/README.md).
+## Por que este existe — Poka-yoke para código gerado por IA
+
+**Poka-yoke** (ポカヨケ, "à prova de erros") é um conceito da transformação enxuta, vindo do Sistema de Produção Toyota (Shigeo Shingo): dispositivos que **impedem que um defeito avance para o próximo passo** do processo. No pensamento enxuto, o custo de um defeito **compõe com a escala** — quanto mais tarde (e em maior volume) ele é encontrado, mais caro é o reparo, e o **débito técnico acumula de forma multiplicativa**.
+
+Agentes de código geram linhas numa velocidade que **multiplica exatamente esse risco**: volume alto, revisão humana que não acompanha e erros repetidos em padrão, não por exceção.
+
+![Débito técnico acumulado vs. volume de código gerado por IA — com e sem Poka-yoke](docs/assets/debito-tecnico-ia.png)
+
+O Omni Harness aplica essa premissa ao código gerado por IA: **gates determinísticos bloqueiam o defeito no passo em que ele nasce** (poka-yoke que falha alto, nunca aviso silencioso), e **todo erro identificado deterministicamente é realimentado ao modelo** como contexto de correção de curso na iteração seguinte. A mesma classe de erro para de se repetir, o esforço de revisão cai e o débito técnico acumulado **cai de forma drástica em vez de compor** — é isso que mantém a entrega acelerada por IA segura **na escala**.
+
+- **Falhe alto, falhe cedo** — o veredito de um gate é um sinal de pare, não um aviso para ignorar.
+- **Realimentação, não arqueologia** — o erro volta ao agente como contexto acionável, não ao humano como investigação.
+- **Determinístico, não impressão** — o mesmo defeito, a mesma detecção, todas as vezes; é isso que torna o ciclo confiável.
+
+
 
 ## Como funciona (a ideia em 4 pilares)
 
