@@ -181,6 +181,7 @@
   "report.rulesTested": "{file}: todas as {total} coleções são citadas por testes de regras.",
   "report.unpinned": "{value} action(s) de terceiros sem SHA fixo em {list}. Fixe cada uses: com o SHA de 40 caracteres.",
   "report.pinned": "Todas as actions de terceiros estão fixadas por SHA.",
+  "scope.empty": "Escopo vazio ({scope}): nenhum arquivo no diff — nada foi medido neste nível (não é aprovação do projeto).",
   "tool.dirtied": "A execução alterou arquivos do repositório ({files}); a evidência não foi registrada. Verifique o que o comando gerou.",
   "evidence.recorded": "Evidência registrada: nível {tier}, escopo {scope}, hash {hash}.",
   "migration.banner": "MODO MIGRAÇÃO ativo (motivo: {reason}) — gates de métrica incremental ignorados: {gates}. Gates semânticos (tipos, testes, exports, ferramentas) permanecem ativos; o ratchet global também aceita a flag: node quality/baseline.mjs --check --migration-override.",

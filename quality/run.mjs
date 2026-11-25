@@ -81,6 +81,8 @@ async function tierCmd(args, { entries, scope }, risk) {
     : { active: false };
   const hashBefore = worktreeHash();
   const { results, ignoredGates } = applyMigrationOverride(await runTier(args.tier, entries), migration);
+  // Árvore limpa no rotina/completo: sem arquivos não há medição — ALERTA explícito em vez de aprovação vazia.
+  if (!entries.length && args.tier !== 'rapido') results.push(result('escopo', 'warn', 'scope.empty', { scope }));
   const c = counts(results);
   const status = c.fail > 0 ? 'fail' : 'pass';
   const header = headerDoTier(args.tier, risk, migration, ignoredGates);

@@ -25,6 +25,11 @@ function projectFiles(root) {
     .split('\0').filter((f) => f && !/(^|\/)node_modules(\/|$)/.test(f) && fs.existsSync(path.join(root, f)));
 }
 
+/** Primeira camada que reclama o arquivo (mesma regra de layerOf) — ou null. Sem optional chaining (funde funções no lizard). */
+function donaDoArquivo(f, layers) {
+  return layers.find((x) => matchAny(f, x.globs)) || null;
+}
+
 function exec(out, name, cmd, args, { cwd, timeoutMs = 900_000 } = {}) {
   const r = run(cmd, args, { cwd, timeoutMs });
   if (r.missing) { out.push(result('ferramentas', 'warn', 'tool.missing', { tool: cmd, impact: `${name} não medido.` })); return null; }
@@ -114,7 +119,14 @@ function flutterBoundaries(files, root, out, m) {
   for (const f of files) if (/^lib\/.*\.dart$/.test(f)) fallbacks += countMatches(fs.readFileSync(path.join(root, f), 'utf8'), /API fallback to Firestore/g);
   out.push(result('fallback-api', fallbacks ? 'fail' : 'pass', 'report.fallbacks', { value: fallbacks }));
 
-  const features = fs.readdirSync(path.join(root, 'lib/features'), { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name);
+  featuresSemTestes(files, root, out, m);
+}
+
+/** Features Flutter sem nenhum teste — só quando há projeto Flutter na árvore (readdirSync seguro). */
+function featuresSemTestes(files, root, out, m) {
+  const featuresDir = path.join(root, 'lib/features');
+  if (!fs.existsSync(featuresDir)) return;
+  const features = fs.readdirSync(featuresDir, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name);
   const untested = features.filter((f) => !files.some((x) => x.startsWith(`test/features/${f}/`) && x.endsWith('_test.dart')));
   m.untested = untested.length;
   out.push(untested.length
@@ -323,7 +335,7 @@ function runQuality(root, out, m) {
 }
 
 // ------------------------------------------------------------------ score (QUALITY.md §6.1, só componentes medidos)
-export function layerScore(m) {
+function layerScore(m) {
   const parts = [];
   if (m.coverage != null) parts.push([25, Math.min(1, m.coverage / m.coverageTarget)]);
   if (m.ccMeasured && m.fns) parts.push([20, 1 - m.ccTarget / m.fns]);
@@ -337,26 +349,52 @@ export function layerScore(m) {
 }
 
 // ------------------------------------------------------------------ orquestração
+// Fallback de camada única: perfil sem camadas (ou nenhuma que case na árvore) produzia relatório
+// VAZIO (0 seções, score —). A árvore inteira vira UMA camada e o relatório segue útil em qualquer
+// hospedeiro. --camadas explícito nunca cai no fallback: o operador pediu exatamente aquilo, então
+// seções vazias honestas.
+const CAMADA_UNICA = { id: 'repo', nome: 'Repositório (camada única)', stack: 'árvore inteira (nenhuma camada do perfil aplicada)', globs: ['**'] };
+
+/** Camadas avaliadas pelo relatório: docs fora; sem nenhuma com arquivo na árvore → camada única. */
+export function selecionarCamadas(all, layers, camadasPedidas) {
+  const selected = layers.filter((l) => l.id !== 'docs' && (!camadasPedidas || camadasPedidas.includes(l.id)));
+  if (camadasPedidas && camadasPedidas.length) return selected;
+  const casa = (l) => all.some((f) => matchAny(f, l.globs) && donaDoArquivo(f, layers) === l);
+  return selected.some(casa) ? selected : [CAMADA_UNICA];
+}
+
+// Runner por camada; 'repo' (fallback de camada única) roda a suíte do harness quando existir.
+const RUNNERS_CAMADA = {
+  flutter: (ctx) => { flutterBoundaries(ctx.files, ctx.root, ctx.out, ctx.m); runFlutter(ctx.root, ctx.out, ctx.m); },
+  functions: (ctx) => runFunctions(ctx.root, ctx.out, ctx.m),
+  ocr: (ctx) => runOcr(ctx.root, ctx.out, ctx.m),
+  'admin-web': (ctx) => runWeb('admin-web', ctx.root, ctx.out, ctx.m),
+  site: (ctx) => runWeb('ofluxo_site', ctx.root, ctx.out, ctx.m),
+  backend: (ctx) => runBackend(ctx.root, ctx.out, ctx.m),
+  rules: (ctx) => runRules(ctx.all, ctx.root, ctx.out, ctx.m),
+  infra: (ctx) => runInfra(ctx.files, ctx.root, ctx.out, ctx.m),
+  quality: (ctx) => runQuality(ctx.root, ctx.out, ctx.m),
+  repo: (ctx) => runQuality(ctx.root, ctx.out, ctx.m),
+};
+
+/** Runner da camada; camada sem runner (ex.: docs) leva só as métricas estáticas. */
+function rodarCamada(ctx) {
+  const runner = RUNNERS_CAMADA[ctx.layer.id];
+  if (runner) runner(ctx);
+}
+
 export function runRelatorio({ camadas } = {}) {
   const root = repoRoot();
   if (!isGitRepo(root)) throw new Error(t('error.notGit'));
   const all = projectFiles(root);
-  const selected = LAYERS.filter((l) => l.id !== 'docs' && (!camadas || camadas.includes(l.id)));
+  const selected = selecionarCamadas(all, LAYERS, camadas);
   const sections = [];
   for (const layer of selected) {
-    // Primeira camada que casa vence (mesma regra de layerOf).
-    const files = all.filter((f) => matchAny(f, layer.globs) && LAYERS.find((l) => matchAny(f, l.globs))?.id === layer.id);
+    // Primeira camada que casa vence (mesma regra de layerOf); sem dona, o arquivo é da própria camada (fallback 'repo').
+    const files = all.filter((f) => matchAny(f, layer.globs) && (donaDoArquivo(f, LAYERS) || layer).id === layer.id);
     const out = [];
     const m = staticMetrics(layer, files, root, out);
-    if (layer.id === 'flutter') { flutterBoundaries(files, root, out, m); runFlutter(root, out, m); }
-    else if (layer.id === 'functions') runFunctions(root, out, m);
-    else if (layer.id === 'ocr') runOcr(root, out, m);
-    else if (layer.id === 'admin-web') runWeb('admin-web', root, out, m);
-    else if (layer.id === 'site') runWeb('ofluxo_site', root, out, m);
-    else if (layer.id === 'backend') runBackend(root, out, m);
-    else if (layer.id === 'rules') runRules(all, root, out, m);
-    else if (layer.id === 'infra') runInfra(files, root, out, m);
-    else if (layer.id === 'quality') runQuality(root, out, m);
+    rodarCamada({ layer, files, all, root, out, m });
     sections.push({ layer, m, results: out, score: layerScore(m) });
   }
   return { root, sha: headSha(root), dirty: run('git', ['status', '--porcelain'], { cwd: root }).stdout.trim() !== '', sections };

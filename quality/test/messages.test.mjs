@@ -6,7 +6,7 @@ import { catalog, t } from '../lib/messages.mjs';
 import { QUALITY_DIR } from './helpers.mjs';
 
 const PREFIXES = ['size', 'cc', 'fnloc', 'params', 'format', 'boundary', 'rule', 'suppress', 'fallback', 'exports', 'tool', 'lint', 'types',
-  'build', 'tests', 'diffcov', 'cost', 'risk', 'summary', 'hook', 'action', 'report', 'error', 'evidence', 'agg'];
+  'build', 'tests', 'diffcov', 'cost', 'risk', 'summary', 'hook', 'action', 'report', 'error', 'evidence', 'scope', 'agg'];
 
 function sources() {
   const files = [];
