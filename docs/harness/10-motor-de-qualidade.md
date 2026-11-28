@@ -85,7 +85,7 @@ Limites estruturais (resumo de `thresholds.json`; catálogo completo em QUALITY.
 
 ## Pre-commit local
 
-`npm run hooks:install` grava `.git/hooks/pre-commit` → `git-pre-commit.mjs`, que roda `run.mjs --fix` e depois `--tier rapido`; reprovado, bloqueia o commit. Respeita `FLUXO_SKIP_QUALITY_GATES=1` e `git commit --no-verify` (bypass de emergência, não rotina).
+`npm run hooks:install` grava `.git/hooks/pre-commit` → `git-pre-commit.mjs` (guarda de identidade de `main` + `run.mjs --fix` + `--tier rapido`; reprovado, bloqueia o commit) e `.git/hooks/pre-push` → `git-identity-guard.mjs` (push para `main` só da allowlist, semeada com o `user.email` do dono). Respeita `FLUXO_SKIP_QUALITY_GATES=1` para os gates e `git commit --no-verify` (bypass de emergência, não rotina).
 
 ## Variáveis de ambiente e configuração
 

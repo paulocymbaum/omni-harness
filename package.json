@@ -40,6 +40,7 @@
   ],
   "scripts": {
     "test": "node --test quality/test/profile.test.mjs quality/test/attach.test.mjs",
+    "hooks:install": "node quality/hooks/install.mjs",
     "sync": "node quality/agents/sync-clinerules.mjs",
     "doctor": "node bin/omni-harness.mjs doctor"
   }

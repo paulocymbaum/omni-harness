@@ -20,6 +20,7 @@ O repositório é compartilhado: todo push é observado por pessoas e pela estei
 |---|---|
 | `quality/hooks/pre-bash-gitflow.mjs` | Taxonomia + branch pai na criação (pai sincronizada com origin; startPoint explícito aceito); matriz de merge (inclui `release/x.y.z → RELEASE` para o merge local); commit/push direto em main/develop negado (develop só recebe merge); **push em RELEASE sem merge commit negado com o comando de retomada do `release-bump.mjs`** (QG-025); pull de trabalho exige `--rebase`; push só com merge commit no develop e sincronizado; `--force` negado (após rebase: `--force-with-lease`, nunca em main/develop/release); delete de main/develop negado; remote inacessível pede confirmação humana |
 | `quality/hooks/post-bash-gitflow.mjs` | Detecta conflito (merge/rebase/cherry-pick) e **para o fluxo** com runbook: arquivos em conflito, passos por operação, como publicar depois, como abortar; enquanto houver conflito, o Pre nega qualquer git que não seja de resolução |
+| `quality/hooks/git-identity-guard.mjs` | Hook **core** de git (`pre-commit`/`pre-push`): commit e push tocando `main` só passam com identidade (autor ou committer) na allowlist do clone (`git config omniharness.allowed-emails`, semeada pelo `install.mjs` com o `user.email` do dono). Barreira definitiva contra outra conta é o branch protection do GitHub |
 | `quality/lib/gitflow.mjs` | Política pura: taxonomia, matriz, decisões, parser |
 | `quality/lib/gitstate.mjs` | Branch atual, estado de conflito, sync com origin |
 | `quality/messages.pt-BR.json` | Mensagens (`gitflow.*`) |
@@ -80,6 +81,7 @@ flowchart TD
 ## Modos de falha e runbook
 
 - **"hotfix/ nasce de main":** a mensagem traz o pai correto — refazer o `switch -c` do jeito indicado.
+- **Commit/push em main de outra conta:** o hook core `git-identity-guard.mjs` nega com a allowlist impressa. Dono do clone: `git config omniharness.allowed-emails <email>`; conta nova legítima entra na allowlist, nunca se desliga a guarda. Hook local se contorna com `--no-verify` — para valer contra outras contas no GitHub, ative o branch protection (restrict who can push → conta do dono).
 - **Push de develop negado:** develop só aceita merge commit no HEAD; volte para a branch de trabalho e abra o PR/merge.
 - **Conflito:** seguir o runbook impresso (`git status` → resolver blocos → `git add` → `git commit`/`git rebase --continue`/`git cherry-pick --continue` → publicar). Nunca contornar com `--no-verify` ou trocar de branch para driblar.
 - **Remote inacessível:** o hook pede confirmação humana em vez de operar sem sync.
