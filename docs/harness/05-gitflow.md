@@ -81,7 +81,8 @@ flowchart TD
 ## Modos de falha e runbook
 
 - **"hotfix/ nasce de main":** a mensagem traz o pai correto — refazer o `switch -c` do jeito indicado.
-- **Commit/push em main de outra conta:** o hook core `git-identity-guard.mjs` nega com a allowlist impressa. Dono do clone: `git config omniharness.allowed-emails <email>`; conta nova legítima entra na allowlist, nunca se desliga a guarda. Hook local se contorna com `--no-verify` — para valer contra outras contas no GitHub, ative o branch protection (restrict who can push → conta do dono).
+- **Commit/push em main de outra conta:** o hook core `git-identity-guard.mjs` nega com a allowlist impressa. Dono do clone: `git config omniharness.allowed-emails <email>`; conta nova legítima entra na allowlist, nunca se desliga a guarda. Hook local se contorna com `--no-verify`.
+- **Barreira server-side (repo `paulocymbaum/omni-harness`, desde 2026-11-28):** branch protection em `main` com force-push/delete negados e `enforce_admins` (vale para o próprio owner). Em repo **pessoal** o GitHub não tem allowlist de push por usuário (`restrictions` só em repos de organização); a garantia de contas é estrutural — só owner e colaboradores convidados têm push (conferido: único colaborador é o dono). Em repo de organização, adicionar `restrictions.users` com a conta do dono.
 - **Push de develop negado:** develop só aceita merge commit no HEAD; volte para a branch de trabalho e abra o PR/merge.
 - **Conflito:** seguir o runbook impresso (`git status` → resolver blocos → `git add` → `git commit`/`git rebase --continue`/`git cherry-pick --continue` → publicar). Nunca contornar com `--no-verify` ou trocar de branch para driblar.
 - **Remote inacessível:** o hook pede confirmação humana em vez de operar sem sync.
